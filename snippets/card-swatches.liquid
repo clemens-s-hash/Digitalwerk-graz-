@@ -1,15 +1,22 @@
 {% comment %}
   Renders colour swatches for a product card.
 
-  Nothing is output unless the product actually has a colour option with more
-  than one value, so single-colour products show no swatches at all.
+  The colours come from the product's selectable variant options - never from
+  the description or the title.
 
-  The colour for each value is resolved in this order:
-    1. the variant image's alt text, when it holds a CSS colour - this is the
-       convention the theme already uses in snippets/product-variant-options.liquid
-    2. a lookup of common German and English colour names
-    3. the variant image itself, shown as a small thumbnail
-  A value that resolves to none of these is skipped.
+  Finding the colour option:
+    1. an option whose name is clearly a colour option (Farbe, Color, ...)
+    2. otherwise the option whose values look most like colour names, which
+       covers options called Ausfuehrung, Variante, Finish and the like
+    An option is only used when at least two of its values resolve.
+
+  Finding each value's colour:
+    1. the variant image's alt text when it holds a CSS colour - the
+       convention snippets/product-variant-options.liquid already uses
+    2. the colour vocabulary below, matched whole first, then as the longest
+       word contained in the value, so "Matt Schwarz" and "Schwarz/Gold" work
+    3. the variant image itself, as a small thumbnail
+  A value matching none of these is skipped.
 
   Accepts:
   - card_product: {Object} product object
@@ -21,12 +28,16 @@
 
 {%- liquid
   assign limit = swatch_limit | default: 6
-  assign colour_option = false
-  assign colour_names = 'farbe,farben,farbvariante,color,colour,colors,colours' | split: ','
 
+  assign colour_defs = 'mattschwarz:#1C1A17|matt schwarz:#1C1A17|tiefschwarz:#111111|schwarz:#1C1A17|black:#1C1A17|mattweiss:#FFFFFF|matt weiss:#FFFFFF|reinweiss:#FFFFFF|cremeweiss:#F6EFE2|weissgold:#D9C38A|weiss:#FFFFFF|weiß:#FFFFFF|white:#FFFFFF|anthrazit:#3A3A3A|graphit:#4A4A4A|charcoal:#3A3A3A|hellgrau:#C7C7C7|dunkelgrau:#5A5A5A|grau:#8E8E8E|gray:#8E8E8E|grey:#8E8E8E|edelstahl:#C2C6C9|silber:#C6C8CA|silver:#C6C8CA|chrom:#CFD3D6|chrome:#CFD3D6|nickel:#B8BCBE|altmessing:#9A8252|messing:#C0A062|brass:#C0A062|golden:#C3A253|gold:#C3A253|antik bronze:#7A6A4A|bronze:#8C7853|kupfer:#B87333|copper:#B87333|rosegold:#D8A47F|roségold:#D8A47F|rose gold:#D8A47F|beige:#DCCFB8|sand:#D9C8A9|taupe:#B9AC9B|creme:#F3EADB|cream:#F3EADB|elfenbein:#F5EFE0|ivory:#F5EFE0|natur:#D9C8A9|natural:#D9C8A9|nussbaum:#7A5230|walnut:#7A5230|eiche:#C9A87C|oak:#C9A87C|holz:#C9A87C|wood:#C9A87C|braun:#7A5230|brown:#7A5230|dunkelblau:#23384F|hellblau:#8FB3CC|navy:#1F3350|blau:#2F4A66|blue:#2F4A66|salbei:#9CAD95|olive:#6B6B3A|gruen:#3F5E4A|grün:#3F5E4A|green:#3F5E4A|bordeaux:#5E2129|terracotta:#B5603F|rot:#8A2B2B|red:#8A2B2B|rosa:#D8A39B|pink:#D8A39B|senf:#C49A3A|gelb:#D8B64A|yellow:#D8B64A|rauchglas:#C9C4BD|smoke:#C9C4BD|milchglas:#EFEDE8|opal:#EFEDE8|bernstein:#C98A3A|amber:#C98A3A|transparent:#E8E6E2|klar:#E8E6E2|clear:#E8E6E2'
+  assign colour_list = colour_defs | split: '|'
+  assign colour_option_names = 'farbe,farben,farbe:,farbvariante,farbton,farbauswahl,color,colour,colors,colours' | split: ','
+  assign blocked_values = 'warmweiss,warmweiß,warm weiss,warm weiß,kaltweiss,kaltweiß,kalt weiss,kalt weiß,neutralweiss,neutralweiß,tageslichtweiss,tageslicht,warm white,cool white,neutral white,daylight,kelvin' | split: ','
+
+  assign colour_option = false
   for option in card_product.options_with_values
     assign option_name = option.name | downcase | strip
-    for candidate in colour_names
+    for candidate in colour_option_names
       if option_name == candidate
         assign colour_option = option
         break
@@ -36,6 +47,37 @@
       break
     endif
   endfor
+
+  unless colour_option
+    assign best_score = 1
+    for option in card_product.options_with_values
+      assign score = 0
+      for value in option.values
+        assign probe = value | downcase | strip
+        assign is_blocked = false
+        for blocked in blocked_values
+          if probe contains blocked
+            assign is_blocked = true
+            break
+          endif
+        endfor
+        if is_blocked
+          continue
+        endif
+        for entry in colour_list
+          assign entry_name = entry | split: ':' | first
+          if probe == entry_name or probe contains entry_name
+            assign score = score | plus: 1
+            break
+          endif
+        endfor
+      endfor
+      if score > best_score
+        assign best_score = score
+        assign colour_option = option
+      endif
+    endfor
+  endunless
 -%}
 
 {%- if colour_option and colour_option.values.size > 1 -%}
@@ -61,60 +103,38 @@
         endfor
 
         if swatch_colour == blank
-          assign value_name = value | downcase | strip
-          case value_name
-            when 'schwarz', 'black', 'matt schwarz', 'schwarz matt', 'tiefschwarz'
-              assign swatch_colour = '#1C1A17'
-            when 'weiss', 'weiß', 'white', 'matt weiss', 'matt weiß', 'reinweiss', 'reinweiß'
-              assign swatch_colour = '#FFFFFF'
-            when 'anthrazit', 'graphit', 'charcoal'
-              assign swatch_colour = '#3A3A3A'
-            when 'grau', 'gray', 'grey'
-              assign swatch_colour = '#8E8E8E'
-            when 'hellgrau', 'light grey', 'light gray'
-              assign swatch_colour = '#C7C7C7'
-            when 'silber', 'silver', 'chrom', 'chrome', 'nickel'
-              assign swatch_colour = '#C6C8CA'
-            when 'gold', 'messing', 'brass', 'golden'
-              assign swatch_colour = '#C3A253'
-            when 'bronze', 'antik bronze'
-              assign swatch_colour = '#8C7853'
-            when 'kupfer', 'copper'
-              assign swatch_colour = '#B87333'
-            when 'beige', 'sand', 'taupe'
-              assign swatch_colour = '#DCCFB8'
-            when 'creme', 'cream', 'elfenbein', 'ivory'
-              assign swatch_colour = '#F3EADB'
-            when 'natur', 'natural', 'holz', 'wood', 'eiche', 'oak'
-              assign swatch_colour = '#C9A87C'
-            when 'nussbaum', 'walnut', 'braun', 'brown'
-              assign swatch_colour = '#7A5230'
-            when 'blau', 'blue', 'navy', 'dunkelblau'
-              assign swatch_colour = '#2F4A66'
-            when 'gruen', 'grün', 'green', 'dunkelgruen', 'dunkelgrün'
-              assign swatch_colour = '#3F5E4A'
-            when 'rot', 'red', 'bordeaux'
-              assign swatch_colour = '#8A2B2B'
-            when 'rosa', 'rose', 'pink', 'rosegold', 'roségold'
-              assign swatch_colour = '#D8A39B'
-            when 'transparent', 'klar', 'clear', 'rauchglas', 'smoke'
-              assign swatch_colour = '#E6E4E0'
-          endcase
+          assign probe = value | downcase | strip
+          assign is_blocked = false
+          for blocked in blocked_values
+            if probe contains blocked
+              assign is_blocked = true
+              break
+            endif
+          endfor
+          assign best_length = 0
+          for entry in colour_list
+            if is_blocked
+              break
+            endif
+            assign parts = entry | split: ':'
+            assign entry_name = parts | first
+            assign entry_hex = parts | last
+            assign entry_length = entry_name | size
+            if probe == entry_name
+              assign swatch_colour = entry_hex
+              assign best_length = 99
+            elsif probe contains entry_name and entry_length > best_length
+              assign swatch_colour = entry_hex
+              assign best_length = entry_length
+            endif
+          endfor
         endif
       -%}
 
       {%- if swatch_colour != blank -%}
-        <span
-          class="ds-card__swatch"
-          style="background-color: {{ swatch_colour }};"
-          title="{{ value | escape }}"
-        ></span>
+        <span class="ds-card__swatch" style="background-color: {{ swatch_colour }};" title="{{ value | escape }}"></span>
       {%- elsif swatch_image -%}
-        <span
-          class="ds-card__swatch ds-card__swatch--image"
-          style="background-image: url({{ swatch_image | image_url: width: 80 }});"
-          title="{{ value | escape }}"
-        ></span>
+        <span class="ds-card__swatch ds-card__swatch--image" style="background-image: url({{ swatch_image | image_url: width: 80 }});" title="{{ value | escape }}"></span>
       {%- endif -%}
     {%- endfor -%}
   {%- endcapture -%}
@@ -127,8 +147,6 @@
         <span class="ds-card__swatch-more">+{{ extra }}</span>
       {%- endif -%}
     </div>
-    <span class="visually-hidden">
-      {{- colour_option.name }}: {{ colour_option.values | join: ', ' -}}
-    </span>
+    <span class="visually-hidden">{{ colour_option.name }}: {{ colour_option.values | join: ', ' }}</span>
   {%- endif -%}
 {%- endif -%}

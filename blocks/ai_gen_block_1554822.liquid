@@ -9,6 +9,10 @@
     display: block;
     width: {{ block.settings.desktop_width_percent }}%;
     max-width: 100%;
+    /* Without auto margins a block narrower than its parent stays flush left,
+       so lowering the width setting only pulled the right edge inwards. */
+    margin-left: auto;
+    margin-right: auto;
     padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
   }
 
@@ -23,10 +27,19 @@
     margin: 0 0 {{ block.settings.heading_spacing }}px;
   }
 
+  /* Flex instead of a fixed five-column grid: a last row with fewer than five
+     products is centred rather than left aligned. With exactly five per row
+     the result is identical to the grid. */
   .ai-bestsellers-grid-{{ ai_gen_id }} {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: {{ block.settings.product_spacing }}px;
+  }
+
+  .ai-bestseller-item-{{ ai_gen_id }} {
+    flex: 0 1 calc((100% - {{ block.settings.product_spacing | times: 4 }}px) / 5);
+    min-width: 0;
   }
 
   .ai-bestseller-item-{{ ai_gen_id }} {
@@ -97,14 +110,14 @@
   }
 
   @media screen and (max-width: 989px) {
-    .ai-bestsellers-grid-{{ ai_gen_id }} {
-      grid-template-columns: repeat(3, 1fr);
+    .ai-bestseller-item-{{ ai_gen_id }} {
+      flex-basis: calc((100% - {{ block.settings.product_spacing | times: 2 }}px) / 3);
     }
   }
 
   @media screen and (max-width: 749px) {
-    .ai-bestsellers-grid-{{ ai_gen_id }} {
-      grid-template-columns: repeat(2, 1fr);
+    .ai-bestseller-item-{{ ai_gen_id }} {
+      flex-basis: calc((100% - {{ block.settings.product_spacing }}px) / 2);
     }
 
     .ai-bestsellers-heading-{{ ai_gen_id }} {
