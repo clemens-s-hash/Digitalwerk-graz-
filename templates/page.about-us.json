@@ -68,22 +68,6 @@
     },
     "rich_text_k89YiD": {
       "type": "rich-text",
-      "blocks": {
-        "button_W3Cwex": {
-          "type": "button",
-          "settings": {
-            "button_label": "Entdecke unsere Produkte",
-            "button_link": "",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "button_W3Cwex"
-      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -97,19 +81,6 @@
     "rich_text_3drxkA": {
       "type": "rich-text",
       "blocks": {
-        "heading_mTMhWK": {
-          "type": "heading",
-          "settings": {
-            "heading": "<p>Kontaktinformationen</p>",
-            "heading_size": "h2"
-          }
-        },
-        "text_ehmgR8": {
-          "type": "text",
-          "settings": {
-            "text": "<p>KONTAKTDATEN EINFÜGEN</p>"
-          }
-        },
         "button_xM38pc": {
           "type": "button",
           "disabled": true,
@@ -124,8 +95,6 @@
         }
       },
       "block_order": [
-        "heading_mTMhWK",
-        "text_ehmgR8",
         "button_xM38pc"
       ],
       "name": "t:sections.rich-text.presets.name",

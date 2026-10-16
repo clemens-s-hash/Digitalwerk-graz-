@@ -640,7 +640,7 @@
         "media_fit": "contain",
         "media_position": "left",
         "media_size": "large",
-        "mobile_thumbnails": "show",
+        "mobile_thumbnails": "hide",
         "padding_bottom": 88,
         "padding_top": 32,
         "trust_badge_position": "top-right",
