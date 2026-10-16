@@ -401,15 +401,30 @@ button.shopify-payment-button__button--unbranded {
   display: none;
 }
 
+/* base.css anchors the bubble with `left: 2.2rem`, which can reach past the
+   viewport edge on small screens. Anchored to the icon's own top-right
+   corner instead, so it can never overflow. */
+.header__icon--cart {
+  position: relative;
+}
+
 .cart-count-bubble {
   background-color: rgb(var(--color-foreground));
   color: rgb(var(--color-background));
   border-radius: 999px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   letter-spacing: 0;
-  min-width: 1.7rem;
-  height: 1.7rem;
-  line-height: 1.7rem;
+  height: 1.4rem;
+  width: 1.4rem;
+  min-width: 0;
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: auto;
+}
+
+.cart-count-bubble span {
+  line-height: 1.4rem;
 }
 
 /* Mega menu / dropdown */
@@ -538,7 +553,16 @@ button.shopify-payment-button__button--unbranded {
   padding: 0;
 }
 
-/* Name + rating on one baseline */
+/* Name + rating on one baseline.
+   `.card__content` is a grid; its items default to `min-width: auto` and so
+   refuse to shrink below the rating's intrinsic width, which pushes the card
+   past its column. Hence min-width: 0 all the way down. */
+.card__content,
+.card__information,
+.ds-card__topline {
+  min-width: 0;
+}
+
 .ds-card__topline {
   display: flex;
   align-items: flex-start;
@@ -548,6 +572,19 @@ button.shopify-payment-button__button--unbranded {
 
 .ds-card__titles {
   min-width: 0;
+}
+
+/* Two-up on phones leaves no room for name and rating side by side */
+@media screen and (max-width: 749px) {
+  .ds-card__topline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .ds-card__rating {
+    padding-top: 0;
+  }
 }
 
 .card__heading,
