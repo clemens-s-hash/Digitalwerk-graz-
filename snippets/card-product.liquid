@@ -121,6 +121,9 @@
             </h3>
           </div>
           <div class="card__badge {{ settings.badge_position }}">
+            {%- if card_product.tags contains 'Bestseller' or card_product.tags contains 'bestseller' -%}
+              <span class="badge ds-badge--soft">Bestseller</span>
+            {%- endif -%}
             {%- if card_product.available == false -%}
               <span
                 id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
@@ -143,31 +146,39 @@
       </div>
       <div class="card__content">
         <div class="card__information">
-          <h3
-            class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
-            {% if card_product.featured_media or settings.card_style == 'card' %}
-              id="title-{{ section_id }}-{{ card_product.id }}"
-            {% endif %}
-          >
-            <a
-              href="{{ card_product.url }}"
-              id="CardLink-{{ section_id }}-{{ card_product.id }}"
-              class="full-unstyled-link"
-              aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
-            >
-              {{ card_product.title | escape }}
-            </a>
-          </h3>
-          <div class="card-information">
-            {%- if show_vendor -%}
-              <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
-              <div class="caption-with-letter-spacing light">{{ card_product.vendor }}</div>
-            {%- endif -%}
+          <div class="ds-card__topline">
+            <div class="ds-card__titles">
+              <h3
+                class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
+                {% if card_product.featured_media or settings.card_style == 'card' %}
+                  id="title-{{ section_id }}-{{ card_product.id }}"
+                {% endif %}
+              >
+                <a
+                  href="{{ card_product.url }}"
+                  id="CardLink-{{ section_id }}-{{ card_product.id }}"
+                  class="full-unstyled-link"
+                  aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
+                >
+                  {{ card_product.title | escape }}
+                </a>
+              </h3>
 
-            <span class="caption-large light">{{ block.settings.description | escape }}</span>
+              {%- liquid
+                assign card_subtitle = ''
+                if card_product.type != blank
+                  assign card_subtitle = card_product.type
+                elsif show_vendor and card_product.vendor != blank
+                  assign card_subtitle = card_product.vendor
+                endif
+              -%}
+              {%- if card_subtitle != blank -%}
+                <span class="ds-card__type">{{ card_subtitle | escape }}</span>
+              {%- endif -%}
+            </div>
 
             {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
-              {% liquid
+              {%- liquid
                 assign rating_decimal = 0
                 assign decimal = card_product.metafields.reviews.rating.value.rating | modulo: 1
                 if decimal >= 0.3 and decimal <= 0.7
@@ -175,31 +186,40 @@
                 elsif decimal > 0.7
                   assign rating_decimal = 1
                 endif
-              %}
-              <div
-                class="rating"
-                role="img"
-                aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}"
-              >
-                <span
-                  aria-hidden="true"
-                  class="rating-star color-icon-{{ settings.accent_icons }}"
-                  style="--rating: {{ card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
-                ></span>
+              -%}
+              <div class="ds-card__rating">
+                <p class="rating-text caption">
+                  <span aria-hidden="true">
+                    {{- card_product.metafields.reviews.rating.value }}/{{ card_product.metafields.reviews.rating.value.scale_max -}}
+                  </span>
+                </p>
+                <div
+                  class="rating"
+                  role="img"
+                  aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="rating-star color-icon-{{ settings.accent_icons }}"
+                    style="--rating: {{ card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+                  ></span>
+                </div>
+                <p class="rating-count caption">
+                  <span aria-hidden="true">({{ card_product.metafields.reviews.rating_count }})</span>
+                  <span class="visually-hidden">
+                    {{- card_product.metafields.reviews.rating_count }}
+                    {{ 'accessibility.total_reviews' | t -}}
+                  </span>
+                </p>
               </div>
-              <p class="rating-text caption">
-                <span aria-hidden="true">
-                  {{- card_product.metafields.reviews.rating.value }} /
-                  {{ card_product.metafields.reviews.rating.value.scale_max -}}
-                </span>
-              </p>
-              <p class="rating-count caption">
-                <span aria-hidden="true">({{ card_product.metafields.reviews.rating_count }})</span>
-                <span class="visually-hidden">
-                  {{- card_product.metafields.reviews.rating_count }}
-                  {{ 'accessibility.total_reviews' | t -}}
-                </span>
-              </p>
+            {%- endif -%}
+          </div>
+
+          <hr class="ds-card__rule">
+
+          <div class="card-information">
+            {%- if block.settings.description != blank -%}
+              <span class="caption-large light">{{ block.settings.description | escape }}</span>
             {%- endif -%}
 
             {% render 'price', product: card_product, price_class: '', hide_currency_code: true %}

@@ -1,1 +1,80 @@
-{"sections":{"main-collection-banner":{"type":"main-collection-banner","disabled":true,"settings":{"show_collection_description":true,"show_collection_image":true,"color_scheme":"background-1"}},"rich_text_rcmWJW":{"type":"rich-text","blocks":{"heading_VYUjxG":{"type":"heading","settings":{"heading":"<p>Alle Produkte<\/p>","heading_size":"h1"}},"text_XQnXyn":{"type":"text","settings":{"text":"<p>Entdecke unsere gesamte Auswahl an Haustierbedarf – von praktischem Zubehör bis hin zu sorgfältig ausgewählten Produkten für den Alltag. Wir legen Wert auf Qualität, Funktionalität und ein gutes Preis-Leistungs-Verhältnis.<\/p>"}},"button_mCinJn":{"type":"button","disabled":true,"settings":{"button_label":"Button label","button_link":"","button_style_secondary":false,"button_label_2":"","button_link_2":"","button_style_secondary_2":false}}},"block_order":["heading_VYUjxG","text_XQnXyn","button_mCinJn"],"name":"t:sections.rich-text.presets.name","settings":{"desktop_content_position":"center","content_alignment":"center","color_scheme":"background-1","full_width":true,"padding_top":40,"padding_bottom":52}},"main-collection-product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":20,"columns_desktop":4,"image_ratio":"square","show_secondary_image":true,"show_vendor":false,"show_rating":false,"enable_quick_add":false,"enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"columns_mobile":"2","padding_top":0,"padding_bottom":0}},"section_divider_XKJxFb":{"type":"section-divider","name":"Section divider","settings":{"shape":"diagonal_1","flip_horizontal":false,"flip_vertical":false,"shape_color":"background-2","background_color":"background-1","padding_top":0,"padding_bottom":0}}},"order":["main-collection-banner","rich_text_rcmWJW","main-collection-product-grid","section_divider_XKJxFb"]}
+{
+  "sections": {
+    "main-collection-banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "background-1"
+      }
+    },
+    "rich_text_rcmWJW": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_VYUjxG": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Alle Produkte</p>",
+            "heading_size": "h1"
+          }
+        },
+        "text_XQnXyn": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Entdecke unsere gesamte Auswahl an Haustierbedarf – von praktischem Zubehör bis hin zu sorgfältig ausgewählten Produkten für den Alltag. Wir legen Wert auf Qualität, Funktionalität und ein gutes Preis-Leistungs-Verhältnis.</p>"
+          }
+        },
+        "button_mCinJn": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_VYUjxG",
+        "text_XQnXyn",
+        "button_mCinJn"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "main-collection-product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 20,
+        "columns_desktop": 4,
+        "image_ratio": "square",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "enable_quick_add": false,
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "columns_mobile": "2",
+        "padding_top": 32,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "main-collection-banner",
+    "rich_text_rcmWJW",
+    "main-collection-product-grid"
+  ]
+}

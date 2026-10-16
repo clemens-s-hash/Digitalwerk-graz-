@@ -1,1 +1,67 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"1788628123834fbc15":{"type":"apps","settings":{"include_margins":true}},"footer":{"type":"footer","blocks":{"link_list_bmjeHQ":{"type":"link_list","settings":{"heading":"Menü","menu":"main-menu","width_desktop":3,"width_mobile":"2"}},"1c647602-cc00-4009-a058-976435c8ee9e":{"type":"link_list","settings":{"heading":"Rechtliches","menu":"","width_desktop":4,"width_mobile":"1"}},"text_9UDH4f":{"type":"text","settings":{"heading":"Kontakt","subtext":"<p>Du benötigst Unterstützung? <br\/>Wir sind für dich da!<br\/><br\/><strong>Kundenservice-Zeiten:<\/strong><br\/>Montag – Freitag: 9:00 – 17:00 Uhr (MEZ)<br\/><br\/><strong>E-Mail: support@solenahome.com<\/strong><br\/><\/p><p><strong>Voraussichtliche Antwortzeit: <\/strong>Innerhalb von 24 Stunden<br\/><br\/><strong>Geschäftsanschrift:<\/strong><br\/>Kärntnerstraße 1, B402<\/p><p>8020 Graz<\/p><p>Steiermark<\/p>","width_desktop":4,"width_mobile":"2"}}},"block_order":["link_list_bmjeHQ","1c647602-cc00-4009-a058-976435c8ee9e","text_9UDH4f"],"settings":{"color_scheme":"background-2","enable_follow_on_shop":false,"show_social":false,"enable_country_selector":false,"enable_language_selector":true,"payment_enable":true,"enabled_payment_types":"","show_policy":false,"branding_text":"","margin_top":0,"padding_top":32,"padding_bottom":20}}},"order":["1788628123834fbc15","footer"]}
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "1788628123834fbc15": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "link_list_bmjeHQ": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Menü",
+            "menu": "main-menu",
+            "width_desktop": 3,
+            "width_mobile": "2"
+          }
+        },
+        "1c647602-cc00-4009-a058-976435c8ee9e": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Rechtliches",
+            "menu": "",
+            "width_desktop": 4,
+            "width_mobile": "1"
+          }
+        },
+        "text_9UDH4f": {
+          "type": "text",
+          "settings": {
+            "heading": "Kontakt",
+            "subtext": "<p>Du benötigst Unterstützung? <br/>Wir sind für dich da!<br/><br/><strong>Kundenservice-Zeiten:</strong><br/>Montag – Freitag: 9:00 – 17:00 Uhr (MEZ)<br/><br/><strong>E-Mail: support@solenahome.com</strong><br/></p><p><strong>Voraussichtliche Antwortzeit: </strong>Innerhalb von 24 Stunden<br/><br/><strong>Geschäftsanschrift:</strong><br/>Kärntnerstraße 1, B402</p><p>8020 Graz</p><p>Steiermark</p>",
+            "width_desktop": 4,
+            "width_mobile": "2"
+          }
+        }
+      },
+      "block_order": [
+        "link_list_bmjeHQ",
+        "1c647602-cc00-4009-a058-976435c8ee9e",
+        "text_9UDH4f"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "enable_follow_on_shop": false,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "enabled_payment_types": "",
+        "show_policy": true,
+        "branding_text": "",
+        "margin_top": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "1788628123834fbc15",
+    "footer"
+  ]
+}

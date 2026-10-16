@@ -187,6 +187,10 @@
         --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
         --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
         --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
+
+        /* Solena design system */
+        --font-heading-weight-light: 400;
+        --duration-image: 900ms;
       }
 
       *,
@@ -261,6 +265,7 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'solena-design.css' | asset_url | stylesheet_tag }}
 
     {%- unless settings.type_body_font.system? -%}
       <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
@@ -376,5 +381,11 @@
         })
       </script>
     {% endif %}
+
+    {%- comment -%}
+      Section stylesheets are emitted inside <body>, so the design layer is
+      re-declared here to win cascade ties. Same file, already cached.
+    {%- endcomment -%}
+    {{ 'solena-design.css' | asset_url | stylesheet_tag }}
 </body>
 </html>
