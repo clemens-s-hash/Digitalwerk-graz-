@@ -151,7 +151,9 @@
             </div>
             <div class="ai-bestseller-info-{{ ai_gen_id }}">
               <h3 class="ai-bestseller-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <hr class="ds-card__rule ds-card__rule--tight">
               <div class="ai-bestseller-price-{{ ai_gen_id }}">{{ product.price | money }}</div>
+              {% render 'card-swatches', card_product: product %}
             </div>
           </a>
         {% endfor %}
@@ -165,6 +167,7 @@
             </div>
             <div class="ai-bestseller-info-{{ ai_gen_id }}">
               <h3 class="ai-bestseller-title-{{ ai_gen_id }}">Produktname</h3>
+              <hr class="ds-card__rule ds-card__rule--tight">
               <div class="ai-bestseller-price-{{ ai_gen_id }}">€0,00</div>
             </div>
           </div>

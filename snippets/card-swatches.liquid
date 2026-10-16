@@ -1,0 +1,134 @@
+{% comment %}
+  Renders colour swatches for a product card.
+
+  Nothing is output unless the product actually has a colour option with more
+  than one value, so single-colour products show no swatches at all.
+
+  The colour for each value is resolved in this order:
+    1. the variant image's alt text, when it holds a CSS colour - this is the
+       convention the theme already uses in snippets/product-variant-options.liquid
+    2. a lookup of common German and English colour names
+    3. the variant image itself, shown as a small thumbnail
+  A value that resolves to none of these is skipped.
+
+  Accepts:
+  - card_product: {Object} product object
+  - swatch_limit: {Number} max swatches to draw (optional, default 6)
+
+  Usage:
+  {% render 'card-swatches', card_product: card_product %}
+{% endcomment %}
+
+{%- liquid
+  assign limit = swatch_limit | default: 6
+  assign colour_option = false
+  assign colour_names = 'farbe,farben,farbvariante,color,colour,colors,colours' | split: ','
+
+  for option in card_product.options_with_values
+    assign option_name = option.name | downcase | strip
+    for candidate in colour_names
+      if option_name == candidate
+        assign colour_option = option
+        break
+      endif
+    endfor
+    if colour_option
+      break
+    endif
+  endfor
+-%}
+
+{%- if colour_option and colour_option.values.size > 1 -%}
+  {%- capture swatch_markup -%}
+    {%- for value in colour_option.values limit: limit -%}
+      {%- liquid
+        assign swatch_colour = ''
+        assign swatch_image = false
+        assign variant_key = 'option' | append: colour_option.position
+
+        for variant in card_product.variants
+          if variant[variant_key] == value
+            assign alt_text = variant.image.alt | default: '' | strip
+            assign alt_first = alt_text | slice: 0
+            if alt_first == '#'
+              assign swatch_colour = alt_text
+            endif
+            if variant.image
+              assign swatch_image = variant.image
+            endif
+            break
+          endif
+        endfor
+
+        if swatch_colour == blank
+          assign value_name = value | downcase | strip
+          case value_name
+            when 'schwarz', 'black', 'matt schwarz', 'schwarz matt', 'tiefschwarz'
+              assign swatch_colour = '#1C1A17'
+            when 'weiss', 'weiß', 'white', 'matt weiss', 'matt weiß', 'reinweiss', 'reinweiß'
+              assign swatch_colour = '#FFFFFF'
+            when 'anthrazit', 'graphit', 'charcoal'
+              assign swatch_colour = '#3A3A3A'
+            when 'grau', 'gray', 'grey'
+              assign swatch_colour = '#8E8E8E'
+            when 'hellgrau', 'light grey', 'light gray'
+              assign swatch_colour = '#C7C7C7'
+            when 'silber', 'silver', 'chrom', 'chrome', 'nickel'
+              assign swatch_colour = '#C6C8CA'
+            when 'gold', 'messing', 'brass', 'golden'
+              assign swatch_colour = '#C3A253'
+            when 'bronze', 'antik bronze'
+              assign swatch_colour = '#8C7853'
+            when 'kupfer', 'copper'
+              assign swatch_colour = '#B87333'
+            when 'beige', 'sand', 'taupe'
+              assign swatch_colour = '#DCCFB8'
+            when 'creme', 'cream', 'elfenbein', 'ivory'
+              assign swatch_colour = '#F3EADB'
+            when 'natur', 'natural', 'holz', 'wood', 'eiche', 'oak'
+              assign swatch_colour = '#C9A87C'
+            when 'nussbaum', 'walnut', 'braun', 'brown'
+              assign swatch_colour = '#7A5230'
+            when 'blau', 'blue', 'navy', 'dunkelblau'
+              assign swatch_colour = '#2F4A66'
+            when 'gruen', 'grün', 'green', 'dunkelgruen', 'dunkelgrün'
+              assign swatch_colour = '#3F5E4A'
+            when 'rot', 'red', 'bordeaux'
+              assign swatch_colour = '#8A2B2B'
+            when 'rosa', 'rose', 'pink', 'rosegold', 'roségold'
+              assign swatch_colour = '#D8A39B'
+            when 'transparent', 'klar', 'clear', 'rauchglas', 'smoke'
+              assign swatch_colour = '#E6E4E0'
+          endcase
+        endif
+      -%}
+
+      {%- if swatch_colour != blank -%}
+        <span
+          class="ds-card__swatch"
+          style="background-color: {{ swatch_colour }};"
+          title="{{ value | escape }}"
+        ></span>
+      {%- elsif swatch_image -%}
+        <span
+          class="ds-card__swatch ds-card__swatch--image"
+          style="background-image: url({{ swatch_image | image_url: width: 80 }});"
+          title="{{ value | escape }}"
+        ></span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if swatch_markup != blank -%}
+    <div class="ds-card__swatches" aria-hidden="true">
+      {{- swatch_markup -}}
+      {%- if colour_option.values.size > limit -%}
+        {%- assign extra = colour_option.values.size | minus: limit -%}
+        <span class="ds-card__swatch-more">+{{ extra }}</span>
+      {%- endif -%}
+    </div>
+    <span class="visually-hidden">
+      {{- colour_option.name }}: {{ colour_option.values | join: ', ' -}}
+    </span>
+  {%- endif -%}
+{%- endif -%}

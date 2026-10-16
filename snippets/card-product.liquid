@@ -223,6 +223,8 @@
             {%- endif -%}
 
             {% render 'price', product: card_product, price_class: '', hide_currency_code: true %}
+
+            {% render 'card-swatches', card_product: card_product %}
           </div>
         </div>
         {%- if show_quick_add -%}
