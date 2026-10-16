@@ -385,8 +385,8 @@ button.shopify-payment-button__button--unbranded {
   background-color: currentColor;
 }
 
-.header__icon,
-.header__icon--cart .icon,
+/* base.css sizes .header__icon at 4.4rem as the tap target; only the glyph
+   inside is scaled here, so the hit area stays accessible. */
 .header__icon .icon {
   height: 2rem;
   width: 2rem;
@@ -396,11 +396,6 @@ button.shopify-payment-button__button--unbranded {
   column-gap: 0.4rem;
 }
 
-.header__icon::after,
-.header__icon::before {
-  display: none;
-}
-
 /* base.css anchors the bubble with `left: 2.2rem`, which can reach past the
    viewport edge on small screens. Anchored to the icon's own top-right
    corner instead, so it can never overflow. */
@@ -408,6 +403,10 @@ button.shopify-payment-button__button--unbranded {
   position: relative;
 }
 
+/* base.css has `.header__icon span { height: 100% }`, which outranks a plain
+   `.cart-count-bubble` rule and stretches the bubble to the full 4.4rem icon
+   height. Matched with the parent class so the badge stays round. */
+.header__icon .cart-count-bubble,
 .cart-count-bubble {
   background-color: rgb(var(--color-foreground));
   color: rgb(var(--color-background));
@@ -417,8 +416,8 @@ button.shopify-payment-button__button--unbranded {
   height: 1.4rem;
   width: 1.4rem;
   min-width: 0;
-  top: 0;
-  right: 0;
+  top: 0.4rem;
+  right: 0.4rem;
   left: auto;
   bottom: auto;
 }
@@ -687,13 +686,11 @@ button.shopify-payment-button__button--unbranded {
   margin: 0;
 }
 
-.price__regular,
-.price__sale {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 1rem;
-}
+/* Do NOT set `display` on .price__sale here. component-price.css hides it
+   with `.price__sale { display: none }` and reveals it only under
+   `.price--on-sale`. Overriding that shows the sale block on every product,
+   which renders the price twice and prints an unstruck compare-at price.
+   The on-sale layout lives in section 19 instead. */
 
 .price-item--regular {
   font-weight: 500;
@@ -716,8 +713,10 @@ button.shopify-payment-button__button--unbranded {
   color: var(--ds-muted);
 }
 
-.price__badge-sale,
-.price__badge-sold-out {
+/* The card carries its own corner badge, so the inline price badge is hidden
+   there - but it stays on the product page, where it is the discount pill. */
+.card-wrapper .price__badge-sale,
+.card-wrapper .price__badge-sold-out {
   display: none;
 }
 
@@ -1204,11 +1203,6 @@ button.shopify-payment-button__button--unbranded {
 /* --------------------------------------------------------------------------
    18. Misc polish
    -------------------------------------------------------------------------- */
-
-.section-divider,
-.shopify-section .section-divider svg {
-  display: none;
-}
 
 .newsletter-form__field-wrapper .field__input {
   border-radius: 0;

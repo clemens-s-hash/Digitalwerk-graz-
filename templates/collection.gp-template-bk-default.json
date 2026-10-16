@@ -24,7 +24,7 @@
         "padding_bottom": 88,
         "padding_top": 32,
         "products_per_page": 20,
-        "show_rating": true,
+        "show_rating": false,
         "show_secondary_image": true,
         "show_vendor": false
       },
