@@ -1219,9 +1219,12 @@ button.shopify-payment-button__button--unbranded {
   margin-top: 0;
 }
 
+/* Payment icons keep their brand colours. The theme already renders them
+   with Shopify's `icon--full-color` variant, in the footer, in the cart
+   drawer and in the product page's payment-badges block. */
 .list-payment__item svg {
-  filter: grayscale(1);
-  opacity: 0.65;
+  filter: none;
+  opacity: 1;
 }
 
 /* --------------------------------------------------------------------------
