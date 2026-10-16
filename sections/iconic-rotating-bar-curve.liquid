@@ -1,0 +1,897 @@
+{%- comment -%}
+  {
+    "name": "iconic-rotating-bar-curve.liquid",
+    "author": "Arham Web Works",
+    "description": "Copying in any form is strictly prohibited. Any instance of copying will be subject to legal action and accountability under the law."
+  }
+{%- endcomment -%}
+
+{% liquid
+  assign horizontal_offset = section.settings.boxshadow_horizontal_offset
+  assign vertical_offset = section.settings.boxshadow_vertical_offset
+  assign blur_radius = section.settings.boxshadow_blur
+  assign shadow_spread = section.settings.boxshadow_spread
+  assign shadow_color = section.settings.boxshadow_color | color_to_rgb | split: 'rgb(' | last | split: ')' | first
+  assign shadow_opacity = section.settings.boxshadow_opacity | divided_by: 100.0
+%}
+
+{% style %}
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-container {
+    max-width: {{ section.settings.iconic_page_width }}px;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotating-bar-section {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotating-bar-section {
+    background: {{ section.settings.background_color }};
+    {% if section.settings.background_gradient != empty %}
+      background: {{ section.settings.background_gradient }};
+    {% endif %}
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.enable_fullwidth == false %}
+      border: {{ section.settings.section_border_thickness }}px solid {{ section.settings.section_border_color }};
+      border-radius: {{ section.settings.section_corner_radius }}px;
+      {% if section.settings.enable_box_shadow %}
+        box-shadow: {{ horizontal_offset }}px {{ vertical_offset }}px {{ blur_radius }}px {{ shadow_spread }}px rgba({{ shadow_color }}, {{ shadow_opacity }});
+      {% endif %}
+    {% endif %}
+  }
+  {% if section.settings.enable_font == true %}
+    {{- section.settings.heading_font | font_face: font_display: 'swap' -}}
+    .iconic-rotating-bar-section-{{ section.id }} h1,
+    .iconic-rotating-bar-section-{{ section.id }} h2,
+    .iconic-rotating-bar-section-{{ section.id }} h3,
+    .iconic-rotating-bar-section-{{ section.id }} h4,
+    .iconic-rotating-bar-section-{{ section.id }} h5,
+    .iconic-rotating-bar-section-{{ section.id }} h6 {
+      font-family: {{ section.settings.heading_font.family }};
+      font-weight: {{ section.settings.heading_font.weight }};
+    }
+    {{- section.settings.body_font | font_face: font_display: 'swap' -}}
+    .iconic-rotating-bar-section-{{ section.id }} *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+      font-family: {{ section.settings.body_font.family }};
+      font-weight: {{ section.settings.body_font.weight }};
+    }
+    {% endif %}
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line path {
+    stroke: {{ section.settings.text_background_color }};
+    stroke-width: {{ section.settings.mobile_height }}px;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line text {
+    font-size: {{ section.settings.mobile_range }}px;
+    text-transform: {{ section.settings.title_style }};
+  }
+
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotatingbar-title,
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotatingbar-title * {
+    color: {{ section.settings.title_color }};
+    word-break: break-word;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotatingbar-subtitle p {
+    font-size: {{ section.settings.subtitle_mobile_font_size }}px;
+    line-height: {{ section.settings.subtitle_mobile_line_height }}px;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotatingbar-subtitle * {
+    color: {{ section.settings.subtitle_color }};
+    margin: 0;
+    word-break: break-word;
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line {
+    {% assign barheight = section.settings.mobile_height %}
+    {% if barheight > 0 %}
+      height: calc(123px + {{ barheight }}px);
+    {% endif %}
+  }
+  #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line {
+    width: 300vw;
+  }
+  @media only screen and (min-width: 768px){
+    #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line {
+      width: 100%;
+    }
+    #iconic-rotatingbar-curve-{{ section.id }} {
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+    #iconic-rotatingbar-curve-{{ section.id }} .iconic-curve-rotatingbar-subtitle p {
+      font-size: {{ section.settings.subtitle_desktop_font_size }}px;
+      line-height: {{ section.settings.subtitle_desktop_line_height }}px;
+    }
+    #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line {
+      {% assign barheight = section.settings.desktop_height %}
+      {% if barheight > 0 %}
+        height: calc(123px + {{ barheight }}px);
+      {% endif %}
+    }
+    #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line text {
+      font-size: {{ section.settings.desktop_range }}px;
+    }
+    #iconic-rotatingbar-curve-{{ section.id }} .iconic-scrolling-line path {
+      stroke-width: {{ section.settings.desktop_height }}px;
+    }
+  }
+{% endstyle %}
+
+{% capture rotating_items %}
+  <tspan alignment-baseline="central">
+    {% for block in section.blocks %}
+      {% if block.settings.icon_text == 'icon-circle' %}
+        ● {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-heart'  %}
+        ❤ {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-tringle' %}
+        ▼ {{ block.settings.heading }}
+      {% endif %}
+    {% endfor %}              
+    {% for block in section.blocks %}
+      {% if block.settings.icon_text == 'icon-circle' %}
+        ● {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-heart'  %}
+        ❤ {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-tringle' %}
+        ▼ {{ block.settings.heading }}
+      {% endif %}
+    {% endfor %}              
+    {% for block in section.blocks %}
+      {% if block.settings.icon_text == 'icon-circle' %}
+        ● {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-heart'  %}
+        ❤ {{ block.settings.heading }}
+      {% elsif block.settings.icon_text == 'icon-tringle' %}
+        ▼ {{ block.settings.heading }}
+      {% endif %}
+    {% endfor %}              
+  </tspan>
+{% endcapture %}
+
+<iconic-curve-rotating-bar
+  id="iconic-rotatingbar-curve-{{ section.id }}"
+  data-rotate-enabled="{{ section.settings.rotate_bar }}"
+  class="iconic-section{% if request.design_mode and section.settings.animation %} iconic-fade-in{% endif %}"
+  {% if section.settings.animation %}
+    data-iconic-fade-in
+  {% endif %}
+  data-iconic-id="6"
+  data-iconic-section-id="cd8c06e21bc285e4ba6116f0d320729669dfaeb0e7a5a512d4e1f3a4154a755e"
+  data-iconic-secret="{{ shop.metaobjects.app--80752541697--iconic-sections.iconic-sections.secret_key }}"
+  style="display: none;"
+>
+  <div class="{% if section.settings.enable_fullwidth == false %} iconic-px-4{% endif %}">
+    <div class="iconic-curve-rotating-bar-section iconic-d-block{% if section.settings.enable_fullwidth %} iconic-container-fluid{% else %} iconic-container{% endif %} iconic-rotating-bar-section-{{ section.id }} iconic-px-0">
+      {% if section.settings.title != blank or section.settings.subtitle != blank %}
+        <div class="iconic-curve-rotatingbar-title iconic-pb-4 iconic-px-4 iconic-pb-md-5{% if section.settings.heading_width == 'narrow' %} iconic-mw-100 iconic-w-75 iconic-w-lg-50{% endif %}{% if section.settings.heading_alignment == 'center' %} iconic-m-auto{% endif %}{% if section.settings.heading_alignment == 'end' %} iconic-ms-auto{% endif %}">
+          {% if section.settings.title != blank %}
+            <{{ section.settings.title_size }} class="iconic-curve-title iconic-text-{{ section.settings.title_text_style}} iconic-m-0 iconic-text-{{ section.settings.heading_alignment }}">
+              {{ section.settings.title }}
+            </{{ section.settings.title_size }}>
+          {% endif %}
+          {% if section.settings.subtitle != blank %}
+            <div class="iconic-curve-rotatingbar-subtitle iconic-mt-2 iconic-text-{{ section.settings.subtitle_text_style }} iconic-text-{{ section.settings.heading_alignment }}">
+              {{ section.settings.subtitle }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      <div class="iconic iconic-overflow-hidden">
+        <div class="iconic-col-12 iconic-p-0">
+          <a
+            href="{% if section.settings.text_url != blank %}{{ section.settings.text_url }}{% endif %}"
+            target="_blank"
+          >
+            <svg
+              class="iconic-scrolling-line iconic-d-block"
+              xmlns="http://www.w3.org/2000/svg"
+              width="1440"
+              height="123"
+              viewBox="0 0 1440 123"
+            >
+              <path id="wavepath" fill="transparent" stroke-width="64px" d="M0 33V33C24.7671 33 49.3015 37.7803 72.2569 47.0787L117.088 65.2381C192.409 95.7478 276.921 94.1781 351.057 60.8926L360.843 56.4992C436.256 22.6403 522.889 24.4444 596.827 61.4134V61.4134C674.366 100.183 765.634 100.183 843.173 61.4134V61.4134C917.111 24.4444 1003.74 22.6403 1079.16 56.4992L1088.94 60.8926C1163.08 94.1781 1247.59 95.7478 1322.91 65.2381L1367.74 47.0787C1390.7 37.7803 1415.23 33 1440 33V33"></path>
+              <text text-anchor="middle" style="fill: {{ section.settings.text_color }}">
+                <textPath href="#wavepath" startOffset="0%">
+                  <animate attributeName="startOffset"{% if section.settings.animation_direction == 'left' %} from="150%"{% else %} from="0%"{% endif %}{% if section.settings.animation_direction == 'left' %} to="0%"{% else %} to="150%"{% endif %} begin="0s" dur="{{ section.settings.animation_speed | times: 10 }}s" repeatCount="indefinite">
+                  </animate>
+                  {{ rotating_items }}
+                  {{ rotating_items }}
+                </textPath>
+              </text>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</iconic-curve-rotating-bar>
+
+<script>
+  (function () {
+    function initRotatingBar() {
+      const barId = "iconic-rotatingbar-curve-{{ section.id }}";
+      const rotatingBar = document.getElementById(barId);
+      if (!rotatingBar) return;
+
+      const animate = rotatingBar.querySelector("animate");
+      if (!animate) return;
+
+      let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      let isScrollingDown = false;
+      let isScrollingUp = false;
+
+      const onScroll = () => {
+        // Check if rotate_bar is still enabled
+        if (rotatingBar.dataset.rotateEnabled !== 'true') return;
+
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const currentFrom = animate.getAttribute("from");
+
+        const reverse = () => {
+          animate.setAttribute("from", currentFrom === '150%' ? '0%' : '150%');
+          animate.setAttribute("to", currentFrom === '150%' ? '150%' : '0%');
+          rotatingBar.offsetHeight; // Force reflow
+        };
+
+        if (currentScrollTop > lastScrollTop && !isScrollingDown) {
+          reverse();
+          isScrollingDown = true;
+          isScrollingUp = false;
+        } else if (currentScrollTop < lastScrollTop && !isScrollingUp) {
+          reverse();
+          isScrollingUp = true;
+          isScrollingDown = false;
+        }
+
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+      };
+
+      // Remove old scroll (if any) and re-add
+      window.removeEventListener('scroll', window._rotatingBarScrollHandler);
+      window._rotatingBarScrollHandler = onScroll;
+      window.addEventListener('scroll', onScroll);
+    }
+
+    document.addEventListener('DOMContentLoaded', initRotatingBar);
+
+    // Shopify Editor support
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (e) {
+        if (e.target.id === 'shopify-section-{{ section.id }}') {
+          initRotatingBar();
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Iconic curve rotating bar",
+  "class": "iconic-curve-rotating-bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "animation",
+      "label": "Enable animation",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth",
+      "label": "Enable fullwidth",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "iconic_page_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "default": 1400,
+      "unit": "px",
+      "label": "Section width",
+      "info": "It will apply only when full width is disabled."
+    },
+    {
+      "type": "header",
+      "content": "background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color",
+      "default": "#DCD1DC"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Gradient"
+    },
+    {
+      "type": "header",
+      "content": "Font family"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_font",
+      "label": "Use custom font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading",
+      "default": "libre_baskerville_n7"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body",
+      "default": "libre_baskerville_n4"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "heading_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Curved Text. Infinite Motion"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Tag",
+      "options": [
+        {
+          "label": "H1",
+          "value": "h1"
+        },
+        {
+          "label": "H2",
+          "value": "h2"
+        },
+        {
+          "label": "H3",
+          "value": "h3"
+        },
+        {
+          "label": "H4",
+          "value": "h4"
+        },
+        {
+          "label": "H5",
+          "value": "h5"
+        },
+        {
+          "label": "H6",
+          "value": "h6"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_text_style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        }
+      ],
+      "default": "capitalize",
+      "label": "Style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#4F4E45"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Text",
+      "default": "<p>A sleek, rotating display to highlight key messages or features.</p>"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_desktop_font_size",
+      "min": 15,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "subtitle_desktop_line_height",
+      "min": 20,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Line height",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "subtitle_mobile_font_size",
+      "min": 15,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size mobile",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "subtitle_mobile_line_height",
+      "min": 20,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Line height mobile",
+      "default": 23
+    },
+    {
+      "type": "select",
+      "id": "subtitle_text_style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        }
+      ],
+      "default": "normal",
+      "label": "Style"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color",
+      "default": "#6F6F68"
+    },
+    {
+      "type": "header",
+      "content": "Rotating bar style"
+    },
+    {
+      "type": "header",
+      "content": "Link"
+    },
+    {
+      "type": "url",
+      "id": "text_url" ,
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "rotate_bar",
+      "label": "Enable reverse scroll direction",
+      "default": false,
+      "info": "When scroll up/down - reverse the animation direction"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "sec",
+      "label": "Speed",
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "animation_direction",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Direction"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "select",
+      "id": "title_style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "uppercase",
+      "label": "Style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_background_color",
+      "label": "Background",
+      "default": "#7B367D"
+    },
+    {
+      "type": "header",
+      "content": "Font size"
+    },
+    {
+      "type": "range",
+      "id": "desktop_range",
+      "min": 12,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_range",
+      "min": 8,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Height"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop",
+      "default": 65
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile",
+      "default": 65
+    },
+    {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "header",
+      "content": "Box shadow",
+      "info": "It will apply only when full width is disabled."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_box_shadow",
+      "label": "Enable box shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "boxshadow_opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "boxshadow_horizontal_offset",
+      "label": "Horizontal offset",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "boxshadow_vertical_offset",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "boxshadow_blur",
+      "label": "Blur",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "boxshadow_spread",
+      "label": "Spread",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "boxshadow_color",
+      "label": "Color",
+      "default": "#242833"
+    },
+    {
+      "type": "header",
+      "content": "Border",
+      "info": "It will apply only when full width is disabled."
+    },
+    {
+      "type": "range",
+      "id": "section_border_thickness",
+      "label": "Thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "section_corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "section_border_color",
+      "label": "Color",
+      "default": "#242833"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Top",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Margin"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Top",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Scrolling text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_text",
+          "options": [
+            {
+              "value": "icon-circle",
+              "label": "Circle"
+            },
+            {
+              "value": "icon-heart",
+              "label": "Heart"
+            },
+            {
+              "value": "icon-tringle",
+              "label": "Tringle"
+            }
+          ],
+          "default": "icon-circle",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Text",
+          "default": "Place text here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Iconic curve rotating bar",
+      "settings": {
+        "text_url": "https://iconicsections.com/"
+      },
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

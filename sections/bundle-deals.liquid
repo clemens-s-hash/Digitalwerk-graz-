@@ -1,0 +1,581 @@
+{{ 'section-bundle-deals.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .bundle-deals-{{ section.id }} .bundle-deals__media {
+    grid-template-columns: repeat({{ section.blocks.size }}, 1fr);
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }}">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- unless section.settings.title == blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin{% if section.settings.text != blank %} main-title-with-text{% endif %}">
+        <h2 class="title {{ section.settings.heading_size }}">
+          {{ section.settings.title | escape }}
+        </h2>
+        {%- if section.settings.button_label != blank and show_mobile_slider -%}
+          <a href="{{ section.settings.button_link }}" class="link underlined-link large-up-hide">
+            {{- section.settings.button_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+    {% if section.settings.text != blank %}
+      <div class="text-under-title">
+        {{ section.settings.text }}
+      </div>
+    {% endif %}
+
+    <div class="bundle-deals bundle-deals-{{ section.id }} bundle-deals-{{ section.settings.layout }}">
+      {% assign product_form_id = 'bundle-deals-' | append: section.id %}
+
+      <div class="bundle-deals__media">
+        {% for block in section.blocks %}
+          {% assign product = block.settings.product %}
+
+          <div class="bundle-deals__media-item">
+            {% if product != blank and product.featured_image != blank %}
+              <a
+                href="{{ product.url }}"
+                class="bundle-deals__media-item-container"
+                data-original-src="{{ product.featured_image | image_url: width: 600 }}"
+              >
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width='auto'
+                  height='auto'
+                >
+              </a>
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="bundle-deals__center">
+        {% assign items_count = 0 %}
+
+        {% for block in section.blocks %}
+          {% assign product = block.settings.product %}
+
+          {% if product != blank %}
+            {% assign items_count = items_count | plus: 1 %}
+
+            <div class="bundle-deals__product">
+              <div class="bundle-deals__checkbox-container">
+                <input
+                  type="checkbox"
+                  class="bundle-deals__checkbox"
+                  id="checkbox-{{ forloop.index0 }}"
+                  onchange="handleCheckboxChange(event, {{ forloop.index0 }})"
+                  data-id="{{ product.selected_or_first_available_variant.id }}"
+                  data-price="{{ product.price }}"
+                  data-compare-price="{% if product.compare_at_price > product.price %}{{ product.compare_at_price }}{% else %}{{ product.price }}{% endif %}"
+                  checked
+                >
+                <label for="checkbox-{{ forloop.index0 }}" class="bundle-deals__checkbox-label">
+                  <svg
+                    class="checkmark-checked"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    fill="currentColor"
+                    width="50"
+                    height="50"
+                  >
+                    <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
+                  </svg>
+                  <svg
+                    class="checkmark-unchecked"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    fill="currentColor"
+                    width="50"
+                    height="50"
+                  >
+                    <path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/>
+                  </svg>
+                  <p class="bundle-deals__title">
+                    {{ product.title }}
+                  </p>
+                </label>
+              </div>
+              <div class="bundle-deals__info">
+                {% if product.has_only_default_variant == false %}
+                  <div class="bundle-deals__variant-select-container select select--small">
+                    <select
+                      class="bundle-deals__variant-select select__select variant-dropdown"
+                      name="id"
+                      aria-label="Select variant"
+                      onchange="handleVariantChange(event, {{ forloop.index0 }})"
+                    >
+                      {% for variant in product.variants %}
+                        <option
+                          value="{{ variant.id }}"
+                          data-price="{{ variant.price }}"
+                          data-compare-price="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price }}{% else %}{{ variant.price }}{% endif %}"
+                          {% if variant.image %}
+                            {% assign variant_image = variant.image | image_url %}
+                            data-image="{{ variant_image }}"
+                          {% endif %}
+                          {% if product.selected_or_first_available_variant.id == variant.id %}
+                            selected
+                          {% endif %}
+                          {% unless variant.available %}
+                            disabled
+                          {% endunless %}
+                        >
+                          {{ variant.title }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endif %}
+                <div class="bundle-deals__prices">
+                  <span class="bundle-deals__price"{% if section.settings.enable_price_changes %} data-price="{{ product.price | money }}"{% endif %}>
+                    {{ product.price | money }}
+                  </span>
+                  {% if product.compare_at_price > product.price %}
+                    <span class="bundle-deals__compare-price"{% if section.settings.enable_price_changes %} data-compare-price="{{ product.compare_at_price | money }}"{% endif %}>
+                      {{ product.compare_at_price | money }}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="bundle-deals__empty"></div>
+      <div class="bundle-deals__button">
+        {% if items_count == section.blocks.size %}
+          {% assign product_ids_string = '' %}
+          {% assign total_price = 0 %}
+          {% assign total_compare_price = 0 %}
+
+          {% for block in section.blocks %}
+            {% if block.settings.product != blank %}
+              {% assign product_ids_string = product_ids_string
+                | append: ','
+                | append: block.settings.product.selected_or_first_available_variant.id
+              %}
+              {% assign total_price = total_price | plus: block.settings.product.price %}
+              {% assign current_item_compare_price =  block.settings.product.price %}
+              {% if block.settings.product.compare_at_price > block.settings.product.price %}
+                {% assign current_item_compare_price = block.settings.product.compare_at_price %}
+              {% endif %}
+              {% assign total_compare_price = total_compare_price | plus: current_item_compare_price %}
+            {% endif %}
+          {% endfor %}
+
+          {% assign product_ids_string = product_ids_string | remove_first: ',' %}
+          {% assign product_ids_array = product_ids_string | split: ',' %}
+
+          <p class="bundle-deals__total-price-container">
+            <span>{{ section.settings.total_price_label }}</span>
+            <span>
+              <span class="bundle-deals__total-price">{{ total_price | money }}</span>
+              {% if total_compare_price > total_price %}
+                <span class="bundle-deals__total-compare-price">{{ total_compare_price | money }}</span>
+              {% endif %}
+            </span>
+          </p>
+          <product-form class="product-form" id='BundleDealsProductForm-{{ section.id }}'>
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                class="icon icon-error"
+                viewBox="0 0 13 13"
+              >
+                <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+                <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+                <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+                <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+              </svg>
+              <span class="product-form__error-message"></span>
+            </div>
+            {%- form 'product',
+              product,
+              id: product_form_id,
+              class: 'form',
+              novalidate: 'novalidate',
+              data-type: 'add-to-cart-form'
+            -%}
+              <div class="product-form__multiple-variant-ids">
+                {% if product_ids_array.size > 1 %}
+                  {% for product in product_ids_array %}
+                    <input type="hidden" name="items[{{ forloop.index0 }}][quantity]" value="1">
+                    <input type="hidden" name="items[{{ forloop.index0 }}][id]" value="{{ product }}">
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product_ids_string }}"
+                data-original-ids="{{ product_ids_string }}"
+                disabled
+                class="product-variant-id"
+                {% if section.settings.skip_cart %}
+                  data-skip-cart="true"
+                {% endif %}
+              >
+              <div class="product-form__buttons">
+                <button
+                  type="submit"
+                  name="add"
+                  class="atc-button product-form__submit button button--full-width"
+                >
+                  <span>
+                    {{ section.settings.btn_label }}
+                  </span>
+                  <div class="loading-overlay__spinner hidden">
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      class="spinner"
+                      viewBox="0 0 66 66"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            {%- endform -%}
+          </product-form>
+        {% else %}
+          <button class="button button--full-width" disabled>Select a product for every added block</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if items_count == section.blocks.size %}
+  <script>
+    var originalIdsArray, idInput, idsToDisplay, variantIdsContainer, imageContainers, submitBtn, totalPrice, totalComparePrice;
+    var prices = [];
+    var comparePrices = [];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const productForm = document.getElementById("BundleDealsProductForm-{{ section.id }}");
+      if (!productForm) return;
+      idInput = productForm.querySelector('[name=id]');
+      if (!idInput) return;
+      originalIdsArray = idInput.dataset.originalIds.split(',');
+      idsToDisplay = [...originalIdsArray];
+      variantIdsContainer = productForm.querySelector('.product-form__multiple-variant-ids');
+      submitBtn = productForm.querySelector('[type=submit]');
+      imageContainers = document.querySelectorAll('.bundle-deals__media-item-container');
+      document.querySelectorAll('.bundle-deals__checkbox').forEach(checkbox => {
+        prices.push(parseInt(checkbox.dataset.price));
+        var comparePrice = parseInt(checkbox.dataset.comparePrice);
+        if (isNaN(comparePrice)) comparePrice = 0;
+        comparePrices.push(comparePrice);
+      });
+      totalPrice = document.querySelector('.bundle-deals__total-price');
+      totalComparePrice = document.querySelector('.bundle-deals__total-compare-price');
+    })
+  
+    function handleCheckboxChange(e, index) { 
+      if (!idInput) return;
+      const itemIndex = parseInt(index);
+      const productContainer = e.target.closest('.bundle-deals__product');
+      const itemSelect = productContainer.querySelector('.bundle-deals__variant-select');
+      if (idsToDisplay[itemIndex] === null) {
+        const idToAdd = e.target.dataset.id;
+        idsToDisplay[itemIndex] = idToAdd;
+        const price = parseInt(e.target.dataset.price);
+        prices[itemIndex] = price;
+        var comparePrice = parseInt(e.target.dataset.comparePrice);
+        if (isNaN(comparePrice)) comparePrice = 0;
+        comparePrices[itemIndex] = comparePrice;
+        imageContainers[itemIndex].classList.remove('bundle-deals__media-item--disabled');
+        e.target.setAttribute('checked', '');
+        if (itemSelect) itemSelect.removeAttribute('disabled');
+        productContainer.classList.remove('bundle-deals__product--deselected');
+      } else {
+        idsToDisplay[itemIndex] = null;
+        prices[itemIndex] = null;
+        comparePrices[itemIndex] = null;
+        imageContainers[itemIndex].classList.add('bundle-deals__media-item--disabled');
+        e.target.removeAttribute('checked');
+        if (itemSelect) itemSelect.setAttribute('disabled', '');
+        productContainer.classList.add('bundle-deals__product--deselected');
+      }
+
+      if (itemSelect) itemSelect.selectedIndex = 0;
+      imageContainers[itemIndex].querySelector('img').src = imageContainers[itemIndex].dataset.originalSrc;
+      
+      updateVariantIdsContainer();
+      
+      {% if section.settings.enable_price_changes %}
+        const priceSpan = productContainer.querySelector('.bundle-deals__price')
+        priceSpan.innerHTML = priceSpan.dataset.price;
+        const comparePriceSpan = productContainer.querySelector('.bundle-deals__compare-price')
+        if (comparePriceSpan) comparePriceSpan.innerHTML = comparePriceSpan.dataset.comparePrice;
+        updateTotalPrice();
+      {% endif %}
+    }
+  
+    function handleVariantChange(e, index) {
+      if (!idInput) return;
+      const itemIndex = parseInt(index);
+      var { price, comparePrice, image } = e.target.options[e.target.selectedIndex].dataset;
+      price = parseInt(price);
+      comparePrice = parseInt(comparePrice);
+  
+      const idToAdd = e.target.value;
+      idsToDisplay[itemIndex] = idToAdd;
+  
+      const infoContainer = e.target.closest('.bundle-deals__info');
+      {% if section.settings.enable_price_changes %}
+        prices[itemIndex] = price;
+        infoContainer.querySelector('.bundle-deals__price').innerHTML = "{{ cart.currency.symbol }}" + ((price / 100).toFixed(2));
+        
+        if (isNaN(comparePrice) || comparePrice === null || comparePrice === undefined) comparePrice = 0;
+        comparePrices[itemIndex] = comparePrice;
+        if (infoContainer.querySelector('.bundle-deals__compare-price')) {
+          if (comparePrice > price) {
+            infoContainer.querySelector('.bundle-deals__compare-price').innerHTML = "{{ cart.currency.symbol }}" + ((comparePrice / 100).toFixed(2));
+          } else {
+            infoContainer.querySelector('.bundle-deals__compare-price').innerHTML = '';
+          }
+        }
+      {% endif %}
+      
+      if (image) {
+        imageContainers[itemIndex].querySelector('img').src = image;
+      }
+  
+      updateVariantIdsContainer();
+      {% if section.settings.enable_price_changes %}
+        updateTotalPrice();
+      {% endif %}
+    }
+  
+    function updateVariantIdsContainer() {
+      var newContainerHTML = '';
+      var newItems = [];
+      submitBtn.removeAttribute('disabled');
+      
+      for (var i=0; i<idsToDisplay.length; i++) {
+        if (idsToDisplay[i] !== null) {
+          newContainerHTML += `<input type="hidden" name="items[${i}][quantity]" value="1"><input type="hidden" name="items[${i}][id]" value="${idsToDisplay[i]}">`;
+          newItems.push(idsToDisplay[i]);
+        }
+      }
+      if (newItems.length < 2) {
+        newContainerHTML = '';
+      }
+      if (newItems.length == 0) {
+        submitBtn.setAttribute('disabled', '');
+      }
+      variantIdsContainer.innerHTML = newContainerHTML;
+      idInput.value = newItems.join(',');
+    }
+  
+    function updateTotalPrice() {
+      const price = prices.reduce((a, b) => a + b, 0);
+      const comparePrice = comparePrices.reduce((a, b) => a + b, 0);
+      totalPrice.innerHTML = "{{ cart.currency.symbol }}" + ((price / 100).toFixed(2));
+      if (totalComparePrice) {
+        if (comparePrice > price) {
+          totalComparePrice.innerHTML = "{{ cart.currency.symbol }}" + ((comparePrice / 100).toFixed(2));
+        } else {
+          totalComparePrice.innerHTML = '';
+        }
+      }
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Bundle deals",
+    "limit": 1,
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "default": "Bundle deals",
+            "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+            "type": "select",
+            "id": "color_scheme",
+            "options": [
+            {
+                "value": "accent-1",
+                "label": "t:sections.all.colors.accent_1.label"
+            },
+            {
+                "value": "accent-2",
+                "label": "t:sections.all.colors.accent_2.label"
+            },
+            {
+                "value": "background-1",
+                "label": "t:sections.all.colors.background_1.label"
+            },
+            {
+                "value": "background-2",
+                "label": "t:sections.all.colors.background_2.label"
+            },
+            {
+                "value": "inverse",
+                "label": "t:sections.all.colors.inverse.label"
+            }
+            ],
+            "default": "background-1",
+            "label": "t:sections.all.colors.label"
+        },
+        {
+          "type": "header",
+          "content": "Bundles"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "options": [
+            {
+              "value": "",
+              "label": "Vertical"
+            },
+            {
+              "value": "horizontal-images-left",
+              "label": "Horizontal - Images left"
+            },
+            {
+              "value": "horizontal-images-right",
+              "label": "Horizontal - Images right"
+            }
+          ],
+          "default": "horizontal-images-left",
+          "label": "Desktop layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_price_changes",
+          "label": "Enable dynamic price changes",
+          "info": "Enables live changes to item and total prices after variant/checkbox change. CAUTION: Due to the way Liquid works, after a change, new price will NOT work with currency converters.",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "skip_cart",
+          "label": "Skip cart",
+          "default": false,
+          "info": "Your customers will be sent directly to checkout after click the Add to Cart button."
+        },
+        {
+          "type": "text",
+          "id": "total_price_label",
+          "label": "Total price label",
+          "default": "Total Price:"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Add to cart button label",
+          "default": "Add selected to cart"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.padding.section_padding_heading"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_top",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_bottom",
+          "default": 36
+        }
+    ],
+    "blocks": [
+      {
+        "type": "product",
+        "name": "Product",
+        "limit": 5,
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          }
+        ]
+      }
+    ],
+    "presets": [
+        {
+          "name": "Bundle deals",
+          "blocks": [
+            {
+              "type": "product"
+            },
+            {
+              "type": "product"
+            },
+            {
+              "type": "product"
+            }
+          ]
+        }
+    ],
+    "disabled_on": {
+        "groups": ["header", "footer"]
+    }
+}
+{% endschema %}

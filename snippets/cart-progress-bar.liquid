@@ -1,0 +1,34 @@
+{% assign goal_threshold = settings.cart_progress_threshold | times: 100.00 %}
+{% assign goal_diff = goal_threshold | minus: cart.items_subtotal_price | money_without_trailing_zeros %}
+{% assign goal_progress = cart.items_subtotal_price | divided_by: goal_threshold | times: 100.00 %}
+{% assign goal_reached = false %}
+
+{% capture goal_diff_html %}
+    <span>{{ goal_diff }}</span>
+{% endcapture %}
+{% assign cart_progress_message = settings.cart_progress_message | replace: '[amount]', goal_diff_html %}
+{% assign cart_progress_success_message = settings.cart_progress_success_message %}
+
+{% if goal_progress > 100.00 %}
+  {% assign goal_reached = true %}
+  {% assign goal_progress = 100 %}
+{% endif %}
+
+<div class="cart-progress">
+  <p class="cart-progress__text">
+    {% if goal_reached == false %}
+      {{ cart_progress_message }}
+    {% else %}
+      {{ cart_progress_success_message }}
+    {% endif %}
+  </p>
+  <div class="cart-progress__bar">
+    <div class="cart-progress__bar__progress" style="width: {{ goal_progress }}%;">
+      <div class="cart-progress__bar__badge">
+        {%- unless settings.cart_progress_icon == 'none' -%}
+          {% render 'icon-accordion', icon: settings.cart_progress_icon %}
+        {%- endunless -%}
+      </div>
+    </div>
+  </div>
+</div>

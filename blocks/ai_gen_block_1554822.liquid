@@ -1,0 +1,383 @@
+{% doc %}
+  @prompt
+    Die 5 Bestseller Produkte nebeneinander mit name und preis 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-bestsellers-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-bestsellers-container-{{ ai_gen_id }} {
+    width: 100%;
+  }
+
+  .ai-bestsellers-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    text-align: {{ block.settings.heading_alignment }};
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+  }
+
+  .ai-bestsellers-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.product_spacing }}px;
+  }
+
+  .ai-bestseller-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ai-bestseller-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    background-color: #f4f4f4;
+    margin-bottom: {{ block.settings.text_spacing }}px;
+  }
+
+  .ai-bestseller-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-bestseller-item-{{ ai_gen_id }}:hover .ai-bestseller-image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-bestseller-image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-bestseller-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-bestseller-info-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.info_spacing }}px;
+  }
+
+  .ai-bestseller-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .ai-bestseller-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    color: {{ block.settings.price_color }};
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-bestsellers-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-bestsellers-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-bestsellers-heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.8);
+    }
+
+    .ai-bestseller-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.9);
+    }
+
+    .ai-bestseller-price-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.price_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+<bestsellers-block-{{ ai_gen_id }} class="ai-bestsellers-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-bestsellers-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-bestsellers-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="ai-bestsellers-grid-{{ ai_gen_id }}">
+      {% if block.settings.collection != blank %}
+        {% assign products = block.settings.collection.products | sort: 'bestselling' | limit: 5 %}
+        
+        {% for product in products %}
+          <a href="{{ product.url }}" class="ai-bestseller-item-{{ ai_gen_id }}">
+            <div class="ai-bestseller-image-wrapper-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                  class="ai-bestseller-image-{{ ai_gen_id }}"
+                >
+              {% else %}
+                <div class="ai-bestseller-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="ai-bestseller-info-{{ ai_gen_id }}">
+              <h3 class="ai-bestseller-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <div class="ai-bestseller-price-{{ ai_gen_id }}">{{ product.price | money }}</div>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..5) %}
+          <div class="ai-bestseller-item-{{ ai_gen_id }}">
+            <div class="ai-bestseller-image-wrapper-{{ ai_gen_id }}">
+              <div class="ai-bestseller-image-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            </div>
+            <div class="ai-bestseller-info-{{ ai_gen_id }}">
+              <h3 class="ai-bestseller-title-{{ ai_gen_id }}">Produktname</h3>
+              <div class="ai-bestseller-price-{{ ai_gen_id }}">€0,00</div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</bestsellers-block-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BestsellersBlock{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+      }
+    }
+
+    customElements.define('bestsellers-block-{{ ai_gen_id }}', BestsellersBlock{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Bestseller Produkte",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Kollektion"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Kollektion"
+    },
+    {
+      "type": "header",
+      "content": "Überschrift"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Unsere Bestseller"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Überschrift Ausrichtung",
+      "options": [
+        {
+          "value": "left",
+          "label": "Links"
+        },
+        {
+          "value": "center",
+          "label": "Zentriert"
+        },
+        {
+          "value": "right",
+          "label": "Rechts"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Überschrift Größe",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Überschrift Farbe",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Abstand unter Überschrift",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop Breite",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "product_spacing",
+      "label": "Abstand zwischen Produkten",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Abstand oben",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Abstand unten",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Produktbild"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Bild Eckenradius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "text_spacing",
+      "label": "Abstand zum Text",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Produktinformationen"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Produktname Größe",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Produktname Farbe",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Preis Größe",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Preis Farbe",
+      "default": "#8D5900"
+    },
+    {
+      "type": "range",
+      "id": "info_spacing",
+      "label": "Abstand zwischen Name und Preis",
+      "min": 2,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bestseller Produkte"
+    }
+  ]
+}
+{% endschema %}
