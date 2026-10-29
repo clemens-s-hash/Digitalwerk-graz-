@@ -393,15 +393,37 @@ def gempages_slot(label):
     """Platzhalter fuer eine GemPages-Section.
 
     Shrine hatte an diesen Stellen `apps`- oder `_blocks`-Sections, deren
-    Inhalt in der App liegt und nicht im Theme. Horizons `_blocks` nimmt
-    App-Bloecke auf, also bleibt die Stelle erhalten und muss in Shopify
-    nur neu befuellt werden.
+    Inhalt in der App liegt und nicht im Theme.
+
+    Als Container dient `sections/section.liquid`, nicht `_blocks`:
+    `_blocks` ist in Horizon eine private Section (fuehrender Unterstrich)
+    und wird im Lieferzustand an keiner Stelle als Top-Level-Section
+    verwendet. `section` nimmt ueber `@app` dieselben App-Bloecke auf.
     """
     return {
-        'type': '_blocks',
+        'type': 'section',
         'name': label,
-        'settings': {'section_width': 'page-width',
-                     'padding-block-start': 0, 'padding-block-end': 0},
+        'settings': {
+            'content_direction': 'column',
+            'section_width': 'page-width',
+            'gap': 0,
+            'padding-block-start': 0,
+            'padding-block-end': 0,
+        },
+    }
+
+
+def app_slot(app, block_name, note=''):
+    """Platzhalter-Block, der die Position eines App-Blocks freihaelt.
+
+    App-Bloecke stehen nicht in den Templates, weil `shopify theme check`
+    `shopify://apps/...`-Typen offline nicht aufloesen kann. Der Platzhalter
+    haelt die Reihenfolge aus dem Shrine-Original und zeigt im Theme-Editor,
+    was an diese Stelle gehoert. Im Shop rendert er nichts.
+    """
+    return {
+        'type': 'solena-app-slot',
+        'settings': {'app_name': app, 'block_name': block_name, 'note': note},
     }
 
 
@@ -545,14 +567,112 @@ def build_index():
             media_position='right', media_width='narrow', media_height='80svh',
             background=BG2, pad=(96, 96), align='center'),
 
-        # 7. featured-product, im Original deaktiviert und ohne Produkt
+        # 7. featured-product mit den sieben Bloecken des Originals.
+        #
+        # Horizons `featured-product` nimmt keine Bloecke an, nur ein Produkt
+        # und ein Layout. Die Entsprechung ist
+        # `featured-product-information`: dieselbe Struktur wie die
+        # Produktseite, aber mit eigenem Produkt-Setting.
+        #
+        # Im Shrine-Original war die Section deaktiviert, alle Bloecke ausser
+        # `text` und `title` ebenfalls, und es war KEIN Produkt gesetzt
+        # ("product": ""). Beides ist uebernommen; das Produkt muss in
+        # Shopify gewaehlt werden.
         'featured_product': {
-            'type': 'featured-product',
+            'type': 'featured-product-information',
             'disabled': True,
             'settings': {
-                'section_width': 'page-width',
+                'product': '',
+                'content_width': 'content-center-aligned',
+                'desktop_media_position': 'left',
+                'gap': 32,
                 'padding-block-start': 88,
                 'padding-block-end': 88,
+            },
+            'blocks': {
+                'media-gallery': {
+                    'type': '_featured-product-information-carousel',
+                    'static': True,
+                    'settings': {},
+                },
+                'product-details': {
+                    'type': '_product-details',
+                    'static': True,
+                    'settings': {
+                        'width': 'fill',
+                        'details_position': 'flex-start',
+                        'gap': 20,
+                    },
+                    'blocks': {
+                        # 1 — text „Immer im Blick", im Original uppercase
+                        'fp-eyebrow': {
+                            'type': 'text',
+                            'settings': {
+                                'text': '<p>Immer im Blick</p>',
+                                'type_preset': 'custom',
+                                'font': 'var(--font-body--family)',
+                                'font_size': '0.75rem',
+                                'letter_spacing': 'loose',
+                                'case': 'uppercase',
+                                'width': '100%',
+                                'alignment': 'left',
+                            },
+                        },
+                        # 2 — title, im Original h2
+                        'fp-title': {
+                            'type': 'product-title',
+                            'settings': {
+                                'width': '100%',
+                                'alignment': 'left',
+                                'type_preset': 'h3',
+                                'font': 'var(--font-heading--family)',
+                                'max_width': 'none',
+                            },
+                        },
+                        # 3 — price, im Original deaktiviert
+                        'fp-price': {
+                            'type': 'price',
+                            'disabled': True,
+                            'settings': {'show_sale_price_first': True, 'width': '100%'},
+                        },
+                        # 4 — variant_picker, im Original deaktiviert
+                        'fp-variant-picker': {
+                            'type': 'variant-picker',
+                            'disabled': True,
+                            'settings': {},
+                        },
+                        # 5 — quantity_selector, im Original deaktiviert
+                        'fp-quantity': {
+                            'type': 'quantity',
+                            'disabled': True,
+                            'settings': {},
+                        },
+                        # 6 — buy_buttons, im Original deaktiviert
+                        'fp-buy-buttons': {
+                            'type': 'buy-buttons',
+                            'disabled': True,
+                            'settings': {'stacking': False},
+                            'blocks': {
+                                'quantity': {'type': 'quantity', 'static': True, 'settings': {}},
+                                'add-to-cart': {'type': 'add-to-cart', 'static': True,
+                                                'settings': {'style_class': 'button'}},
+                                'accelerated-checkout': {'type': 'accelerated-checkout',
+                                                         'static': True, 'settings': {}},
+                            },
+                        },
+                        # 7 — share, im Original deaktiviert. Horizon hat
+                        #     keinen Teilen-Block, daher solena-share.
+                        'fp-share': {
+                            'type': 'solena-share',
+                            'disabled': True,
+                            'settings': {'label': 'Share'},
+                        },
+                    },
+                    'block_order': [
+                        'fp-eyebrow', 'fp-title', 'fp-price', 'fp-variant-picker',
+                        'fp-quantity', 'fp-buy-buttons', 'fp-share',
+                    ],
+                },
             },
         },
 
@@ -647,6 +767,19 @@ PRODUCT_FAQ = [
      '<p>support@solenahome.com</p>'),
 ]
 
+# Der Markentext aus Shrines rich-text-Section, identisch auf product.json
+# und allen acht Premium-Templates.
+ABOUT_TEXT = (
+    '<p>"Bei Solena dreht sich alles um eines: Licht, das wirklich berührt. '
+    'Wir glauben, dass ein Zuhause erst durch die richtige Beleuchtung seinen '
+    'Charakter bekommt – deshalb haben wir es uns zur Aufgabe gemacht, '
+    'ausschließlich Designerlampen zu führen, die höchsten Ansprüchen an '
+    'Qualität, Formgebung und Langlebigkeit gerecht werden.</p>'
+    '<p>Kund:innen vertrauen auf Solena, wenn es darum geht, ihr Zuhause in ein '
+    'Statement zu verwandeln. Entdecke jetzt unsere Kollektionen und finde die '
+    'Leuchte, die zu dir passt – bevor sie ausverkauft ist."</p>'
+)
+
 COMPARISON_ROWS = [
     'Persönlicher Kundenservice',
     'Designerlampen zum fairen Preis',
@@ -673,6 +806,71 @@ def comparison_table():
         },
         'blocks': blocks,
         'block_order': order_,
+    }
+
+
+def product_tabs(tabs=None):
+    """Die drei Aufklappbereiche als Horizon-`accordion`."""
+    tabs = tabs or [
+        ('Produktbeschreibung', 'clipboard', None),
+        ('Versandinformationen', 'truck',
+         '<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p>'
+         '<ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li>'
+         '<li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul>'
+         '<p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p>'
+         '<p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>'),
+        ('Rückgabeinformationen', 'return',
+         '<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.'
+         '<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.'
+         '<br/>Die Rücksendekosten trägt der Käufer.</p>'
+         '<p>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>'),
+    ]
+    blocks, order_ = {}, []
+    for i, (title, icon, content) in enumerate(tabs, start=1):
+        key = 'tab-%d' % i
+        child_key = 'tab-body-%d' % i
+        # `{{ product.description }}` im Original heisst: Horizons
+        # product-description-Block, nicht ein Text mit Liquid darin.
+        if content is None:
+            child = {'type': 'product-description', 'settings': {'width': '100%'}}
+        else:
+            child = body(content, 'left', '100%', 'none')
+        blocks[key] = {
+            'type': '_accordion-row',
+            'settings': {'heading': title, 'icon': icon},
+            'blocks': {child_key: child},
+            'block_order': [child_key],
+        }
+        order_.append(key)
+    return {
+        'type': 'accordion',
+        'settings': {
+            'icon': 'caret',
+            'dividers': True,
+            'type_preset': 'h5',
+            'divider_color': '{{ settings.color_palette.color2 }}',
+        },
+        'blocks': blocks,
+        'block_order': order_,
+    }
+
+
+def sticky_atc():
+    """Shrines `sticky_atc`-Block.
+
+    Einstellungen aus dem Export: erscheint nach dem Scrollen, Beschriftung
+    „Zum Warenkorb", Preis und Rabatt-Badge sichtbar, Farbschema
+    background-1 — in Horizon also die Standardfarben, kein Override.
+    """
+    return {
+        'type': 'solena-sticky-atc',
+        'settings': {
+            'display_when': 'after_scroll',
+            'button_label': 'Zum Warenkorb',
+            'show_image': True,
+            'show_price': True,
+            'show_price_badge': True,
+        },
     }
 
 
@@ -732,56 +930,38 @@ def product_details_blocks():
             'settings': {'horizontal_alignment': 'flex-start', 'gap': 8},
         },
         # 13-15 — die drei Aufklapp-Zeilen
-        'tabs': {
-            'type': 'accordion',
-            'settings': {
-                'icon': 'caret',
-                'dividers': True,
-                'type_preset': 'h5',
-                'divider_color': '{{ settings.color_palette.color2 }}',
-            },
-            'blocks': {
-                'tab-description': {
-                    'type': '_accordion-row',
-                    'settings': {'heading': 'Produktbeschreibung', 'icon': 'clipboard'},
-                    'blocks': {'desc': {'type': 'product-description',
-                                        'settings': {'width': '100%'}}},
-                    'block_order': ['desc'],
-                },
-                'tab-shipping': {
-                    'type': '_accordion-row',
-                    'settings': {'heading': 'Versandinformationen', 'icon': 'truck'},
-                    'blocks': {'ship': body(
-                        '<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p>'
-                        '<ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li>'
-                        '<li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul>'
-                        '<p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p>'
-                        '<p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>',
-                        'left', '100%', 'none')},
-                    'block_order': ['ship'],
-                },
-                'tab-returns': {
-                    'type': '_accordion-row',
-                    'settings': {'heading': 'Rückgabeinformationen', 'icon': 'return'},
-                    'blocks': {'ret': body(
-                        '<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.'
-                        '<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.'
-                        '<br/>Die Rücksendekosten trägt der Käufer.</p>'
-                        '<p>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>',
-                        'left', '100%', 'none')},
-                    'block_order': ['ret'],
-                },
-            },
-            'block_order': ['tab-description', 'tab-shipping', 'tab-returns'],
-        },
+        'tabs': product_tabs(),
     }
-    # Reihenfolge wie im Shrine-Export, ohne die vier App-Bloecke:
-    #   davor        -> App: Iconic Review Summary (Trustpilot)
-    #   nach 'title' -> App: Iconic Benefits, App: Judge.me Preview Badge,
-    #                   App: Iconic Review Summary (zweite Instanz)
+    # Die vier App-Bloecke bekommen Platzhalter an ihren Positionen 1, 3, 4
+    # und 5, damit die Reihenfolge des Originals erhalten bleibt.
+    blocks['app-review-summary-1'] = app_slot(
+        'Iconic Blocks', 'Review Summary',
+        'Trustpilot-Zeile: 4,5 Sterne, „Über 35.000 Bewertungen", Link at.trustpilot.com')
+    blocks['app-benefits'] = app_slot(
+        'Iconic Blocks', 'Benefits',
+        'liest product.metafields.custom.selling_point_1 bis _4')
+    blocks['app-judgeme-badge'] = app_slot(
+        'Judge.me', 'Preview Badge', 'Sterne-Vorschau unter dem Titel')
+    blocks['app-review-summary-2'] = app_slot(
+        'Iconic Blocks', 'Review Summary (zweite Instanz)',
+        'im Original mit dem Platzhaltertext „20,921 reviews", ohne Link')
+    # 11 — Sticky Warenkorb
+    blocks['sticky-atc'] = sticky_atc()
+
     block_order = [
-        'title', 'price', 'emoji-benefits', 'variant-picker',
-        'quantity', 'buy-buttons', 'payment-icons', 'tabs',
+        'app-review-summary-1',   # 1
+        'title',                  # 2
+        'app-benefits',           # 3
+        'app-judgeme-badge',      # 4
+        'app-review-summary-2',   # 5
+        'price',                  # 6
+        'emoji-benefits',         # 7  (im Original deaktiviert)
+        'variant-picker',         # 8
+        'quantity',               # 9  (im Original deaktiviert)
+        'buy-buttons',            # 10
+        'sticky-atc',             # 11
+        'payment-icons',          # 12
+        'tabs',                   # 13-15
     ]
     return blocks, block_order
 
@@ -795,7 +975,9 @@ def build_product():
                 'content_width': 'content-center-aligned',
                 'desktop_media_position': 'left',
                 'gap': 32,
-                'enable_sticky_add_to_cart': True,
+                # Aus, weil der eigene Block solena-sticky-atc an Position 11
+                # steht. Sonst erschienen zwei Leisten.
+                'enable_sticky_add_to_cart': False,
                 'padding-block-start': 32,
                 'padding-block-end': 88,
             },
@@ -870,14 +1052,7 @@ def build_product():
         'about': rich_text([
             ('about-heading', heading('<h2>Über Uns</h2>', 'h2', 'center')),
             ('about-text', body(
-                '<p>"Bei Solena dreht sich alles um eines: Licht, das wirklich berührt. '
-                'Wir glauben, dass ein Zuhause erst durch die richtige Beleuchtung seinen '
-                'Charakter bekommt – deshalb haben wir es uns zur Aufgabe gemacht, '
-                'ausschließlich Designerlampen zu führen, die höchsten Ansprüchen an '
-                'Qualität, Formgebung und Langlebigkeit gerecht werden.</p>'
-                '<p>Kund:innen vertrauen auf Solena, wenn es darum geht, ihr Zuhause in ein '
-                'Statement zu verwandeln. Entdecke jetzt unsere Kollektionen und finde die '
-                'Leuchte, die zu dir passt – bevor sie ausverkauft ist."</p>',
+                ABOUT_TEXT,
                 'center', '100%', 'normal')),
         ], background=BG2, width='full-width'),
 
@@ -902,10 +1077,22 @@ def build_product():
         # Platz fuer das Judge.me Review-Widget. Der Container steht, der
         # App-Block kommt in Shopify hinein (PORT.md, App-Bloecke).
         'judgeme_reviews': {
-            'type': '_blocks',
+            'type': 'section',
             'name': 'Judge.me Bewertungen',
-            'settings': {'section_width': 'page-width',
-                         'padding-block-start': 48, 'padding-block-end': 48},
+            'settings': {
+                'content_direction': 'column',
+                'horizontal_alignment_flex_direction_column': 'center',
+                'section_width': 'page-width',
+                'gap': 0,
+                'padding-block-start': 48,
+                'padding-block-end': 48,
+            },
+            'blocks': {
+                'app-judgeme-widget': app_slot(
+                    'Judge.me', 'Review Widget',
+                    'echte Daten, maximale Breite 700, Shop-Bewertungen aus'),
+            },
+            'block_order': ['app-judgeme-widget'],
         },
 
         'gempages_product_3': gempages_slot('GemPages Platzhalter 3'),
@@ -929,6 +1116,241 @@ def build_product():
             'block_order': ['faq-heading', 'faq-accordion'],
         },
     }})
+
+
+# ---------------------------------------------------------------------------
+# templates/product.premium-1 bis -8
+#
+# Die acht Varianten teilen sich main-product-Aufbau, „Ueber Uns",
+# Vergleichstabelle und FAQ mit product.json — per Hash geprueft, alle
+# identisch. Unterschiedlich sind nur die drei image-with-text-Sections und
+# ihre Position relativ zu related-products.
+#
+# Inhalte kommen aus tools/premium-content.json, das
+# tools/extract-premium.py 1:1 aus dem Shrine-Export liest. So steht der
+# Text im Repo, ohne von Hand abgeschrieben zu sein.
+# ---------------------------------------------------------------------------
+
+PREMIUM_CONTENT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'premium-content.json')
+
+
+def premium_details_blocks(with_emoji_benefits, tabs):
+    """main-product der Premium-Templates.
+
+    Reihenfolge weicht von product.json ab: hier kommt der Preis vor den
+    Benefits, und es gibt nur zwei App-Bloecke statt vier.
+    """
+    blocks = {
+        'app-review-summary': app_slot(
+            'Iconic Blocks', 'Review Summary',
+            'Trustpilot-Zeile: 4,5 Sterne, „Über 35.000 Bewertungen", Link at.trustpilot.com'),
+        'title': {
+            'type': 'product-title',
+            'settings': {
+                'width': '100%',
+                'alignment': 'left',
+                'type_preset': 'h3',
+                'font': 'var(--font-heading--family)',
+                'max_width': 'none',
+            },
+        },
+        'price': {
+            'type': 'price',
+            'settings': {
+                'show_sale_price_first': True,
+                'width': '100%',
+                'alignment': 'left',
+                'type_preset': 'custom',
+                'font': 'var(--font-body--family)',
+                'font_size': '1.25rem',
+            },
+        },
+        'app-benefits': app_slot(
+            'Iconic Blocks', 'Benefits',
+            'liest product.metafields.custom.selling_point_1 bis _4'),
+        'variant-picker': {'type': 'variant-picker', 'settings': {}},
+        'quantity': {'type': 'quantity', 'disabled': True, 'settings': {}},
+        'buy-buttons': {
+            'type': 'buy-buttons',
+            'settings': {'stacking': False, 'show_pickup_availability': True},
+            'blocks': {
+                'quantity': {'type': 'quantity', 'static': True, 'settings': {}},
+                'add-to-cart': {'type': 'add-to-cart', 'static': True,
+                                'settings': {'style_class': 'button'}},
+                'accelerated-checkout': {'type': 'accelerated-checkout', 'static': True,
+                                         'settings': {}},
+            },
+        },
+        'sticky-atc': sticky_atc(),
+        'payment-icons': {
+            'type': 'payment-icons',
+            'settings': {'horizontal_alignment': 'flex-start', 'gap': 8},
+        },
+        'tabs': product_tabs([(x['heading'], x['icon'],
+                               None if x['heading'] == 'Produktbeschreibung' else x['content'])
+                              for x in tabs]),
+    }
+    order_ = ['app-review-summary', 'title', 'price', 'app-benefits']
+
+    if with_emoji_benefits:
+        blocks['emoji-benefits'] = {
+            'type': 'solena-emoji-benefits',
+            'disabled': True,
+            'settings': {'benefits': '<p>🙌 Benefit</p><p>💪 Benefit</p><p>🌟 Benefit</p>'},
+        }
+        order_.append('emoji-benefits')
+
+    order_ += ['variant-picker', 'quantity', 'buy-buttons', 'sticky-atc',
+               'payment-icons', 'tabs']
+    return blocks, order_
+
+
+def premium_row(index, row):
+    """Eine image-with-text-Zeile eines Premium-Templates."""
+    content = [
+        ('pr-heading-%d' % index,
+         heading('<h2>%s</h2>' % row['heading'], 'h2', 'left', 'fit-content')),
+        ('pr-text-%d' % index, body(row['text'], 'left')),
+    ]
+    if row['button_label']:
+        content.append(('pr-button-%d' % index,
+                        button(row['button_label'], row['button_link'], 'button-secondary')))
+    # Shrines `layout: image_first` heisst Bild links, `text_first` Bild rechts.
+    media_position = 'left' if row['layout'] == 'image_first' else 'right'
+    return media_with_content(
+        row['image'], content,
+        media_position=media_position,
+        media_width='medium', media_height='auto',
+        pad=tuple(row['padding']), align='flex-start')
+
+
+def build_premium(name, data):
+    sections = {}
+    row_index = 0
+    gem_index = 0
+    details_blocks, details_order = premium_details_blocks(
+        with_emoji_benefits=name != 'premium-8', tabs=data['tabs'])
+
+    for slot in data['order']:
+        if slot == 'main':
+            sections['main'] = {
+                'type': 'product-information',
+                'settings': {
+                    'content_width': 'content-center-aligned',
+                    'desktop_media_position': 'left',
+                    'gap': 32,
+                    'enable_sticky_add_to_cart': False,
+                    'padding-block-start': 32,
+                    'padding-block-end': 88,
+                },
+                'blocks': {
+                    'media-gallery': {
+                        'type': '_product-media-gallery',
+                        'static': True,
+                        'settings': {
+                            'media_presentation': 'carousel',
+                            'slideshow_controls_style': 'thumbnails',
+                            'slideshow_mobile_controls_style': 'thumbnails',
+                            'thumbnail_position': 'bottom',
+                            'thumbnail_radius': 0,
+                            'aspect_ratio': 'adapt',
+                            'constrain_to_viewport': True,
+                            'media_fit': 'contain',
+                            'media_radius': 2,
+                            'extend_media': False,
+                            'zoom': True,
+                            'hide_variants': False,
+                        },
+                    },
+                    'product-details': {
+                        'type': '_product-details',
+                        'static': True,
+                        'settings': {
+                            'width': 'fill',
+                            'details_position': 'flex-start',
+                            'gap': 20,
+                            'sticky_details_desktop': True,
+                            'padding-block-end': 24,
+                        },
+                        'blocks': details_blocks,
+                        'block_order': details_order,
+                    },
+                },
+            }
+        elif slot == 'related':
+            sections['related_products'] = {
+                'type': 'product-recommendations',
+                'disabled': True,
+                'settings': {
+                    'max_products': 4, 'columns': 4,
+                    'columns_gap': 24, 'rows_gap': 56,
+                    'padding-block-start': 88, 'padding-block-end': 88,
+                },
+                'blocks': {
+                    'static-header': {
+                        'type': 'text',
+                        'settings': {
+                            'text': '<h2>Das könnte dir auch gefallen</h2>',
+                            'type_preset': 'h3',
+                            'font': 'var(--font-heading--family)',
+                            'width': 'fit-content',
+                        },
+                    },
+                    'static-product-card': product_card('static-product-card', 'square'),
+                },
+                'block_order': ['static-header'],
+            }
+        elif slot == 'apps':
+            gem_index += 1
+            sections['gempages_slot_%d' % gem_index] = gempages_slot(
+                'GemPages Platzhalter %d' % gem_index)
+        elif slot == 'row':
+            row_index += 1
+            sections['row_%d' % row_index] = premium_row(row_index,
+                                                         data['rows'][row_index - 1])
+        elif slot == 'about':
+            sections['about'] = rich_text([
+                ('about-heading', heading('<h2>Über Uns</h2>', 'h2', 'center')),
+                ('about-text', body(ABOUT_TEXT, 'center', '100%', 'normal')),
+            ], background=BG2, width='full-width')
+        elif slot == 'comparison':
+            sections['comparison'] = {
+                'type': 'section',
+                'settings': {
+                    'content_direction': 'column',
+                    'horizontal_alignment_flex_direction_column': 'center',
+                    'gap': 32,
+                    'section_width': 'page-width',
+                    'padding-block-start': 88,
+                    'padding-block-end': 88,
+                },
+                'blocks': {
+                    'cmp-heading': heading('<h2>Was uns ausmacht</h2>', 'h1', 'center'),
+                    'cmp-table': comparison_table(),
+                },
+                'block_order': ['cmp-heading', 'cmp-table'],
+            }
+        elif slot == 'faq':
+            sections['faq'] = {
+                'type': 'section',
+                'settings': {
+                    'content_direction': 'column',
+                    'horizontal_alignment_flex_direction_column': 'center',
+                    'gap': 24,
+                    'section_width': 'page-width',
+                    'background_color': BG2,
+                    'padding-block-start': 88,
+                    'padding-block-end': 88,
+                },
+                'blocks': {
+                    'faq-heading': heading('<h2>Häufig gestellte Fragen</h2>', 'h3', 'center'),
+                    'faq-accordion': accordion(PRODUCT_FAQ),
+                },
+                'block_order': ['faq-heading', 'faq-accordion'],
+            }
+
+    return order({'sections': sections})
 
 
 # ---------------------------------------------------------------------------
@@ -1374,3 +1796,7 @@ write('article.json', append_newsletter('article.json'))
 write('search.json', build_search())
 write('list-collections.json', build_list_collections())
 write('password.json', build_password())
+
+premium = json.load(open(PREMIUM_CONTENT, encoding='utf-8'))
+for name in sorted(premium):
+    write('product.%s.json' % name, build_premium(name, premium[name]))

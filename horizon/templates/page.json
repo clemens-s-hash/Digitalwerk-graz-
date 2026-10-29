@@ -27,19 +27,23 @@
       ]
     },
     "gempages_page_1": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter 1",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
     "gempages_page_2": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter 2",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }

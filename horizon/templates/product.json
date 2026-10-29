@@ -15,7 +15,7 @@
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
         "gap": 32,
-        "enable_sticky_add_to_cart": true,
+        "enable_sticky_add_to_cart": false,
         "padding-block-start": 32,
         "padding-block-end": 88
       },
@@ -130,14 +130,14 @@
                 "divider_color": "{{ settings.color_palette.color2 }}"
               },
               "blocks": {
-                "tab-description": {
+                "tab-1": {
                   "type": "_accordion-row",
                   "settings": {
                     "heading": "Produktbeschreibung",
                     "icon": "clipboard"
                   },
                   "blocks": {
-                    "desc": {
+                    "tab-body-1": {
                       "type": "product-description",
                       "settings": {
                         "width": "100%"
@@ -145,17 +145,17 @@
                     }
                   },
                   "block_order": [
-                    "desc"
+                    "tab-body-1"
                   ]
                 },
-                "tab-shipping": {
+                "tab-2": {
                   "type": "_accordion-row",
                   "settings": {
                     "heading": "Versandinformationen",
                     "icon": "truck"
                   },
                   "blocks": {
-                    "ship": {
+                    "tab-body-2": {
                       "type": "text",
                       "settings": {
                         "text": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
@@ -167,17 +167,17 @@
                     }
                   },
                   "block_order": [
-                    "ship"
+                    "tab-body-2"
                   ]
                 },
-                "tab-returns": {
+                "tab-3": {
                   "type": "_accordion-row",
                   "settings": {
                     "heading": "Rückgabeinformationen",
                     "icon": "return"
                   },
                   "blocks": {
-                    "ret": {
+                    "tab-body-3": {
                       "type": "text",
                       "settings": {
                         "text": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.</p><p>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
@@ -189,24 +189,71 @@
                     }
                   },
                   "block_order": [
-                    "ret"
+                    "tab-body-3"
                   ]
                 }
               },
               "block_order": [
-                "tab-description",
-                "tab-shipping",
-                "tab-returns"
+                "tab-1",
+                "tab-2",
+                "tab-3"
               ]
+            },
+            "app-review-summary-1": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Iconic Blocks",
+                "block_name": "Review Summary",
+                "note": "Trustpilot-Zeile: 4,5 Sterne, „Über 35.000 Bewertungen\", Link at.trustpilot.com"
+              }
+            },
+            "app-benefits": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Iconic Blocks",
+                "block_name": "Benefits",
+                "note": "liest product.metafields.custom.selling_point_1 bis _4"
+              }
+            },
+            "app-judgeme-badge": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Judge.me",
+                "block_name": "Preview Badge",
+                "note": "Sterne-Vorschau unter dem Titel"
+              }
+            },
+            "app-review-summary-2": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Iconic Blocks",
+                "block_name": "Review Summary (zweite Instanz)",
+                "note": "im Original mit dem Platzhaltertext „20,921 reviews\", ohne Link"
+              }
+            },
+            "sticky-atc": {
+              "type": "solena-sticky-atc",
+              "settings": {
+                "display_when": "after_scroll",
+                "button_label": "Zum Warenkorb",
+                "show_image": true,
+                "show_price": true,
+                "show_price_badge": true
+              }
             }
           },
           "block_order": [
+            "app-review-summary-1",
             "title",
+            "app-benefits",
+            "app-judgeme-badge",
+            "app-review-summary-2",
             "price",
             "emoji-benefits",
             "variant-picker",
             "quantity",
             "buy-buttons",
+            "sticky-atc",
             "payment-icons",
             "tabs"
           ]
@@ -357,19 +404,23 @@
       ]
     },
     "gempages_product_1": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter 1",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
     "gempages_product_2": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter 2",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -482,19 +533,37 @@
       ]
     },
     "judgeme_reviews": {
-      "type": "_blocks",
+      "type": "section",
       "name": "Judge.me Bewertungen",
       "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 48,
         "padding-block-end": 48
-      }
+      },
+      "blocks": {
+        "app-judgeme-widget": {
+          "type": "solena-app-slot",
+          "settings": {
+            "app_name": "Judge.me",
+            "block_name": "Review Widget",
+            "note": "echte Daten, maximale Breite 700, Shop-Bewertungen aus"
+          }
+        }
+      },
+      "block_order": [
+        "app-judgeme-widget"
+      ]
     },
     "gempages_product_3": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter 3",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }

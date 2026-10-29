@@ -273,6 +273,12 @@ for p, doc in json_docs.items():
             errors.append('%s: Section-Type "%s" (%s) — sections/%s.liquid fehlt'
                           % (where, stype, sid, stype))
             continue
+        if stype.startswith('_'):
+            # Sections mit fuehrendem Unterstrich sind privat. Horizon setzt
+            # sie nur per {% content_for %} ein, nie als Top-Level-Section;
+            # Shopify rendert die Seite sonst nicht.
+            errors.append('%s: "%s" (%s) ist eine private Section und darf nicht '
+                          'als Top-Level-Section stehen' % (where, stype, sid))
         check_placement(stype, where, kind, ctx_name)
         check_blocks('section', stype, sec, where)
     for sid in doc.get('order', []):

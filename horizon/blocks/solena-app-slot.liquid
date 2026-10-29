@@ -1,0 +1,61 @@
+{%- doc -%}
+  Platzhalter fuer einen App-Block, der in Shopify eingesetzt werden muss.
+
+  `shopify theme check` kann `shopify://apps/...`-Typen offline nicht
+  aufloesen und meldet sie als JSONMissingBlock. Die App-Bloecke stehen
+  deshalb nicht in den Templates. Dieser Block haelt stattdessen die
+  Position frei, damit die Reihenfolge aus dem Shrine-Original erhalten
+  bleibt und im Theme-Editor sichtbar ist, wohin welcher App-Block gehoert.
+
+  Im Shop rendert er nichts. Nur im Theme-Editor zeigt er einen gestrichelten
+  Hinweis mit App- und Blockname.
+{%- enddoc -%}
+
+{% if request.design_mode %}
+  <div class="solena-app-slot" {{ block.shopify_attributes }}>
+    <span class="solena-app-slot__label">
+      {{- block.settings.app_name | escape }}
+      {%- if block.settings.block_name != blank %}
+        &nbsp;›&nbsp;{{ block.settings.block_name | escape }}
+      {%- endif -%}
+    </span>
+    {% if block.settings.note != blank %}
+      <span class="solena-app-slot__note">{{ block.settings.note | escape }}</span>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Platz für App-Block",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Hier gehört ein App-Block hin. Setze ihn über „Block hinzufügen“ an dieser Stelle ein und lösche danach diesen Platzhalter. Im Shop ist der Platzhalter unsichtbar."
+    },
+    {
+      "type": "text",
+      "id": "app_name",
+      "label": "App",
+      "default": "App"
+    },
+    {
+      "type": "text",
+      "id": "block_name",
+      "label": "Block"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Notiz"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Platz für App-Block",
+      "category": "t:categories.custom"
+    }
+  ]
+}
+{% endschema %}

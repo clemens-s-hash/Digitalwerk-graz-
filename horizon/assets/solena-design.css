@@ -930,6 +930,164 @@ dialog,
   display: none;
 }
 
+/* Sticky Add-to-Cart-Leiste
+
+   Shrine: Leiste unten, Haarlinie als Oberkante, kein Schatten, Preis mit
+   Rabatt-Badge, Button rechts. Faehrt von unten ein, sobald die
+   Kaufen-Schaltflaechen nach oben aus dem Bild gescrollt sind. */
+
+.solena-sticky-atc {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: calc(var(--layer-sticky) - 1); /* unter dem Sticky-Header */
+  background-color: var(--color-background);
+  border-top: 1px solid var(--sl-line);
+  box-shadow: none;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--animation-speed-slow) var(--sl-ease),
+    opacity var(--animation-speed-slow) var(--sl-ease),
+    visibility var(--animation-speed-slow) var(--sl-ease);
+}
+
+.solena-sticky-atc[data-visible='true'] {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.solena-sticky-atc__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: var(--page-content-width);
+  margin-inline: auto;
+  padding: 0.75rem var(--page-margin, 1rem);
+}
+
+.solena-sticky-atc__image {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+.solena-sticky-atc__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.solena-sticky-atc__title {
+  margin: 0;
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 500;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.solena-sticky-atc__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.solena-sticky-atc__price-current {
+  font-weight: 500;
+}
+
+.solena-sticky-atc__price-compare {
+  color: var(--sl-muted);
+  text-decoration-thickness: 1px;
+}
+
+.solena-sticky-atc__badge {
+  border-radius: 999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  background-color: var(--color-palette-color1, #7a3b1e);
+  color: var(--color-background);
+}
+
+.solena-sticky-atc__button {
+  flex: 0 0 auto;
+  min-height: 3rem;
+  padding-inline: 1.5rem;
+}
+
+@media screen and (max-width: 749px) {
+  .solena-sticky-atc__title {
+    display: none;
+  }
+
+  .solena-sticky-atc__button {
+    flex: 1 1 auto;
+  }
+}
+
+/* Teilen */
+
+.solena-share__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--sl-muted);
+  cursor: pointer;
+  transition: color var(--animation-speed) var(--sl-ease);
+}
+
+.solena-share__button:hover {
+  color: var(--color-foreground);
+}
+
+.solena-share__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Platzhalter fuer App-Bloecke — nur im Theme-Editor sichtbar */
+
+.solena-app-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--sl-line-strong);
+  border-radius: 2px;
+  background-color: var(--sl-surface);
+}
+
+.solena-app-slot__label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-foreground);
+}
+
+.solena-app-slot__note {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--sl-muted);
+}
+
 /* --------------------------------------------------------------------------
    16. Warenkorb und Drawer
    -------------------------------------------------------------------------- */

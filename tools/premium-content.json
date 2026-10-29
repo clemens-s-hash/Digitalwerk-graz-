@@ -1,0 +1,618 @@
+{
+  "premium-1": {
+    "order": [
+      "main",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Versatz als Prinzip",
+        "image": "shopify://shop_images/hf_20261013_183155_93dd5c41-85b7-456b-bdc8-101f2c8175f1.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Drei Ovale, jedes gegen das nächste gekippt. Dazwischen öffnen sich Zwischenräume, die mal breiter, mal schmaler ausfallen, nie symmetrisch. Was von vorn wie eine Staffelung wirkt, löst sich beim Umrunden auf und setzt sich neu zusammen. Die Form hat keine richtige Ansicht, nur Momente.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Die Achse auf der alles entsteht",
+        "image": "shopify://shop_images/hf_20261013_183343_c227a138-c8c0-42a3-834a-ed3bf504479a.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Durch die Horizontalen der Schirme läuft eine einzige Senkrechte. Gedrechseltes Walnussholz, oben kräftig, unten auslaufend in eine Spitze, die ins Leere zeigt. Sie trägt nichts sichtbar, hält aber alles zusammen. Dunkel gegen Hell, gerade gegen rund, ein Gegengewicht zur Weichheit des Gewebes.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Das Gewebe wird erst im Licht sichtbar",
+        "image": "shopify://shop_images/hf_20261013_183512_0d540609-bd80-44ff-8ccd-1e148e8c5fd1.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Ungebleichtes Leinen, ungleichmäßig gesponnen. Dickere Fäden liegen neben feineren, und was tagsüber als ruhige Fläche gelesen wird, öffnet sich am Abend zu einer Struktur aus Hell und Dunkel. Das Licht legt frei, was das Material ohnehin ist. Warmweiß oder dreifarbig, je nach Stunde.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-2": {
+    "order": [
+      "main",
+      "row",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Echtes Holz, fein geschliffen",
+        "image": "shopify://shop_images/hf_20261012_175241_6ab43073-e3d2-48e7-9c8f-4cba27756c83.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die drei Beine bestehen aus massivem Walnuss- oder Eichenholz, kein Furnier, keine Folie. Jede Maserung fällt anders aus, keine Leuchte gleicht der anderen. Darüber ein Schirm aus seidig gewebter Baumwolle, der das Licht aufnimmt und weich wieder abgibt. Zwei Materialien, die sich gegenseitig tragen und mit den Jahren schöner werden.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Vollspektrum-Licht, das die Augen schont",
+        "image": "shopify://shop_images/hf_20261012_175919_8d15c4e9-45f3-4760-8b69-8566bed49a5b.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Das Vollspektrum-Leuchtmittel gibt ein gleichmäßiges Lichtbild ohne harte Spitzen ab, so wie natürliches Tageslicht. Der dicht gewebte Stoffschirm streut es zusätzlich, sodass nirgends eine direkte Lichtquelle sichtbar bleibt. Drei Lichtfarben stehen zur Wahl: warm für den Abend, neutral für den Alltag, kühl zum Lesen und Arbeiten. Angenehm für die Augen, auch nach Stunden.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Eine Form, die Platz lässt",
+        "image": "shopify://shop_images/hf_20261012_180402_f3f112eb-5027-4738-ac0d-077526309a28.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Drei schlanke Beine aus Massivholz, ein hoher Zylinder, sonst nichts. Die Leuchte nimmt kaum Fläche ein und wirkt trotzdem wie ein eigenständiges Objekt im Raum. Sie steht frei neben dem Sofa, in einer Ecke oder neben dem Bett und fügt sich ein, ohne sich in den Vordergrund zu drängen.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-3": {
+    "order": [
+      "main",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Stillstand, der sich bewegt",
+        "image": "shopify://shop_images/hf_20261013_171453_e3dbf18d-35af-430b-a6b5-fa92034ead54.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Der Rand bleibt nicht flach. An zwei Stellen hebt er sich, legt sich nach oben um und fällt wieder ab. Eine Welle, die durch das ganze Blatt läuft. Von unten gesehen entsteht daraus ein Profil, das sich mit jedem Schritt durch den Raum verändert. Die Form steht still und wirkt trotzdem bewegt.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Hunderte Falten, ein Punkt",
+        "image": "shopify://shop_images/hf_20261013_173819_46fbb377-726a-4a10-b440-c13d63d742e2.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Am oberen Ende des Schirms läuft alles zusammen. Die Falten, die unten breit auseinanderfallen, verengen sich nach oben und treffen in einem engen Ring aufeinander. Dort sitzt die Spannung, die das ganze Blatt in Form hält. Der Rest ist nur noch Fall.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Dasselbe Blatt, drei Temperaturen",
+        "image": "shopify://shop_images/hf_20261013_174020_317def2a-b100-4463-9515-f723b984a2c3.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Ein Stoffschirm reagiert anders auf Licht als Glas oder Metall. Er lässt es durch, bremst es und gibt es gestreut wieder ab. Deshalb verändert sich die Leuchte mit jeder Lichtfarbe spürbar: warm wird sie fast cremefarben, neutral bleibt sie hell und ruhig, kalt zieht sich alles ins Weiße zurück. Drei Zustände, ein Objekt, umschaltbar per Fernbedienung.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-4": {
+    "order": [
+      "main",
+      "row",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Materialstärke als Entwurfsmittel",
+        "image": "shopify://shop_images/hf_20261014_094134_fa67bc30-82ec-4ea8-8b1e-90cc6f59a916.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>In der Mitte hat der Querschnitt noch Tiefe, nach außen nimmt er kontinuierlich ab, bis die Kante nur noch wenige Millimeter misst. Kein Absatz, keine Fase, kein Abschlussprofil. Dadurch liest sich die Scheibe von der Seite als Linie und von unten als volle Fläche. Dieselbe Geometrie, zwei Zustände.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Das Schliffbild läuft konzentrisch",
+        "image": "shopify://shop_images/hf_20261014_095053_0d402659-ee70-45c5-acca-67093c1c9784.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Das Finish ist kein Hochglanz, sondern ein feiner Rundschliff. Die Riefen folgen dem Radius, nicht der Längsachse, und brechen das Licht entlang der Wölbung. Was entsteht, ist kein Spiegelbild, sondern ein wandernder Reflex: eine Oberfläche, die den Raum aufnimmt, ohne ihn abzubilden.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Entblendet bis an die Kante",
+        "image": "shopify://shop_images/hf_20261014_095853_4143e74d-1967-4b6a-9bab-77873f20cbb8.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die gesamte Unterseite ist Lichtaustrittsfläche. Sie endet nicht vor dem Rand, sondern läuft ohne Rahmen bis an die Materialkante. Dahinter sitzt die Optik tief genug, dass im Blickfeld keine Lichtquelle erscheint. Was im Raum ankommt, ist eine gleichmäßig leuchtende Fläche ohne Hotspot und ohne harten Übergang zum Metall.</p><h3></h3>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-5": {
+    "order": [
+      "main",
+      "row",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Zwei Ebenen, eine Drehung",
+        "image": "shopify://shop_images/hf_20261012_215147_7513d3a2-fe0f-4556-acc2-c64052c39aef.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die Idee ist einfach: Man nehme zwei flache Scheiben und drehe die untere ein Stück gegen die obere. Was entsteht, ist ein schmaler Spalt, durch den das Licht seitlich entweicht und die Decke mitbeleuchtet. Von unten bleibt die Form geschlossen und ruhig. Erst aus dem Winkel zeigt sich, dass hier zwei Ebenen übereinander liegen.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Die Kunst des Weglassens",
+        "image": "shopify://shop_images/hf_20261012_214040_b0ef0a6d-ad0b-49aa-9990-f8c87038ed29.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die Aufgabe war, so wenig Bauhöhe wie möglich zu beanspruchen. Keine Aufhängung, kein Baldachin, keine sichtbare Befestigung. Die Leuchte legt sich flach gegen die Decke und läuft als sauberer Kreis aus. Übergänge fugenlos, Kante durchgehend. Was man nicht sieht, ist der eigentliche Teil der Arbeit.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Licht als Material",
+        "image": "shopify://shop_images/hf_20261012_214700_1ec429c9-5bb0-493b-a251-d418394a47d2.jpg",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Zwei Lichtfarben, warmweiß und kaltweiß, beide stufenlos regelbar, per App oder Sprachbefehl vom Sofa aus. Dahinter steht eine einfache Überlegung: Ein Raum braucht am Abend ein anderes Licht als am Nachmittag. Die LED-Technik verteilt es gleichmäßig über die gesamte Fläche, ohne dass eine einzelne Lichtquelle sichtbar wird.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-6": {
+    "order": [
+      "main",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Wo die Linie ausläuft",
+        "image": "shopify://shop_images/hf_20261012_191937_b74853ff-4406-4ca9-9e17-8996e16c76ba.jpg",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Das Profil verjüngt sich nicht, es behält seine Breite bis zum Schluss und endet in einem sauber gezogenen Radius. Der Diffusor folgt der Kontur bis in die Rundung hinein. Zwei Flächen, eine Kante, ein Abschluss.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Kurve trifft Horizontale",
+        "image": "shopify://shop_images/hf_20261012_200400_783a1135-2a29-4148-9723-a95414be9035.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Eine flache rechteckige Platte, kaum höher als ein Fingerbreit, mit weich gebrochenen Ecken. Der Bogen führt in steilem Winkel daran vorbei und endet knapp darüber. Horizontale und Kurve, nebeneinander, ohne Verbindungsstück.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Zwei Flächen im Schnitt",
+        "image": "shopify://shop_images/hf_20261012_200534_c4c0c497-1a7e-44c1-a6d4-7d0a62302743.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Das Profil ist flach und rechteckig, matt beschichtet auf der Schauseite. An der inneren Kante läuft der Diffusor als schmales Band mit, bündig eingelassen, mit einer scharfen Trennlinie dazwischen. Eine Form, die aus zwei Materialien besteht und wie eine wirkt.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-7": {
+    "order": [
+      "main",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Form entsteht aus dem Bruch",
+        "image": "shopify://shop_images/hf_20261012_145808_5f89c07f-3383-4fc3-a1b2-d8660b8d014a.jpg",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die Öffnung im Ring ist kein Zufall. Sie bricht die perfekte Form auf und macht aus einem Kreis ein Objekt mit Charakter. Die abgerundeten Enden fassen das Band weich ein, nichts wirkt scharf oder technisch. Was bleibt, ist eine Leuchte, die auch tagsüber als Skulptur über deinem Tisch schwebt.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Zweitausend Lumen, fein abgestuft",
+        "image": "shopify://shop_images/hf_20261012_151743_db98e961-2925-4222-b2d4-d457934aac61.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>2.000 Lumen reichen aus, um einen Esstisch vollständig auszuleuchten. Doch selten braucht man alles davon. Deshalb lässt sich die Leuchte stufenlos herunterregeln, vom hellen Licht beim Kochen und Arbeiten bis zum warmen Schimmer am späten Abend. Eine Leuchte, die sich dem Moment anpasst, statt ihn vorzugeben.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Ein Material, das keine Patina braucht",
+        "image": "shopify://shop_images/hf_20261012_150928_3a98efb4-3d57-4fce-8970-5c3efa28d0c7.jpg",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Edelstahl läuft nicht an, rostet nicht und verliert seinen Glanz nicht. Deshalb haben wir uns dafür entschieden. Die spiegelnde Oberfläche fängt das Licht deines Raumes ein und gibt es weich zurück, Tag für Tag, Jahr für Jahr. Ein Material, das man nicht pflegen muss, sondern einfach genießt.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  },
+  "premium-8": {
+    "order": [
+      "main",
+      "row",
+      "related",
+      "apps",
+      "apps",
+      "row",
+      "row",
+      "about",
+      "comparison",
+      "apps",
+      "apps",
+      "faq"
+    ],
+    "rows": [
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Eine Form, die nicht fertig aussehen will",
+        "image": "shopify://shop_images/hf_20261013_074428_1d6c983c-4356-471f-8eb0-0118003ab362.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die Kuppel ist nicht ganz rund. Sie neigt sich leicht zur Seite, und der untere Rand läuft in einer weichen Welle aus statt in einer geraden Kante. Das ist Absicht. Wabi-Sabi beschreibt die Schönheit des Unfertigen, und genau dort setzt diese Form an. Sie sieht aus, als hätte jemand sie von Hand aufgebaut und an der Stelle aufgehört, an der es richtig war.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Die Oberfläche ist der eigentliche Entwurf",
+        "image": "shopify://shop_images/hf_20261013_074711_f3966971-de0f-471f-8f76-ed36dc3f7259.png",
+        "image_width": "medium",
+        "layout": "text_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Glatt wäre einfacher gewesen. Stattdessen trägt die Schale eine feine, raue Struktur, wie verputzter Lehm oder ein Stein, der lange im Wasser lag. Im Streiflicht wirft jede Unebenheit einen eigenen kleinen Schatten, und die Fläche bekommt Tiefe, die eine lackierte Oberfläche nie hätte. Tagsüber ist die Leuchte deshalb ein Objekt. Erst abends wird sie Licht.</p>"
+      },
+      {
+        "button_label": "",
+        "button_link": "",
+        "heading": "Licht kommt nicht von oben, sondern von innen",
+        "image": "shopify://shop_images/hf_20261013_074837_c2e05248-644d-4b2e-8b0c-4474818c45c4.png",
+        "image_width": "medium",
+        "layout": "image_first",
+        "padding": [
+          96,
+          96
+        ],
+        "text": "<p>Die Schale ist innen hell und offen nach unten. Das Leuchtmittel sitzt tief darin, sodass man es im Stehen nicht sieht. Das warme LED-Licht trifft zuerst auf die raue Innenwand, wird dort gestreut und fällt erst dann in den Raum. Was unten ankommt, ist weich und gleichmäßig, ohne harte Kante und ohne Blendung am Esstisch.</p>"
+      }
+    ],
+    "tabs": [
+      {
+        "content": "{{ product.description }}",
+        "disabled": false,
+        "heading": "Produktbeschreibung",
+        "icon": "clipboard"
+      },
+      {
+        "content": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Versandinformationen",
+        "icon": "truck"
+      },
+      {
+        "content": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+        "disabled": false,
+        "heading": "Rückgabeinformationen",
+        "icon": "return"
+      }
+    ]
+  }
+}

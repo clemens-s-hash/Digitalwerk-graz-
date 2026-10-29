@@ -124,16 +124,7 @@
         "enable_transparent_header_product": false,
         "enable_transparent_header_collection": false
       }
-    },
-    "gempages_header_slot": {
-      "type": "_blocks",
-      "name": "GemPages Platzhalter (Kopfbereich)",
-      "settings": {
-        "section_width": "page-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
     }
   },
-  "order": ["announcement_bar", "ticker", "header_section", "gempages_header_slot"]
+  "order": ["announcement_bar", "ticker", "header_section"]
 }

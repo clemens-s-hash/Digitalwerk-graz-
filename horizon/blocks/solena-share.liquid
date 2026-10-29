@@ -1,0 +1,76 @@
+{%- doc -%}
+  Teilen-Schaltflaeche fuer die Produktseite.
+
+  Shrines `share`-Block hatte nur die Beschriftung als Einstellung. Horizon
+  hat keinen Teilen-Block, deshalb dieser. Er nutzt die Web-Share-API des
+  Browsers und faellt auf „Link kopieren" zurueck, wo sie fehlt.
+{%- enddoc -%}
+
+<solena-share
+  class="solena-share spacing-style"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  data-share-url="{{ canonical_url | default: request.origin }}"
+  data-share-title="{{ closest.product.title | default: shop.name | escape }}"
+  data-copied-label="{{ block.settings.copied_label | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <button type="button" class="solena-share__button button-unstyled" data-share-trigger>
+    <span class="svg-wrapper solena-share__icon">
+      {{- 'icon-share.svg' | inline_asset_content -}}
+    </span>
+    <span data-share-label>{{ block.settings.label | escape }}</span>
+  </button>
+</solena-share>
+
+<script src="{{ 'solena-share.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Teilen",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Beschriftung",
+      "default": "Teilen"
+    },
+    {
+      "type": "text",
+      "id": "copied_label",
+      "label": "Rückmeldung nach dem Kopieren",
+      "default": "Link kopiert"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Teilen",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

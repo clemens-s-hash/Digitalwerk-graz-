@@ -8,13 +8,13 @@ Portierung des Live-Themes **solenahome-redesign-clarity** (Shrine⁺ 1.3.5) auf
 - Regel: **kein Shrine-Code kopiert.** Shrine ist optische und funktionale
   Vorlage; umgesetzt mit Horizons eigenen Sections, Theme-Blocks und Snippets.
 
-Stand: Etappen 1–7 abgeschlossen, Etappe 8 (Feinschliff) begonnen.
+Stand: Etappen 1–8 abgeschlossen. Fünf Befunde aus deinem Diff behoben.
 
 ---
 
 ## Inhalt
 
-1. [Status](#1-status)
+1. [Status](#1-status) · [Die fünf Befunde aus deinem Diff](#1a-die-fünf-befunde-aus-deinem-diff) · [Linkprüfung](#1b-linkprüfung)
 2. [Drei Korrekturen zur Ausgangslage](#2-drei-korrekturen-zur-ausgangslage)
 3. [Design-Tokens](#3-design-tokens)
 4. [Was pro Template drin ist](#4-was-pro-template-drin-ist)
@@ -40,8 +40,9 @@ Stand: Etappen 1–7 abgeschlossen, Etappe 8 (Feinschliff) begonnen.
 | 5 | Produktseite inkl. aller Blöcke | ✅ |
 | 6 | Collection, Cart, Search, 404, About, FAQ, Contact | ✅ |
 | 7 | Fehlende Sections als eigene Theme-Blocks | ✅ |
-| 8 | Feinschliff per CSS, Theme Check, Mobil-Prüfung | 🟨 |
+| 8 | Feinschliff per CSS, Theme Check, Mobil-Prüfung | ✅ |
 | 9 | ZIP-Lieferung | ✅ |
+| 10 | Fünf Befunde aus dem Diff behoben, 8 Premium-Templates | ✅ |
 
 Prüfungen: `shopify theme check` **0 Errors**, `tools/verify.py` **0 Fehler**.
 
@@ -51,6 +52,196 @@ Prüfungen: `shopify theme check` **0 Errors**, `tools/verify.py` **0 Fehler**.
 | 🟨 | in Arbeit |
 | ❓ | warte auf deine Entscheidung |
 | ⏭️ | bewusst nicht portiert, Begründung in der Zeile |
+
+---
+
+## 1a. Die fünf Befunde aus deinem Diff
+
+| # | Befund | Behoben |
+|---|---|---|
+| 1 | `_blocks` an neun Stellen als Top-Level-Section | ✅ alle ersatzlos weg |
+| 2 | `featured-product` auf der Startseite leer | ✅ sieben Blöcke, Section bleibt deaktiviert |
+| 3 | vier App-Blöcke auf der Produktseite fehlten in der Reihenfolge | ✅ Platzhalter an Position 1, 3, 4 und 5 |
+| 4 | `sticky_atc` fehlte ganz | ✅ `blocks/solena-sticky-atc.liquid`, Position 11 |
+| 5 | die acht Premium-Templates fehlten | ✅ alle acht angelegt, Inhalte 1:1 |
+
+### 1 — `_blocks` ist weg, überall
+
+`_blocks` ist in Horizon eine private Section (führender Unterstrich) und
+wird im Lieferzustand an **keiner** Stelle als Top-Level-Section verwendet —
+ich habe das gegen das Original-Horizon geprüft, es ist nirgends. Mein
+Fehler: ich hatte das Muster aus Shrine übernommen, wo `_blocks` eine
+Plattform-Section ohne Datei im Theme ist.
+
+Alle neun Vorkommen sind ersetzt. Als Container dient jetzt
+`sections/section.liquid`, das über `@app` dieselben App-Blöcke aufnimmt:
+
+| Datei | vorher | jetzt |
+|---|---|---|
+| `templates/index.json` | 2× `_blocks` | 2× `section` „GemPages Platzhalter 1/2" |
+| `templates/product.json` | 4× `_blocks` | 3× `section` „GemPages Platzhalter 1–3" + 1× `section` „Judge.me Bewertungen" |
+| `templates/page.json` | 2× `_blocks` | 2× `section` „GemPages Platzhalter 1/2" |
+| `sections/footer-group.json` | 1× `_blocks` | 1× `section` „GemPages Platzhalter (Fußbereich)" |
+| `sections/header-group.json` | 1× `_blocks` | **ersatzlos entfernt** |
+
+Die Header-Gruppe ist der eine Fall ohne Ersatz: `section.liquid` trägt
+`disabled_on: {"groups": ["header"]}`, darf dort also nicht stehen. Shrines
+Platzhalter war ohnehin leer. Wenn du im Kopfbereich einen GemPages-Block
+brauchst, geht er in die Ankündigungsleiste oder in eine eigene Section auf
+dem Template.
+
+`tools/verify.py` prüft jetzt zusätzlich, dass kein Section-Type mit
+Unterstrich als Top-Level-Section auftaucht.
+
+### 2 — `featured-product` mit sieben Blöcken
+
+Horizons `featured-product` nimmt **keine Blöcke** an, nur ein Produkt und
+ein Layout. Die Entsprechung ist `featured-product-information`: gleiche
+Struktur wie die Produktseite, aber mit eigenem Produkt-Setting. Darin
+stehen jetzt die sieben Blöcke:
+
+| # | Shrine | Horizon | im Original |
+|---|---|---|---|
+| 1 | `text` „Immer im Blick" | `text`, 12px uppercase | aktiv |
+| 2 | `title` (h2) | `product-title` (h3) | aktiv |
+| 3 | `price` | `price` | deaktiviert |
+| 4 | `variant_picker` | `variant-picker` | deaktiviert |
+| 5 | `quantity_selector` | `quantity` | deaktiviert |
+| 6 | `buy_buttons` | `buy-buttons` + 3 statische Kinder | deaktiviert |
+| 7 | `share` | `solena-share` (neu gebaut) | deaktiviert |
+
+**Zum Produkt:** du schreibst „setze dasselbe Produkt wie im Original". Im
+Shrine-Export steht dort `"product": ""` — es ist **keines gesetzt**, und
+die Section ist als Ganzes deaktiviert. Ich habe beides so übernommen. Das
+Produkt musst du in Shopify wählen; ich kann es nicht erraten.
+
+Für `share` hat Horizon kein Gegenstück, deshalb `blocks/solena-share.liquid`:
+Web-Share-API des Browsers, mit „Link kopieren" als Rückfall.
+
+### 3 — App-Platzhalter an den richtigen Positionen
+
+Neu: `blocks/solena-app-slot.liquid`. Im Shop rendert er **nichts**. Im
+Theme-Editor zeigt er einen gestrichelten Kasten mit App- und Blockname,
+damit die Reihenfolge stimmt und sichtbar ist, was wohin gehört.
+
+Die Produktseite hat damit wieder alle 15 Positionen:
+
+| # | Block | Typ |
+|---|---|---|
+| 1 | Iconic Blocks › Review Summary | Platzhalter |
+| 2 | Titel | `product-title` |
+| 3 | Iconic Blocks › Benefits | Platzhalter |
+| 4 | Judge.me › Preview Badge | Platzhalter |
+| 5 | Iconic Blocks › Review Summary (2.) | Platzhalter |
+| 6 | Preis | `price` |
+| 7 | Vorteile mit Emoji | `solena-emoji-benefits` (aus) |
+| 8 | Variantenauswahl | `variant-picker` |
+| 9 | Menge | `quantity` (aus) |
+| 10 | Kaufen-Schaltflächen | `buy-buttons` |
+| 11 | Sticky Warenkorb | `solena-sticky-atc` |
+| 12 | Bezahl-Icons | `payment-icons` |
+| 13–15 | drei Aufklappbereiche | `accordion` + 3 Zeilen |
+
+Dazu die Section „Judge.me Bewertungen" mit einem Platzhalter fürs Review-Widget.
+
+### 4 — Sticky Warenkorb als eigener Block
+
+`blocks/solena-sticky-atc.liquid` + `assets/solena-sticky-atc.js`, mit den
+Einstellungen aus dem Export: erscheint nach dem Scrollen, Beschriftung
+„Zum Warenkorb", Preis sichtbar, Rabatt-Badge sichtbar, Standardfarben
+(Shrines `background-1`).
+
+Die Leiste schreibt **nicht** selbst in den Warenkorb. Sie klickt den echten
+Add-to-Cart-Button des Produktformulars, damit Horizons Variantenlogik,
+Mengenregeln, Fehlermeldungen und Cart-Drawer unverändert greifen — dieselbe
+Technik, die Horizons eigene Leiste benutzt (`dataset.puppet`).
+
+Horizons eingebaute Leiste ist dafür abgeschaltet
+(`enable_sticky_add_to_cart: false`), sonst erschienen zwei.
+
+### 5 — Die acht Premium-Templates
+
+Alle acht angelegt. Geprüft per Hash: `rich-text`, `comparison-table`,
+`collapsible-content` und `related-products` sind in allen acht **und** in
+`product.json` identisch. Verschieden sind nur die drei
+`image-with-text`-Sections und ihre Position relativ zu `related-products`.
+
+`main-product` hat bei den Premium-Templates eine **andere** Reihenfolge als
+`product.json` — Preis vor den Benefits, und nur zwei App-Blöcke statt vier:
+
+| # | Block |
+|---|---|
+| 1 | Platzhalter: Iconic Blocks › Review Summary |
+| 2 | Titel |
+| 3 | Preis |
+| 4 | Platzhalter: Iconic Blocks › Benefits |
+| 5 | Vorteile mit Emoji (aus) — fehlt bei `premium-8` |
+| 6 | Variantenauswahl |
+| 7 | Menge (aus) |
+| 8 | Kaufen-Schaltflächen |
+| 9 | Sticky Warenkorb |
+| 10 | Bezahl-Icons |
+| 11–13 | drei Aufklappbereiche |
+
+`premium-8` hat 12 Blöcke statt 13, weil dort `emoji_benefits` fehlt —
+so im Original.
+
+Die Bilder, Überschriften und Texte der 24 `image-with-text`-Zeilen sind
+**nicht abgeschrieben**: `tools/extract-premium.py` liest sie direkt aus dem
+Shrine-Export in `tools/premium-content.json`, und `tools/templates.py`
+erzeugt die Templates daraus. Das Ergebnis ist damit nachweisbar 1:1.
+
+Die Position der Bildseite folgt Shrines `layout`: `image_first` → Bild
+links, `text_first` → Bild rechts.
+
+### Kleinigkeiten
+
+| Punkt | Stand |
+|---|---|
+| `sticky_header_type: "always"` | war bereits gesetzt: `enable_sticky_header: "always"` in `sections/header-group.json`. Da ist nichts zu ändern. |
+| `logo_position: "middle-left"` | Horizon kennt nur `left`, `center`, `right`. Shrines `middle-left` heißt „mittlere Zeile, links ausgerichtet" — in Horizon also `left`, zusammen mit `menu_position: "center"`. Das ist gesetzt und die genaue Entsprechung; einen Wert `middle-left` gibt es nicht. |
+| Platzhaltertext „🙌 Benefit" | bleibt, wie du sagst. |
+| Microsoft Clarity | unangetastet. |
+
+---
+
+## 1b. Linkprüfung
+
+**Der Live-Shop ist aus dieser Session nicht erreichbar** — die
+Netzwerk-Richtlinie dieser Cloud-Umgebung hat `www.solenahome.com`
+abgelehnt. Du kannst das in den Einstellungen der Umgebung ändern (Menü der
+Cloud-Umgebung in der Titelzeile → Edit → Network access): entweder eine
+breitere Zugriffsstufe oder `www.solenahome.com` unter „Allowed domains",
+mit „Allow package managers" angehakt. Die Schritte stehen unter
+https://code.claude.com/docs/en/cloud-environments#network-access
+
+Was ich **ohne** Shop prüfen konnte: ob mein Build irgendein Linkziel
+erfindet, das Shrine nicht hatte. Ergebnis: **nein, kein einziges.** Alle
+Handles sind identisch mit dem Original:
+
+| Ziel | Shrine | mein Build |
+|---|---|---|
+| `shopify://collections/all` | index | index, 404 |
+| `hangeleuchten`, `deckenleuchten`, `tischleuchten`, `wandleuchten`, `outdoor-leuchten` | index | index |
+| `bestseller` | index | index |
+| `trends` | index, page | index, page |
+| `alleprodukte`, `all` | cart | cart |
+| `shopify://pages/uber-uns` | index | index |
+| `shopify://pages/contact` | page.faq | page.faq, page.track-order |
+| Menüs `main-menu`, `rechtliches` | header-group, footer-group | header-group, footer-group |
+
+Der 404, auf dem du gelandet bist, kam also mit hoher Wahrscheinlichkeit
+**nicht** von einem falschen Link, sondern von Befund 1: eine private
+Section als Top-Level-Section bringt das Rendern der ganzen Seite zu Fall.
+Das ist behoben.
+
+Was ich trotzdem **nicht** prüfen konnte und du im Shop nachsehen musst:
+
+- ob diese acht Kollektions-Handles im Shop so heißen
+- ob die Seite `uber-uns` existiert (und nicht etwa `about-us`)
+- welche Ziele in `main-menu` und `rechtliches` hinterlegt sind — die Menüs
+  liegen in Shopifys Navigation, nicht im Theme. Das Theme verweist nur auf
+  die beiden Handles.
 
 ---
 
@@ -74,14 +265,20 @@ Shrines Schemes sind daher in Hex-Werte aufgelöst:
 | `inverse` / `accent-1` | `#1C1A17` | `#FBF9F5` | `background_color: "#1C1A17"` |
 | `accent-2` | `#7A3B1E` | `#FBF9F5` | `background_color: "#7A3B1E"` |
 
-### 2.2 `_blocks` kommt nicht von GemPages
+### 2.2 `_blocks` kommt nicht von GemPages — und ist nicht benutzbar
 
-`_blocks` ist Shopifys eigener Container für freistehende Theme-Blocks —
-Horizon hat die Section selbst (`sections/_blocks.liquid`). Die drei
+In Shrine ist `_blocks` eine **Plattform-Section** ohne Datei im Theme:
+Shopifys eigener Container für freistehende Theme-Blocks. Die drei
 Instanzen im Live-Theme (2× `index.json`, 1× `header-group.json`) sind
-**inhaltlich leer**. Sie bleiben als benannte Platzhalter erhalten, weil
-`_blocks` App-Blöcke aufnimmt und damit der richtige Ort für die
-GemPages-Inhalte ist.
+inhaltlich leer.
+
+In Horizon existiert zwar `sections/_blocks.liquid`, aber als **private
+Section** (führender Unterstrich). Sie wird im Lieferzustand an keiner
+Stelle als Top-Level-Section verwendet, und als eine solche eingesetzt
+bringt sie das Rendern der Seite zu Fall. Siehe Befund 1 in §1a.
+
+Für die GemPages-Stellen dient stattdessen `sections/section.liquid`, das
+über `@app` dieselben App-Blöcke aufnimmt.
 
 ### 2.3 Vier der „neu bauen"-Sections sind im Live-Theme gar nicht aktiv
 
@@ -200,7 +397,7 @@ gleich bleibt, in denen sie vorkommt.
 | `announcement-bar` + 1 Block | `header-announcements` + `_announcement` | „Kostenloser DHL-Versand inkl. Sendungsverfolgung", Hintergrund `#1C1A17`, 12px uppercase |
 | `horizontal-ticker` + 3 Blöcke, **deaktiviert** | `marquee` + 3× `text`, **deaktiviert** | „WELCOME!", „SITEWIDE SALE", „USE CODE X FOR X% OFF!" |
 | `header` | `header` + `_header-logo`, `_header-menu` | sticky `always`, Logo links, Menü zentriert, Icons rechts, 1px Unterkante, `main-menu`, Cart-Bubble in Vordergrundfarbe |
-| `_blocks` (leer) | `_blocks` „GemPages Platzhalter (Kopfbereich)" | leer, siehe §8 |
+| `_blocks` (leer) | **ersatzlos entfernt** | `section` ist in der Header-Gruppe gesperrt, Shrines Platzhalter war leer. Siehe §1a |
 
 **Nicht übertragbar:** Shrines `mobile_menu_title: "Menu"` — Horizon beschriftet
 die Schublade über die Sprachdatei. `highlighted_link_color_scheme` entfällt
@@ -211,7 +408,7 @@ aus dem Design-Layer, wie in Shrine.
 
 | Shrine | Horizon | Inhalt |
 |---|---|---|
-| `apps` (leer) | `_blocks` „GemPages Platzhalter (Fußbereich)" | leer, siehe §8 |
+| `apps` (leer) | `section` „GemPages Platzhalter (Fußbereich)" | leer, siehe §8 |
 | `footer` Block `link_list` | `menu` | „Menü" → `main-menu` |
 | `footer` Block `link_list` | `menu` | „Rechtliches" → `rechtliches` |
 | `footer` Block `text` | `group` mit 2× `text` | „Kontakt" mit Service-Zeiten, `support@solenahome.com`, Anschrift Graz |
@@ -230,10 +427,10 @@ rendert sie ohnehin nichts. Der Ländersteller bleibt aus, wie in Shrine.
 | 1 | `slideshow`, 1 Slide | `slideshow` + `_slide` | „Entdecke Solena" / „Weil Design keine Ausnahme sein sollte" / Button „Finde jetzt deinen Stil" → `/collections/all`; full-width, `slide_height: large`, Counter, Overlay 10 %, Text links mittig |
 | 2 | `collection-list`, 5 Blöcke | `collection-list` + `_collection-card` | „Collections"; hangeleuchten, deckenleuchten, tischleuchten, wandleuchten, outdoor-leuchten; 5 Spalten / 2 mobil, square, Swipe mobil, Padding 72/88 |
 | 3 | `featured-collection` | `product-list` | „Solena Bestseller" (h1), Kollektion `bestseller`, 16 Produkte, 5 Spalten / 2 mobil, Bewertung an, Padding 36/36 |
-| 4 | `_blocks` (leer) | `_blocks` | GemPages Platzhalter 1 |
-| 5 | `_blocks` (leer) | `_blocks` | GemPages Platzhalter 2 |
+| 4 | `_blocks` (leer) | `section` | GemPages Platzhalter 1 |
+| 5 | `_blocks` (leer) | `section` | GemPages Platzhalter 2 |
 | 6 | `image-with-text`, 3 Blöcke | `media-with-content` | „Ein Statement für dein Zuhause" / „Wo nordische Ruhe auf Design trifft" / „Mehr lesen" → `/pages/uber-uns`; Hintergrund `#F2EDE5`, Bild rechts schmal, Padding 96/96 |
-| 7 | `featured-product`, **deaktiviert** | `featured-product`, **deaktiviert** | kein Produkt gesetzt, wie im Original |
+| 7 | `featured-product`, 7 Blöcke, **deaktiviert** | `featured-product-information` + `_product-details` mit 7 Blöcken, **deaktiviert** | „Immer im Blick", Titel, Preis (aus), Variantenauswahl (aus), Menge (aus), Kaufen (aus), Teilen (aus). Kein Produkt gesetzt, wie im Original — siehe §1a |
 | 8 | `featured-collection` | `product-list` | „Trends 2026", Kollektion `trends`, 4 Produkte, 4 Spalten, „Alle ansehen" |
 | 9 | `testimonials`, 3 Blöcke | `section` → `group` → 3× `solena-testimonial` | „Zufriedenheit ist unsere Voraussetzung", 3 Spalten, zentriert, Sterne; Julia S. / Thomas W. / Andrea Z. mit den Originaltexten |
 
@@ -253,17 +450,17 @@ Die 15 Blöcke in der Reihenfolge des Exports:
 
 | # | Shrine-Block | Horizon | Status |
 |---|---|---|---|
-| 1 | App: Iconic Review Summary | — | ❓ §7, in Shopify einsetzen |
+| 1 | App: Iconic Review Summary | `solena-app-slot` | ✅ Platzhalter, §7 |
 | 2 | `title` | `product-title` (h3, Jost) | ✅ |
-| 3 | App: Iconic Benefits | — | ❓ §7 |
-| 4 | App: Judge.me Preview Badge | — | ❓ §7 |
-| 5 | App: Iconic Review Summary (2.) | — | ❓ §7 |
+| 3 | App: Iconic Benefits | `solena-app-slot` | ✅ Platzhalter, §7 |
+| 4 | App: Judge.me Preview Badge | `solena-app-slot` | ✅ Platzhalter, §7 |
+| 5 | App: Iconic Review Summary (2.) | `solena-app-slot` | ✅ Platzhalter, §7 |
 | 6 | `price` | `price` (20px, weight 500) | ✅ |
 | 7 | `emoji_benefits`, deaktiviert | `solena-emoji-benefits`, deaktiviert | ✅ neu gebaut |
 | 8 | `variant_picker` (Buttons) | `variant-picker` | ✅ |
 | 9 | `quantity_selector`, deaktiviert | `quantity`, deaktiviert | ✅ |
 | 10 | `buy_buttons` | `buy-buttons` + `quantity`, `add-to-cart`, `accelerated-checkout` | ✅ |
-| 11 | `sticky_atc` | Section-Setting `enable_sticky_add_to_cart` | ✅ ohne Neubau |
+| 11 | `sticky_atc` | `solena-sticky-atc` | ✅ neu gebaut, §1a |
 | 12 | `payment_badges` | `payment-icons` | ✅ ohne Neubau |
 | 13 | `collapsible_tab` „Produktbeschreibung" | `accordion` + `_accordion-row` + `product-description`, Icon `clipboard` | ✅ |
 | 14 | `collapsible_tab` „Versandinformationen" | `_accordion-row` + `text`, Icon `truck` | ✅ |
@@ -274,11 +471,11 @@ Danach:
 | Shrine | Horizon | Inhalt |
 |---|---|---|
 | `related-products`, deaktiviert | `product-recommendations`, deaktiviert | „Das könnte dir auch gefallen" |
-| `apps` ×2 (leer) | `_blocks` ×2 | GemPages Platzhalter 1 und 2 |
+| `apps` ×2 (leer) | `section` ×2 | GemPages Platzhalter 1 und 2 |
 | `rich-text`, 2 Blöcke | `section` + 2× `text` | „Über Uns" + Markentext, Hintergrund `#F2EDE5`, full-width, zentriert |
 | `comparison-table`, 3 Blöcke | `section` + `solena-comparison-table` + 3 Zeilen | „Was uns ausmacht"; Persönlicher Kundenservice / Designerlampen zum fairen Preis / 30 Tage Geld-zurück-Garantie; Haken `#53AF01` |
-| `apps` (Judge.me Widget) | `_blocks` „Judge.me Bewertungen" | ❓ §7 |
-| `apps` (leer) | `_blocks` | GemPages Platzhalter 3 |
+| `apps` (Judge.me Widget) | `section` „Judge.me Bewertungen" + App-Platzhalter | ❓ §7 |
+| `apps` (leer) | `section` | GemPages Platzhalter 3 |
 | `collapsible-content`, 8 Blöcke | `section` + `accordion` + 8 Zeilen | „Häufig gestellte Fragen", Hintergrund `#F2EDE5`, alle 8 deutschen Einträge |
 
 **Nicht übertragbar:** Shrines `sticky_atc` hatte den eigenen Button-Text
@@ -322,8 +519,8 @@ dem Einleitungstext → Produktraster mit `show_secondary_image: true`.
 
 ### templates/page.json ✅
 
-`main-page` + `page-content` → `_blocks` ×2 (GemPages) → `product-list`
-„Trends 2026".
+`main-page` + `page-content` → `section` ×2 (GemPages-Platzhalter) →
+`product-list` „Trends 2026".
 
 ### templates/page.about-us.json ✅ (neu)
 
@@ -401,16 +598,31 @@ in den Blöcken — eine Stelle für alles.
 | `solena-card-swatches` + `snippets/solena-card-swatches.liquid` | `card-swatches.liquid` | 8 Templates |
 | `solena-hairline` | die 1px-Linie in der Produktkarte | 8 Templates |
 | `solena-collection-banner` | `main-collection-banner` | collection, collection.alle |
+| `solena-sticky-atc` + `assets/solena-sticky-atc.js` | `sticky_atc` | product, alle 8 premium |
+| `solena-share` + `assets/solena-share.js` | `share` | index (featured-product) |
+| `solena-app-slot` | hält die Position eines App-Blocks frei | product, alle 8 premium |
 
-### Warum vier aus deiner Liste nicht gebaut wurden
+### Warum drei aus deiner Liste nicht gebaut wurden
 
 | Deine Liste | Grund |
 |---|---|
-| `sticky_atc` | Horizon hat das eingebaut: `enable_sticky_add_to_cart` in `product-information` zeigt Bild, Titel, Variante, Preis und Add-to-Cart. Ein Nachbau wäre doppelt. |
 | `payment_badges` | Horizon hat `blocks/payment-icons.liquid`. |
 | `icon-bar` | Horizons `section.liquid` hat das Preset `icons_with_text`. Zusätzlich: in keinem der gebauten Templates verwendet, nur in `product.gp-template-bk-default`. |
 | `horizontal-ticker` | `marquee` deckt es ab. |
 | `vertical-ticker` | Kommt nur in `product.gp-template-bk-default` vor, also in keinem der jetzt gebauten Templates. Wird mit den Premium-Templates gebaut, wenn du sie brauchst — siehe §12. |
+
+### Warum `solena-sticky-atc` nicht Horizons eingebaute Leiste nutzt
+
+Horizon hat eine eigene Sticky-Leiste, aber nur als Section-Einstellung
+`enable_sticky_add_to_cart` und ohne eigene Beschriftung oder Rabatt-Badge.
+Shrine hatte beides. Der eigene Block liefert „Zum Warenkorb" und das
+Badge; Horizons Leiste ist auf der Produktseite und allen acht
+Premium-Templates abgeschaltet, sonst erschienen zwei.
+
+Die Leiste schreibt nicht selbst in den Warenkorb, sondern klickt den echten
+Add-to-Cart-Button des Formulars (`dataset.puppet`, dieselbe Technik wie
+Horizons eigene Leiste). So greifen Variantenlogik, Mengenregeln,
+Fehlermeldungen und Cart-Drawer unverändert.
 
 ### Warum `solena-track-order` eigenen JavaScript-Code hat
 
@@ -580,15 +792,15 @@ nicht gebaut; sag Bescheid, wenn du eines davon brauchst.
 
 | Prüfung | Werkzeug | Ergebnis |
 |---|---|---|
-| Liquid- und Schema-Validierung | `shopify theme check` (CLI 5.0.0) | 372 Dateien, **0 Errors**, 6 Warnings |
-| JSON, Referenzen, Block-Architektur, Platzierung, Limits | `tools/verify.py` | 293 Liquid-Dateien, 20 JSON-Dokumente, **0 Fehler, 0 Warnungen** |
+| Liquid- und Schema-Validierung | `shopify theme check` (CLI 5.0.0) | 383 Dateien, **0 Errors**, 6 Warnings |
+| JSON, Referenzen, Block-Architektur, Platzierung, Limits | `tools/verify.py` | 296 Liquid-Dateien, 28 JSON-Dokumente, **0 Fehler, 0 Warnungen** |
 | Theme-Settings gegen das Schema | `tools/settings.py` | 129 von 133 gesetzt, 4 bewusst auf Default |
 
 Die sechs Warnings stammen unverändert aus Horizons Lieferzustand:
 fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
 `ExcessiveSettingsCount` in `sections/header.liquid`.
 
-`tools/verify.py` prüft acht Dinge, die `theme check` nicht abdeckt:
+`tools/verify.py` prüft neun Dinge, die `theme check` nicht abdeckt:
 
 1. Alle JSON-Templates und Section-Groups parsen, inklusive der `/* */`- und
    `//`-Kommentare, die Shopify dort erlaubt.
@@ -603,13 +815,18 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
    diesem Template stehen? **Das hat den Marquee-Fehler gefunden**, der den
    Upload gebrochen hätte.
 7. `max_blocks` der Section und `limit` je Block-Type.
-8. Jeder `t:`-Schlüssel existiert in `locales/en.default.schema.json`.
+8. Kein Section-Type mit führendem Unterstrich steht als Top-Level-Section
+   in einem Template oder einer Section-Gruppe. **Das ist der Check für
+   Befund 1**; ich habe ihn gegengeprüft, indem ich ein `_blocks` wieder
+   eingesetzt habe — er schlägt an.
+9. Jeder `t:`-Schlüssel existiert in `locales/en.default.schema.json`.
 
 ### Noch offen in Etappe 8
 
 | Punkt | Warum noch offen |
 |---|---|
 | Mobil- und Desktop-Prüfung im Browser | braucht einen laufenden Store. Ohne Store-Zugang habe ich nur statisch gegen die Breakpoints geprüft: `max-width: 749px` für Handy, `min-width: 750px` und `990px` für Desktop, dieselben Grenzen wie in Shrine. Sobald das Theme in der Vorschau läuft, sag mir, was abweicht. |
+| Linkziele gegen den Live-Shop | `www.solenahome.com` ist aus dieser Session nicht erreichbar, siehe §1b. Geprüft ist nur, dass mein Build kein Ziel erfindet, das Shrine nicht hatte — das trifft zu. |
 | `locales/de.json` | Horizons deutsche Datei deckt Shrines Strings bereits ab — `add_to_cart` heißt in beiden „In den Warenkorb legen", `sold_out` „Ausverkauft". Es war also nichts zu pflegen. Falls du die Sticky-Leiste auf „Zum Warenkorb" willst, ist das ein Eintrag in `products.product.add_to_cart` — der ändert dann aber auch den Hauptbutton. |
 
 ---
@@ -644,8 +861,14 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
    bitte nach Augenmaß korrigieren.
 5. **App-Embeds aktivieren:** Judge.me, Iconic Blocks, Google Ads Pixel by
    Nabu. Siehe §7.
-6. **App-Blöcke einsetzen:** vier auf der Produktseite, eines in der
-   Section „Judge.me Bewertungen". Positionen und Einstellungen in §7.
+6. **App-Blöcke einsetzen:** vier auf der Produktseite, zwei auf jedem
+   Premium-Template, eines in der Section „Judge.me Bewertungen". An jeder
+   Stelle steht ein gestrichelter Platzhalter mit App- und Blocknamen —
+   App-Block daneben einsetzen, Platzhalter löschen. Positionen und
+   Einstellungen in §7.
+6a. **Produkt für die Section „Featured product" auf der Startseite wählen**,
+   falls du sie aktivieren willst. Im Original war keines gesetzt und die
+   Section deaktiviert.
 7. **GemPages-Inhalte** in die benannten Platzhalter setzen. Siehe §8.
 8. **Produkt-Metafelder prüfen:** `custom.selling_point_1` bis `_4` — der
    Iconic-Benefits-Block liest sie aus.
@@ -657,24 +880,15 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
 
 ## 12. Offene Fragen
 
-### Frage 1 — `product.premium-1` bis `premium-8`
+### Frage 1 — Premium-Templates: erledigt
 
-Du hast entschieden: alle acht 1:1. Ich habe zuerst `product.json` fertig
-gebaut, wie vorgegeben. Die acht Varianten haben je 12 bis 13
-`main-product`-Blöcke und zusätzlich zwei bis drei
-`image-with-text`-Sections, die sich nur in Reihenfolge, Bildern und Texten
-unterscheiden.
-
-Bevor ich sie baue: **brauchst du alle acht, oder reicht eine Vorlage, die
-du in Shopify duplizierst?** Mit `product.json` fertig und der Produktkarte
-im Generator ist jede weitere Variante wenig Aufwand — aber acht
-Templates, die sich nur in Bildern unterscheiden, sind acht Dateien, die du
-später einzeln pflegen musst.
-
-Falls alle acht: `vertical-ticker`, `icon-bar`, `results` und
-`comparison-slider` kommen in `product.gp-template-bk-default` vor. Soll
-ich die vier dann auch bauen? `comparison-slider` und `icon-bar` deckt
-Horizon ab, `vertical-ticker` und `results` wären Neubauten.
+Alle acht sind gebaut. Einziger Rest: `vertical-ticker`, `icon-bar`,
+`results` und `comparison-slider` kommen nur in
+`product.gp-template-bk-default` vor, also in keinem der acht
+Premium-Templates und auch nicht in `product.json`. `icon-bar` und
+`comparison-slider` deckt Horizon über `icons_with_text` und
+`image_compare` ab; `vertical-ticker` und `results` wären Neubauten. Soll
+ich dieses GemPages-Backup-Template überhaupt portieren?
 
 ### Frage 2 — englische Texte
 
@@ -694,12 +908,10 @@ welche vor.
 
 ### Frage 3 — zweite Trustpilot-Zeile
 
-Die Produktseite hat zwei Iconic-Review-Summary-Blöcke: einen mit deinen
-echten Werten, einen mit dem App-Platzhalter „20,921 reviews" ohne Link.
-Du hattest zuerst „nur die erste" entschieden, dann in der Zielstruktur
-beide Positionen (1 und 5) genannt. Ich habe **beide** dokumentiert, weil
-die Zielstruktur die spätere Angabe ist. Wenn die zweite doch raus soll,
-lass sie in Shopify einfach weg — am Theme ändert sich nichts.
+Beide Positionen (1 und 5) haben jetzt einen Platzhalter, wie es die
+Zielstruktur verlangt. Position 5 trug im Original den App-Platzhaltertext
+„20,921 reviews" ohne Link. Wenn du sie nicht willst, lösch in Shopify
+einfach den Platzhalter an Position 5 — am Theme ändert sich nichts.
 
 ### Frage 4 — drei App-Snippets
 

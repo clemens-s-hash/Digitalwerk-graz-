@@ -1,0 +1,960 @@
+/*
+ * ------------------------------------------------------------
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
+ *
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product-information",
+      "settings": {
+        "content_width": "content-center-aligned",
+        "desktop_media_position": "left",
+        "gap": 32,
+        "enable_sticky_add_to_cart": false,
+        "padding-block-start": 32,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "media-gallery": {
+          "type": "_product-media-gallery",
+          "static": true,
+          "settings": {
+            "media_presentation": "carousel",
+            "slideshow_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "thumbnails",
+            "thumbnail_position": "bottom",
+            "thumbnail_radius": 0,
+            "aspect_ratio": "adapt",
+            "constrain_to_viewport": true,
+            "media_fit": "contain",
+            "media_radius": 2,
+            "extend_media": false,
+            "zoom": true,
+            "hide_variants": false
+          }
+        },
+        "product-details": {
+          "type": "_product-details",
+          "static": true,
+          "settings": {
+            "width": "fill",
+            "details_position": "flex-start",
+            "gap": 20,
+            "sticky_details_desktop": true,
+            "padding-block-end": 24
+          },
+          "blocks": {
+            "app-review-summary": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Iconic Blocks",
+                "block_name": "Review Summary",
+                "note": "Trustpilot-Zeile: 4,5 Sterne, „Über 35.000 Bewertungen\", Link at.trustpilot.com"
+              }
+            },
+            "title": {
+              "type": "product-title",
+              "settings": {
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "h3",
+                "font": "var(--font-heading--family)",
+                "max_width": "none"
+              }
+            },
+            "price": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1.25rem"
+              }
+            },
+            "app-benefits": {
+              "type": "solena-app-slot",
+              "settings": {
+                "app_name": "Iconic Blocks",
+                "block_name": "Benefits",
+                "note": "liest product.metafields.custom.selling_point_1 bis _4"
+              }
+            },
+            "variant-picker": {
+              "type": "variant-picker",
+              "settings": {}
+            },
+            "quantity": {
+              "type": "quantity",
+              "disabled": true,
+              "settings": {}
+            },
+            "buy-buttons": {
+              "type": "buy-buttons",
+              "settings": {
+                "stacking": false,
+                "show_pickup_availability": true
+              },
+              "blocks": {
+                "quantity": {
+                  "type": "quantity",
+                  "static": true,
+                  "settings": {}
+                },
+                "add-to-cart": {
+                  "type": "add-to-cart",
+                  "static": true,
+                  "settings": {
+                    "style_class": "button"
+                  }
+                },
+                "accelerated-checkout": {
+                  "type": "accelerated-checkout",
+                  "static": true,
+                  "settings": {}
+                }
+              }
+            },
+            "sticky-atc": {
+              "type": "solena-sticky-atc",
+              "settings": {
+                "display_when": "after_scroll",
+                "button_label": "Zum Warenkorb",
+                "show_image": true,
+                "show_price": true,
+                "show_price_badge": true
+              }
+            },
+            "payment-icons": {
+              "type": "payment-icons",
+              "settings": {
+                "horizontal_alignment": "flex-start",
+                "gap": 8
+              }
+            },
+            "tabs": {
+              "type": "accordion",
+              "settings": {
+                "icon": "caret",
+                "dividers": true,
+                "type_preset": "h5",
+                "divider_color": "{{ settings.color_palette.color2 }}"
+              },
+              "blocks": {
+                "tab-1": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Produktbeschreibung",
+                    "icon": "clipboard"
+                  },
+                  "blocks": {
+                    "tab-body-1": {
+                      "type": "product-description",
+                      "settings": {
+                        "width": "100%"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "tab-body-1"
+                  ]
+                },
+                "tab-2": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Versandinformationen",
+                    "icon": "truck"
+                  },
+                  "blocks": {
+                    "tab-body-2": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Wir bieten kostenlosen Versand innerhalb Deutschlands an.</p><ul><li><strong>Bearbeitungszeit:</strong> 1–2 Werktage</li><li><strong>Lieferzeit:</strong> 3–7 Werktage</li></ul><p>Der Versand erfolgt zuverlässig mit DHL, inklusive Sendungsverfolgung.</p><p>Weitere Informationen findest du in unserer Versandrichtlinie.</p>",
+                        "type_preset": "rte",
+                        "width": "100%",
+                        "alignment": "left",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "tab-body-2"
+                  ]
+                },
+                "tab-3": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Rückgabeinformationen",
+                    "icon": "return"
+                  },
+                  "blocks": {
+                    "tab-body-3": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Rücksendungen sind innerhalb von 30 Tagen nach Erhalt der Ware möglich.<br/>Der Kaufpreis wird nach Eingang und Prüfung der Rücksendung erstattet.<br/>Die Rücksendekosten trägt der Käufer.<br/><br/>Weitere Informationen finden Sie in unserer Rückerstattungsrichtlinie.</p>",
+                        "type_preset": "rte",
+                        "width": "100%",
+                        "alignment": "left",
+                        "max_width": "none"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "tab-body-3"
+                  ]
+                }
+              },
+              "block_order": [
+                "tab-1",
+                "tab-2",
+                "tab-3"
+              ]
+            },
+            "emoji-benefits": {
+              "type": "solena-emoji-benefits",
+              "disabled": true,
+              "settings": {
+                "benefits": "<p>🙌 Benefit</p><p>💪 Benefit</p><p>🌟 Benefit</p>"
+              }
+            }
+          },
+          "block_order": [
+            "app-review-summary",
+            "title",
+            "price",
+            "app-benefits",
+            "emoji-benefits",
+            "variant-picker",
+            "quantity",
+            "buy-buttons",
+            "sticky-atc",
+            "payment-icons",
+            "tabs"
+          ]
+        }
+      }
+    },
+    "row_1": {
+      "type": "media-with-content",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      },
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/hf_20261014_094134_fa67bc30-82ec-4ea8-8b1e-90cc6f59a916.png",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16
+          },
+          "blocks": {
+            "pr-heading-1": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Materialstärke als Entwurfsmittel</h2>",
+                "type_preset": "h2",
+                "font": "var(--font-heading--family)",
+                "width": "fit-content",
+                "alignment": "left",
+                "max_width": "none"
+              }
+            },
+            "pr-text-1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>In der Mitte hat der Querschnitt noch Tiefe, nach außen nimmt er kontinuierlich ab, bis die Kante nur noch wenige Millimeter misst. Kein Absatz, keine Fase, kein Abschlussprofil. Dadurch liest sich die Scheibe von der Seite als Linie und von unten als volle Fläche. Dieselbe Geometrie, zwei Zustände.</p>",
+                "type_preset": "rte",
+                "width": "100%",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "pr-heading-1",
+            "pr-text-1"
+          ]
+        }
+      }
+    },
+    "related_products": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "max_products": 4,
+        "columns": 4,
+        "columns_gap": 24,
+        "rows_gap": 56,
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "static-header": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Das könnte dir auch gefallen</h2>",
+            "type_preset": "h3",
+            "font": "var(--font-heading--family)",
+            "width": "fit-content"
+          }
+        },
+        "static-product-card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {
+            "product_card_gap": 0,
+            "border": "none",
+            "border_radius": 0
+          },
+          "blocks": {
+            "card-gallery": {
+              "type": "_product-card-gallery",
+              "settings": {
+                "image_ratio": "square",
+                "border_radius": 2
+              }
+            },
+            "card-topline": {
+              "type": "_product-card-group",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "flex-start",
+                "align_baseline": false,
+                "gap": 12,
+                "width": "fill",
+                "height": "fit"
+              },
+              "blocks": {
+                "card-titles": {
+                  "type": "_product-card-group",
+                  "settings": {
+                    "content_direction": "column",
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "gap": 0,
+                    "width": "fill",
+                    "height": "fit"
+                  },
+                  "blocks": {
+                    "card-title": {
+                      "type": "product-title",
+                      "settings": {
+                        "width": "100%",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.125rem",
+                        "line_height": "tight",
+                        "max_width": "none"
+                      }
+                    },
+                    "card-type": {
+                      "type": "solena-product-type",
+                      "settings": {
+                        "source": "type_then_vendor",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "card-title",
+                    "card-type"
+                  ]
+                },
+                "card-rating": {
+                  "type": "review",
+                  "settings": {
+                    "stars_style": "shaded",
+                    "show_number": true,
+                    "width": "fit-content",
+                    "alignment": "right",
+                    "type_preset": "paragraph"
+                  }
+                }
+              },
+              "block_order": [
+                "card-titles",
+                "card-rating"
+              ]
+            },
+            "card-rule": {
+              "type": "solena-hairline",
+              "settings": {
+                "thickness": 1,
+                "padding-block-start": 14,
+                "padding-block-end": 0
+              }
+            },
+            "card-price": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem"
+              }
+            },
+            "card-swatches": {
+              "type": "solena-card-swatches",
+              "settings": {
+                "swatch_limit": 6,
+                "swatch_size": 18,
+                "alignment": "flex-start",
+                "padding-block-start": 14
+              }
+            }
+          },
+          "block_order": [
+            "card-gallery",
+            "card-topline",
+            "card-rule",
+            "card-price",
+            "card-swatches"
+          ]
+        }
+      },
+      "block_order": [
+        "static-header"
+      ]
+    },
+    "gempages_slot_1": {
+      "type": "section",
+      "name": "GemPages Platzhalter 1",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "gempages_slot_2": {
+      "type": "section",
+      "name": "GemPages Platzhalter 2",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "row_2": {
+      "type": "media-with-content",
+      "settings": {
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      },
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/hf_20261014_095053_0d402659-ee70-45c5-acca-67093c1c9784.png",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16
+          },
+          "blocks": {
+            "pr-heading-2": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Das Schliffbild läuft konzentrisch</h2>",
+                "type_preset": "h2",
+                "font": "var(--font-heading--family)",
+                "width": "fit-content",
+                "alignment": "left",
+                "max_width": "none"
+              }
+            },
+            "pr-text-2": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Das Finish ist kein Hochglanz, sondern ein feiner Rundschliff. Die Riefen folgen dem Radius, nicht der Längsachse, und brechen das Licht entlang der Wölbung. Was entsteht, ist kein Spiegelbild, sondern ein wandernder Reflex: eine Oberfläche, die den Raum aufnimmt, ohne ihn abzubilden.</p>",
+                "type_preset": "rte",
+                "width": "100%",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "pr-heading-2",
+            "pr-text-2"
+          ]
+        }
+      }
+    },
+    "row_3": {
+      "type": "media-with-content",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      },
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/hf_20261014_095853_4143e74d-1967-4b6a-9bab-77873f20cbb8.png",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16
+          },
+          "blocks": {
+            "pr-heading-3": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Entblendet bis an die Kante</h2>",
+                "type_preset": "h2",
+                "font": "var(--font-heading--family)",
+                "width": "fit-content",
+                "alignment": "left",
+                "max_width": "none"
+              }
+            },
+            "pr-text-3": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Die gesamte Unterseite ist Lichtaustrittsfläche. Sie endet nicht vor dem Rand, sondern läuft ohne Rahmen bis an die Materialkante. Dahinter sitzt die Optik tief genug, dass im Blickfeld keine Lichtquelle erscheint. Was im Raum ankommt, ist eine gleichmäßig leuchtende Fläche ohne Hotspot und ohne harten Übergang zum Metall.</p><h3></h3>",
+                "type_preset": "rte",
+                "width": "100%",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "pr-heading-3",
+            "pr-text-3"
+          ]
+        }
+      }
+    },
+    "about": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "full-width",
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "background_color": "#F2EDE5"
+      },
+      "blocks": {
+        "about-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Über Uns</h2>",
+            "type_preset": "h2",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "about-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>\"Bei Solena dreht sich alles um eines: Licht, das wirklich berührt. Wir glauben, dass ein Zuhause erst durch die richtige Beleuchtung seinen Charakter bekommt – deshalb haben wir es uns zur Aufgabe gemacht, ausschließlich Designerlampen zu führen, die höchsten Ansprüchen an Qualität, Formgebung und Langlebigkeit gerecht werden.</p><p>Kund:innen vertrauen auf Solena, wenn es darum geht, ihr Zuhause in ein Statement zu verwandeln. Entdecke jetzt unsere Kollektionen und finde die Leuchte, die zu dir passt – bevor sie ausverkauft ist.\"</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "normal"
+          }
+        }
+      },
+      "block_order": [
+        "about-heading",
+        "about-text"
+      ]
+    },
+    "comparison": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "page-width",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "cmp-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Was uns ausmacht</h2>",
+            "type_preset": "h1",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "cmp-table": {
+          "type": "solena-comparison-table",
+          "settings": {
+            "us_label": "",
+            "others_label": "Andere",
+            "us_column_width": 25,
+            "checkmark_color": "#53AF01"
+          },
+          "blocks": {
+            "cmp-1": {
+              "type": "_solena-comparison-row",
+              "settings": {
+                "benefit": "Persönlicher Kundenservice",
+                "us": true,
+                "others": false
+              }
+            },
+            "cmp-2": {
+              "type": "_solena-comparison-row",
+              "settings": {
+                "benefit": "Designerlampen zum fairen Preis",
+                "us": true,
+                "others": false
+              }
+            },
+            "cmp-3": {
+              "type": "_solena-comparison-row",
+              "settings": {
+                "benefit": "30 Tage Geld-zurück-Garantie",
+                "us": true,
+                "others": false
+              }
+            }
+          },
+          "block_order": [
+            "cmp-1",
+            "cmp-2",
+            "cmp-3"
+          ]
+        }
+      },
+      "block_order": [
+        "cmp-heading",
+        "cmp-table"
+      ]
+    },
+    "gempages_slot_3": {
+      "type": "section",
+      "name": "GemPages Platzhalter 3",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "gempages_slot_4": {
+      "type": "section",
+      "name": "GemPages Platzhalter 4",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "faq": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 24,
+        "section_width": "page-width",
+        "background_color": "#F2EDE5",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "faq-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Häufig gestellte Fragen</h2>",
+            "type_preset": "h3",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "faq-accordion": {
+          "type": "accordion",
+          "settings": {
+            "icon": "caret",
+            "dividers": true,
+            "type_preset": "h5",
+            "divider_color": "{{ settings.color_palette.color2 }}"
+          },
+          "blocks": {
+            "row-1": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie lange dauert der Versand?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-1": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Die Bearbeitung dauert in der Regel 1 bis 2 Werktage. Die Lieferzeit beträgt meist ca. 3 bis 7 Werktage.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-1"
+              ]
+            },
+            "row-2": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Ist der Versand kostenlos?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-2": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Ja, der Versand innerhalb Deutschlands und Österreich ist kostenlos.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-2"
+              ]
+            },
+            "row-3": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie kann ich meine Bestellung verfolgen?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-3": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sobald die Bestellung versendet wurde, erhalten Sie eine E-Mail mit einem Tracking-Link.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-3"
+              ]
+            },
+            "row-4": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie lautet eure Rückgaberichtlinie?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-4": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sie können Artikel innerhalb von 30 Tagen ab Zustellung zurückgeben. Die Artikel müssen ungetragen, unbenutzt, vollständig und im Originalzustand mit Etiketten sein. Die Rücksendekosten trägt der Kunde.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-4"
+              ]
+            },
+            "row-5": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Welche Zahlungsmethoden bietet ihr an?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-5": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Visa, Mastercard, Maestro, SEPA, American Express, Apple Pay und PayPal.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-5"
+              ]
+            },
+            "row-6": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Ist die Zahlung auf eurer Website sicher?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-6": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Ja. Ihre Zahlung wird über sichere, verschlüsselte Verbindungen verarbeitet. Zusätzlich stehen Ihnen bekannte Zahlungsarten zur Verfügung.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-6"
+              ]
+            },
+            "row-7": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie geht ihr mit meinen Daten um?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-7": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Wir nutzen Ihre Daten nur zur Bestellabwicklung und zur Bereitstellung unseres Services. Ihre Daten werden nicht für fremde Werbezwecke verkauft.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-7"
+              ]
+            },
+            "row-8": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie kann ich euch erreichen?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-8": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>support@solenahome.com</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-8"
+              ]
+            }
+          },
+          "block_order": [
+            "row-1",
+            "row-2",
+            "row-3",
+            "row-4",
+            "row-5",
+            "row-6",
+            "row-7",
+            "row-8"
+          ]
+        }
+      },
+      "block_order": [
+        "faq-heading",
+        "faq-accordion"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "row_1",
+    "related_products",
+    "gempages_slot_1",
+    "gempages_slot_2",
+    "row_2",
+    "row_3",
+    "about",
+    "comparison",
+    "gempages_slot_3",
+    "gempages_slot_4",
+    "faq"
+  ]
+}

@@ -3,10 +3,12 @@
   "name": "t:names.footer",
   "sections": {
     "gempages_footer_slot": {
-      "type": "_blocks",
+      "type": "section",
       "name": "GemPages Platzhalter (Fußbereich)",
       "settings": {
+        "content_direction": "column",
         "section_width": "page-width",
+        "gap": 0,
         "padding-block-start": 0,
         "padding-block-end": 0
       }

@@ -1,0 +1,167 @@
+{%- doc -%}
+  Sticky Add-to-Cart-Leiste, wie Shrines `sticky_atc`-Block.
+
+  Horizon hat eine eigene Leiste, aber nur als Section-Einstellung
+  (`enable_sticky_add_to_cart` in `product-information`) und ohne eigene
+  Beschriftung oder Rabatt-Badge. Shrine hatte beides als Block mit
+  Einstellungen, deshalb hier nachgebaut. Auf der Produktseite ist Horizons
+  eingebaute Leiste abgeschaltet, damit nicht zwei erscheinen.
+
+  Die Logik liegt in assets/solena-sticky-atc.js: die Leiste klickt den
+  echten Add-to-Cart-Button des Formulars, statt selbst in den Warenkorb
+  zu schreiben.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+
+  assign image_alt = product.title
+  assign on_sale = false
+  if variant.compare_at_price > variant.price
+    assign on_sale = true
+    assign saved = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | floor
+  endif
+%}
+
+{% if product != blank %}
+  {% render 'contrast-override',
+    background_color: block_settings.background_color,
+    text_color: block_settings.text_color,
+    section_id: block.id,
+    preset: 'ui'
+  %}
+
+  <solena-sticky-atc
+    data-display-when="{{ block_settings.display_when }}"
+    {{ block.shopify_attributes }}
+  >
+    <div
+      class="
+        solena-sticky-atc
+        {% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}
+      "
+      data-sticky-bar
+      data-visible="false"
+      aria-hidden="true"
+      role="region"
+      aria-label="{{ 'products.product.sticky_add_to_cart' | t }}"
+    >
+      <div class="solena-sticky-atc__inner">
+        {% if block_settings.show_image and product.featured_image %}
+          {{
+            product.featured_image
+            | image_url: width: 120
+            | image_tag:
+              loading: 'lazy',
+              alt: image_alt,
+              class: 'solena-sticky-atc__image',
+              widths: '60, 120'
+          }}
+        {% endif %}
+
+        <div class="solena-sticky-atc__text">
+          <p class="solena-sticky-atc__title">{{ product.title | escape }}</p>
+
+          {% if block_settings.show_price %}
+            <div class="solena-sticky-atc__price">
+              {% if on_sale %}
+                <span class="solena-sticky-atc__price-current">{{ variant.price | money }}</span>
+                <s class="solena-sticky-atc__price-compare">{{ variant.compare_at_price | money }}</s>
+                {% if block_settings.show_price_badge %}
+                  <span class="solena-sticky-atc__badge">−{{ saved }}%</span>
+                {% endif %}
+              {% else %}
+                <span class="solena-sticky-atc__price-current">{{ variant.price | money }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        <button
+          type="button"
+          class="button solena-sticky-atc__button"
+          data-sticky-submit
+          {% unless variant.available %}
+            disabled
+          {% endunless %}
+        >
+          {%- if variant.available -%}
+            {{ block_settings.button_label | escape }}
+          {%- else -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- endif -%}
+        </button>
+      </div>
+    </div>
+  </solena-sticky-atc>
+
+  <script src="{{ 'solena-sticky-atc.js' | asset_url }}" defer></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Sticky Warenkorb",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "display_when",
+      "label": "Anzeigen",
+      "options": [
+        { "value": "after_scroll", "label": "Nach dem Scrollen" },
+        { "value": "always", "label": "Immer" }
+      ],
+      "default": "after_scroll"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Beschriftung der Schaltfläche",
+      "default": "Zum Warenkorb"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Produktbild anzeigen",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Preis anzeigen",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_badge",
+      "label": "Rabatt-Badge anzeigen",
+      "default": true,
+      "visible_if": "{{ block.settings.show_price }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky Warenkorb",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
