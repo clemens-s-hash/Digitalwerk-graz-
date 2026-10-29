@@ -202,9 +202,33 @@ def check_limits(container_kind, container_name, node, where):
                              counts[btype], btype, limit))
 
 
-def check_blocks(container_kind, container_name, node, where):
+def setting_ids(kind, name):
+    """Die im Schema definierten Setting-IDs. None = Schema unbekannt."""
+    schema = schemas.get((kind, name))
+    if schema is None:
+        return None
+    return {s['id'] for s in schema.get('settings', []) if s.get('id')}
+
+
+def check_settings(container_kind, container_name, node, where, path):
+    """Jeder settings-Schluessel muss im Schema stehen.
+
+    Ein Schluessel, den das Schema nicht kennt, faellt weder theme check
+    noch dem Auge auf, kann die Vorlage aber unbrauchbar machen.
+    """
+    allowed = setting_ids(container_kind, container_name)
+    if allowed is None:
+        return
+    for key in (node.get('settings') or {}):
+        if key not in allowed:
+            errors.append('%s/%s: %s "%s" kennt die Einstellung "%s" nicht'
+                          % (where, path, container_kind, container_name, key))
+
+
+def check_blocks(container_kind, container_name, node, where, path=''):
     allowed = allowed_children(container_kind, container_name)
     check_limits(container_kind, container_name, node, where)
+    check_settings(container_kind, container_name, node, where, path or container_name)
     for bid, blk in (node.get('blocks') or {}).items():
         btype = blk.get('type', '')
         if btype.startswith('shopify://apps/'):
@@ -219,7 +243,7 @@ def check_blocks(container_kind, container_name, node, where):
         if allowed is not None and btype not in allowed:
             errors.append('%s: Block-Type "%s" ist in %s "%s" nicht erlaubt (%s)'
                           % (where, btype, container_kind, container_name, sorted(allowed)))
-        check_blocks('block', btype, blk, where)
+        check_blocks('block', btype, blk, where, (path or container_name) + '/' + bid)
 
 
 def context_of(path):
@@ -280,7 +304,7 @@ for p, doc in json_docs.items():
             errors.append('%s: "%s" (%s) ist eine private Section und darf nicht '
                           'als Top-Level-Section stehen' % (where, stype, sid))
         check_placement(stype, where, kind, ctx_name)
-        check_blocks('section', stype, sec, where)
+        check_blocks('section', stype, sec, where, sid)
     for sid in doc.get('order', []):
         if sid not in doc['sections']:
             errors.append('%s: order nennt "%s", das nicht in sections steht' % (where, sid))

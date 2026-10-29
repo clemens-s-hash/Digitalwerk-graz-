@@ -1,7 +1,7 @@
 Solena Horizon — Theme-Build
 
-Gebaut:       2026-10-29 17:30 UTC
-Commit:       1924e9e
+Gebaut:       2026-10-29 17:49 UTC
+Commit:       f2f7126
 Branch:       claude/blissful-curie-910v02
 Dateien:      514
 Groesse:      1.4M
