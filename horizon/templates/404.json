@@ -91,7 +91,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 100,
         "padding-block-end": 100
-      }
+      },
+      "disabled": true
     },
     "newsletter": {
       "type": "section",

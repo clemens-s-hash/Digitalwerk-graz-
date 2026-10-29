@@ -1,0 +1,58 @@
+/*
+ * ------------------------------------------------------------
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
+ *
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "gap": 24,
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      },
+      "blocks": {
+        "page-content": {
+          "type": "page-content",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "page-content"
+      ]
+    },
+    "gempages_indoor_1": {
+      "type": "section",
+      "name": "GemPages Platzhalter 1",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "gempages_indoor_2": {
+      "type": "section",
+      "name": "GemPages Platzhalter 2",
+      "settings": {
+        "content_direction": "column",
+        "section_width": "page-width",
+        "gap": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "gempages_indoor_1",
+    "gempages_indoor_2"
+  ]
+}

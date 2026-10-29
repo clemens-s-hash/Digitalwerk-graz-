@@ -245,6 +245,35 @@ Was ich trotzdem **nicht** prüfen konnte und du im Shop nachsehen musst:
 
 ---
 
+## 1c. Nachtrag: drei fehlende Templates
+
+Dein Screenshot zeigt das Menü **STARTSEITE · INDOOR · OUTDOOR · TRENDS ·
+KONTAKT · ÜBER UNS**. Der Abgleich der Template-Liste gegen Shrine ergab,
+dass drei Templates fehlten, die ein Menüpunkt treffen kann:
+
+| Template | Shrine | jetzt |
+|---|---|---|
+| `collection.indoor.json` | Banner mit Bild + Raster | ✅ angelegt |
+| `page.indoor.json` | `main-page` (aus) + 2× GemPages | ✅ angelegt, mit Platzhaltern |
+| `collection.gp-template-bk-default.json` | GemPages-Backup, inhaltlich wie `collection.json` | ✅ angelegt |
+
+Dazu eine Abweichung auf der Fehlerseite: in Shrine ist `main-404`
+**deaktiviert** — die 404-Seite zeigte nur den Abschnitt „Warum Solena?".
+Bei mir war Horizons `main-404` aktiv, mit dem englischen Text
+„Page not found / The link may be incorrect / Continue shopping", den dein
+Shop nie hatte. Jetzt deaktiviert, wie im Original.
+
+### Was weiterhin fehlt, und warum
+
+| Template | Grund |
+|---|---|
+| `index.gem-1775335711-template.json` | GemPages-Backup der Startseite mit veraltetem Demo-Inhalt (eigene Einstellungen, nicht die der Live-Startseite). Shopify serviert alternative `index.*`-Templates nicht von selbst — die Startseite nutzt immer `index.json`. |
+| `index.gp-template-bk-default.json` | dito |
+| `product.gp-template-bk-default.json` | braucht `vertical-ticker` und `results` als Neubauten, siehe Frage 1 in §12 |
+
+
+---
+
 ## 2. Drei Korrekturen zur Ausgangslage
 
 ### 2.1 Horizon 4.3.0 hat **keine Color Schemes**
@@ -835,7 +864,7 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
 
 | Punkt | Grund |
 |---|---|
-| `templates/customers/*` (7 Dateien) | Horizon 4.3.0 liefert keine Customer-Templates; Shopify rendert sie aus `layout/theme.liquid`. Ein Nachbau wäre gegen Horizons Architektur. |
+| `templates/customers/*` (7 Dateien aus Shrine) | Horizon 4.3.0 liefert keine Customer-Templates; Shopify rendert sie aus `layout/theme.liquid`. Ein Nachbau wäre gegen Horizons Architektur. |
 | `templates/gift_card.liquid` | Horizon hat eine eigene Version. Shrines zu übernehmen hieße Shrine-Code kopieren. |
 | `product.premium-1` bis `premium-8` | ❓ siehe §12 |
 | `bundle-deals`, `pricing-table`, `promo-popup`, `scroll-to-top-btn`, `global-music-player`, `music-player` | in keinem Template verwendet, drei zusätzlich per Setting deaktiviert |

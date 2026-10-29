@@ -1426,6 +1426,42 @@ def build_collection():
     }})
 
 
+def build_collection_indoor():
+    """Shrines `collection.indoor`: Banner mit Bild, Raster mit Zweitbild."""
+    return order({'sections': {
+        'banner': collection_banner(),
+        'main': collection_grid(),
+    }})
+
+
+def build_collection_gp_backup():
+    """Shrines `collection.gp-template-bk-default`, ein GemPages-Backup.
+
+    Inhaltlich dasselbe wie `collection.json`, nur mit Zweitbild und
+    Quick-Add. Mitgenommen, damit eine Kollektion, der dieses Template
+    zugewiesen ist, nicht ins Leere laeuft.
+    """
+    return order({'sections': {
+        'banner': collection_banner(),
+        'main': collection_grid(),
+    }})
+
+
+def build_page_indoor():
+    """Shrines `page.indoor`: main-page aus, darunter zwei GemPages-Sections."""
+    return order({'sections': {
+        'main': {
+            'type': 'main-page',
+            'disabled': True,
+            'settings': {'gap': 24, 'padding-block-start': 64, 'padding-block-end': 64},
+            'blocks': {'page-content': {'type': 'page-content', 'settings': {}}},
+            'block_order': ['page-content'],
+        },
+        'gempages_indoor_1': gempages_slot('GemPages Platzhalter 1'),
+        'gempages_indoor_2': gempages_slot('GemPages Platzhalter 2'),
+    }})
+
+
 def build_collection_alle():
     return order({'sections': {
         'banner': collection_banner(disabled=True),
@@ -1468,6 +1504,10 @@ def build_404():
     base = load('404.json')
     main = base['sections'][next(iter(base['sections']))]
     main['settings'] = dict(main.get('settings', {}))
+    # Im Shrine-Original ist main-404 deaktiviert: die Fehlerseite zeigte nur
+    # den Abschnitt „Warum Solena?". Uebernommen, damit kein englischer
+    # „Page not found"-Text erscheint, den der Shop nie hatte.
+    main['disabled'] = True
     return order({'sections': {
         'main': main,
         'newsletter': newsletter(disabled=True),
@@ -1784,6 +1824,9 @@ write('index.json', build_index())
 write('product.json', build_product())
 write('collection.json', build_collection())
 write('collection.alle.json', build_collection_alle())
+write('collection.indoor.json', build_collection_indoor())
+write('collection.gp-template-bk-default.json', build_collection_gp_backup())
+write('page.indoor.json', build_page_indoor())
 write('cart.json', build_cart())
 write('404.json', build_404())
 write('page.json', build_page())
