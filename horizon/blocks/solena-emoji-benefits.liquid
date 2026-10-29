@@ -1,0 +1,195 @@
+{%- doc -%}
+  Kurze Vorteilsliste unter dem Produkttitel, je Zeile ein Emoji und ein Satz.
+
+  Shrines `emoji_benefits`-Block nahm einen einzigen Rich-Text, in dem jeder
+  Absatz zu einer Zeile wurde. Das bleibt so, damit der Inhalt aus dem alten
+  Theme unveraendert uebernommen werden kann.
+
+  Im Live-Theme war der Block deaktiviert; er wird mitgeliefert, damit die
+  Produktseite vollstaendig ist und sich im Theme-Editor zuschalten laesst.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+%}
+
+{% if block_settings.benefits != blank %}
+  {% render 'contrast-override',
+    background_color: block_settings.background_color,
+    text_color: block_settings.text_color,
+    section_id: block.id
+  %}
+
+  <div
+    class="
+      solena-benefits rte border-style spacing-style
+      {% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}
+    "
+    style="
+      --solena-benefits-gap: {{ block_settings.row_gap }}px;
+      --solena-benefits-size: var(--font-{{ block_settings.type_preset }}--size);
+      {% render 'spacing-style', settings: block_settings %}
+      {% render 'border-override', settings: block_settings %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    {{ block_settings.benefits }}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Vorteile mit Emoji",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "benefits",
+      "label": "Vorteile",
+      "info": "Ein Absatz je Zeile. Das Emoji am Anfang des Absatzes wird zum Symbol.",
+      "default": "<p>🙌 Vorteil</p><p>💪 Vorteil</p><p>🌟 Vorteil</p>"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.type_preset",
+      "options": [
+        { "value": "paragraph", "label": "t:options.paragraph" },
+        { "value": "h6", "label": "t:options.h6" },
+        { "value": "h5", "label": "t:options.h5" },
+        { "value": "h4", "label": "t:options.h4" }
+      ],
+      "default": "paragraph"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Abstand zwischen den Zeilen",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "solid", "label": "t:options.solid" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "t:settings.opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 12,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vorteile mit Emoji",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

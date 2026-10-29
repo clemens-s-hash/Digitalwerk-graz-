@@ -1,0 +1,253 @@
+{%- doc -%}
+  Vergleichstabelle „wir gegen die anderen".
+
+  Shrine hatte dafuer die Section `comparison-table` mit `row`-Blocks
+  (Vorteil, Haekchen bei uns, Haekchen bei den anderen) und optional einem
+  Logo in der eigenen Spalte. Horizon hat kein Gegenstueck.
+
+  Die Zeilen sind eigene Kindbloecke, damit sie sich im Theme-Editor
+  einzeln sortieren und bearbeiten lassen — dieselbe Aufteilung wie bei
+  Horizons `accordion` und `_accordion-row`.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign us_label = block_settings.us_label | default: shop.name
+%}
+
+{% render 'contrast-override',
+  background_color: block_settings.background_color,
+  text_color: block_settings.text_color,
+  section_id: block.id
+%}
+
+<div
+  class="
+    solena-compare border-style spacing-style
+    {% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}
+  "
+  style="
+    --solena-compare-check: {% if block_settings.checkmark_color != blank %}{{ block_settings.checkmark_color }}{% else %}var(--color-foreground){% endif %};
+    --solena-compare-cross: {% if block_settings.cross_color != blank %}{{ block_settings.cross_color }}{% else %}var(--sl-muted){% endif %};
+    --solena-compare-us-width: {{ block_settings.us_column_width }}%;
+    {% render 'spacing-style', settings: block_settings %}
+    {% render 'border-override', settings: block_settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="solena-compare__head" role="presentation">
+    <span class="solena-compare__head-cell solena-compare__head-cell--benefit"></span>
+    <span class="solena-compare__head-cell solena-compare__head-cell--us">
+      {%- if block_settings.logo != blank -%}
+        {{
+          block_settings.logo
+          | image_url: width: 400
+          | image_tag:
+            loading: 'lazy',
+            alt: us_label,
+            class: 'solena-compare__logo',
+            widths: '120, 200, 300, 400'
+        }}
+      {%- else -%}
+        {{- us_label | escape -}}
+      {%- endif -%}
+    </span>
+    <span class="solena-compare__head-cell solena-compare__head-cell--others">
+      {{- block_settings.others_label | escape -}}
+    </span>
+  </div>
+
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Vergleichstabelle",
+  "tag": null,
+  "class": "solena-compare-wrapper",
+  "blocks": [
+    {
+      "type": "_solena-comparison-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "us_label",
+      "label": "Spaltentitel für uns",
+      "info": "Leer lassen, wenn das Logo gezeigt wird."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo statt Spaltentitel"
+    },
+    {
+      "type": "range",
+      "id": "us_column_width",
+      "label": "Breite der eigenen Spalte",
+      "min": 15,
+      "max": 45,
+      "step": 1,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "text",
+      "id": "others_label",
+      "label": "Spaltentitel für die anderen",
+      "default": "Andere"
+    },
+    {
+      "type": "header",
+      "content": "Symbole"
+    },
+    {
+      "type": "color",
+      "id": "checkmark_color",
+      "label": "Haken",
+      "default": "#53AF01"
+    },
+    {
+      "type": "color",
+      "id": "cross_color",
+      "label": "Kreuz",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "solid", "label": "t:options.solid" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "t:settings.opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 12,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vergleichstabelle",
+      "category": "t:categories.custom",
+      "blocks": {
+        "row-1": {
+          "type": "_solena-comparison-row",
+          "settings": { "benefit": "Persönlicher Kundenservice" }
+        },
+        "row-2": {
+          "type": "_solena-comparison-row",
+          "settings": { "benefit": "Designerlampen zum fairen Preis" }
+        },
+        "row-3": {
+          "type": "_solena-comparison-row",
+          "settings": { "benefit": "30 Tage Geld-zurück-Garantie" }
+        }
+      },
+      "block_order": ["row-1", "row-2", "row-3"]
+    }
+  ]
+}
+{% endschema %}

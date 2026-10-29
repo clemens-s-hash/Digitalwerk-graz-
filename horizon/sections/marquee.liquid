@@ -97,11 +97,17 @@
   }
 {% endstylesheet %}
 
+{%- comment -%}
+  Solena: 'header' wurde aus disabled_on entfernt. Shrine zeigte den Lauftext
+  als eigene Section in der Header-Gruppe, direkt unter der
+  Ankuendigungsleiste. Fuer die Footer-Gruppe bleibt die Sperre bestehen.
+{%- endcomment -%}
+
 {% schema %}
 {
   "name": "t:names.marquee",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": ["footer"]
   },
   "blocks": [
     {

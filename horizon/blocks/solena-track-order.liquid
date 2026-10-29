@@ -1,0 +1,299 @@
+{%- doc -%}
+  Sendungsverfolgung: Trackingnummer eingeben, Ergebnis im Block anzeigen.
+
+  Shrine hatte dafuer die Section `track-order`, die das Widget von 17TRACK
+  einbindet. Horizon hat kein Gegenstueck. Die Logik steckt in
+  assets/solena-track-order.js, die aufgerufene Schnittstelle
+  (YQV5.trackSingle) ist die oeffentliche Integration von 17TRACK.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+%}
+
+{% render 'contrast-override',
+  background_color: block_settings.background_color,
+  text_color: block_settings.text_color,
+  section_id: block.id
+%}
+
+<script src="{{ 'solena-track-order.js' | asset_url }}" defer></script>
+
+<solena-track-order
+  class="
+    solena-track border-style spacing-style
+    {% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}
+  "
+  style="
+    --solena-track-width: {{ block_settings.max_width }}px;
+    {% render 'spacing-style', settings: block_settings %}
+    {% render 'border-override', settings: block_settings %}
+  "
+  data-lang="{{ block_settings.widget_language }}"
+  data-height="{{ block_settings.widget_height }}"
+  data-empty-message="{{ block_settings.empty_message | escape }}"
+  data-error-message="{{ block_settings.error_message | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="solena-track__intro">
+    {% if block_settings.heading != blank %}
+      <p class="solena-track__heading {{ block_settings.heading_preset }}">
+        {{- block_settings.heading | escape -}}
+      </p>
+    {% endif %}
+    {% if block_settings.text != blank %}
+      <div class="solena-track__text rte">{{ block_settings.text }}</div>
+    {% endif %}
+  </div>
+
+  <div class="solena-track__field">
+    <label class="solena-track__label" for="SolenaTrackInput-{{ block.id }}">
+      {{- block_settings.input_label | escape -}}
+    </label>
+    <input
+      id="SolenaTrackInput-{{ block.id }}"
+      class="solena-track__input"
+      type="text"
+      inputmode="text"
+      autocomplete="off"
+      maxlength="50"
+      placeholder="{{ block_settings.input_label | escape }}"
+      data-track-input
+    >
+  </div>
+
+  <p class="solena-track__error" data-track-error hidden></p>
+
+  <button
+    type="button"
+    class="button{% if block_settings.button_full_width %} solena-track__button--full{% endif %}"
+    data-track-submit
+  >
+    {{- block_settings.button_label | escape -}}
+  </button>
+
+  <div
+    id="SolenaTrackResult-{{ block.id }}"
+    class="solena-track__result"
+    data-track-result
+  ></div>
+</solena-track-order>
+
+{% schema %}
+{
+  "name": "Sendungsverfolgung",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.heading",
+      "default": "TRACK YOUR ORDER"
+    },
+    {
+      "type": "select",
+      "id": "heading_preset",
+      "label": "t:settings.heading_preset",
+      "options": [
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:settings.text"
+    },
+    {
+      "type": "header",
+      "content": "Formular"
+    },
+    {
+      "type": "text",
+      "id": "input_label",
+      "label": "Beschriftung des Eingabefelds",
+      "default": "Tracking Number"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Beschriftung der Schaltfläche",
+      "default": "Track Now"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_full_width",
+      "label": "Schaltfläche über die ganze Breite",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "Hinweis bei leerem Feld",
+      "default": "Bitte gib deine Trackingnummer ein."
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Hinweis, wenn der Dienst nicht erreichbar ist",
+      "default": "Die Sendungsverfolgung ist gerade nicht erreichbar. Bitte versuch es später noch einmal."
+    },
+    {
+      "type": "header",
+      "content": "Widget"
+    },
+    {
+      "type": "select",
+      "id": "widget_language",
+      "label": "Sprache des Widgets",
+      "options": [
+        { "value": "de", "label": "Deutsch" },
+        { "value": "en", "label": "Englisch" }
+      ],
+      "default": "de"
+    },
+    {
+      "type": "range",
+      "id": "widget_height",
+      "label": "Höhe des Ergebnisbereichs",
+      "min": 200,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximale Breite",
+      "min": 320,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "solid", "label": "t:options.solid" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "t:settings.opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 12,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sendungsverfolgung",
+      "category": "t:categories.custom"
+    }
+  ]
+}
+{% endschema %}

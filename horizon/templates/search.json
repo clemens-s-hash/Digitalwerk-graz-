@@ -1,12 +1,13 @@
 /*
  * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
  *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "search": {
       "type": "search-header",
@@ -76,84 +77,106 @@
           "type": "_product-card",
           "static": true,
           "settings": {
-            "product_card_gap": 4,
+            "product_card_gap": 0,
             "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "border_radius": 0
           },
           "blocks": {
-            "product_card_gallery_cFExAi": {
+            "card-gallery": {
               "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
+                "image_ratio": "square",
+                "border_radius": 2
+              }
             },
-            "product_title_j7qXTx": {
-              "type": "product-title",
-              "name": "t:names.product_title",
+            "card-topline": {
+              "type": "_product-card-group",
               "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "flex-start",
+                "align_baseline": false,
+                "gap": 12,
+                "width": "fill",
+                "height": "fit"
               },
-              "blocks": {}
+              "blocks": {
+                "card-titles": {
+                  "type": "_product-card-group",
+                  "settings": {
+                    "content_direction": "column",
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "gap": 0,
+                    "width": "fill",
+                    "height": "fit"
+                  },
+                  "blocks": {
+                    "card-title": {
+                      "type": "product-title",
+                      "settings": {
+                        "width": "100%",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.125rem",
+                        "line_height": "tight",
+                        "max_width": "none"
+                      }
+                    },
+                    "card-type": {
+                      "type": "solena-product-type",
+                      "settings": {
+                        "source": "type_then_vendor",
+                        "alignment": "left"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "card-title",
+                    "card-type"
+                  ]
+                }
+              },
+              "block_order": [
+                "card-titles"
+              ]
             },
-            "price_fYkUgG": {
+            "card-rule": {
+              "type": "solena-hairline",
+              "settings": {
+                "thickness": 1,
+                "padding-block-start": 14,
+                "padding-block-end": 0
+              }
+            },
+            "card-price": {
               "type": "price",
-              "name": "t:names.product_price",
               "settings": {
                 "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
                 "width": "100%",
                 "alignment": "left",
+                "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
+                "font_size": "1rem"
+              }
+            },
+            "card-swatches": {
+              "type": "solena-card-swatches",
+              "settings": {
+                "swatch_limit": 6,
+                "swatch_size": 18,
+                "alignment": "flex-start",
+                "padding-block-start": 14
+              }
             }
           },
           "block_order": [
-            "product_card_gallery_cFExAi",
-            "product_title_j7qXTx",
-            "price_fYkUgG"
+            "card-gallery",
+            "card-topline",
+            "card-rule",
+            "card-price",
+            "card-swatches"
           ]
         }
       },
@@ -171,10 +194,65 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
+    },
+    "newsletter": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "background_color": "#F2EDE5",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "nl-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Subscribe to our emails</h2>",
+            "type_preset": "h2",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "nl-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Join our email list for exclusive offers and the latest news.</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "normal"
+          }
+        },
+        "nl-form": {
+          "type": "email-signup",
+          "settings": {
+            "width": "custom",
+            "custom_width": 50,
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 0,
+            "label": "Sign up",
+            "style_class": "button",
+            "display_type": "text",
+            "integrated_button": false
+          }
+        }
+      },
+      "block_order": [
+        "nl-heading",
+        "nl-text",
+        "nl-form"
+      ]
     }
   },
   "order": [
     "search",
-    "main"
+    "main",
+    "newsletter"
   ]
 }

@@ -1,0 +1,89 @@
+{%- doc -%}
+  Farb-Swatches unter dem Preis einer Produktkarte.
+
+  Horizons eigener `swatches`-Block zeigt Shopifys native Swatches, die
+  dafuer am Produkt gepflegt sein muessen. Dieser Shop hat sie nicht,
+  deshalb leitet `snippets/solena-card-swatches.liquid` die Farben aus den
+  Namen der Varianten-Optionen ab — genau wie im Shrine-Theme.
+{%- enddoc -%}
+
+<div
+  class="solena-card-swatches-wrapper spacing-style"
+  style="
+    --solena-swatch-align: {{ block.settings.alignment }};
+    --solena-swatch-size: {{ block.settings.swatch_size }}px;
+    {% render 'spacing-style', settings: block.settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {% render 'solena-card-swatches', card_product: closest.product, swatch_limit: block.settings.swatch_limit %}
+</div>
+
+{% schema %}
+{
+  "name": "Farb-Swatches",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "swatch_limit",
+      "label": "Maximale Anzahl",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "swatch_size",
+      "label": "Groesse",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        { "value": "flex-start", "label": "t:options.direction_start" },
+        { "value": "center", "label": "t:options.direction_center" },
+        { "value": "flex-end", "label": "t:options.direction_end" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "header",
+      "content": "Innenabstand"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Oben",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Unten",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Farb-Swatches",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

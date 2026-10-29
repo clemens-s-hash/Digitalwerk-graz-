@@ -1,0 +1,250 @@
+{%- doc -%}
+  Eine Kundenstimme als Karte mit Haarlinien-Rahmen.
+
+  Shrine hatte dafuer eine eigene Section (`testimonials`) mit
+  `column`-Blocks: Titel, Text, Autor, optional Sterne und Anfuehrungszeichen.
+  Horizon hat kein Gegenstueck. Als Block laesst sich dieselbe Optik in jeder
+  Section aufbauen — auf der Startseite in `section` mit einer `group` als
+  Zeile, genau wie Shrines dreispaltiges Raster.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign stars = block_settings.stars | times: 1
+%}
+
+{% render 'contrast-override',
+  background_color: block_settings.background_color,
+  text_color: block_settings.text_color,
+  section_id: block.id
+%}
+
+<div
+  class="
+    solena-testimonial border-style spacing-style
+    solena-testimonial--{{ block_settings.alignment }}
+    {% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}
+    {% if block_settings.show_quote %} solena-testimonial--quoted{% endif %}
+  "
+  style="
+    {% render 'spacing-style', settings: block_settings %}
+    {% render 'border-override', settings: block_settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {% if block_settings.show_stars and stars > 0 %}
+    <div
+      class="solena-testimonial__stars"
+      role="img"
+      aria-label="{{ stars }} von 5 Sternen"
+    >
+      {%- comment -%}
+        Derselbe Stern-Pfad wie in Horizons eigenem `review`-Block, damit die
+        Sterne hier und bei den Produktbewertungen identisch aussehen.
+      {%- endcomment -%}
+      {% for i in (1..5) %}
+        <svg
+          class="solena-testimonial__star{% if i > stars %} solena-testimonial__star--empty{% endif %}"
+          viewBox="0 0 32 32"
+          role="presentation"
+        >
+          <path d="M31.547 12a.848.848 0 00-.677-.577l-9.427-1.376-4.224-8.532a.847.847 0 00-1.516 0l-4.218 8.534-9.427 1.355a.847.847 0 00-.467 1.467l6.823 6.664-1.612 9.375a.847.847 0 001.23.893l8.428-4.434 8.432 4.432a.847.847 0 001.229-.894l-1.615-9.373 6.822-6.665a.845.845 0 00.214-.869z" />
+        </svg>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if block_settings.heading != blank %}
+    <p class="solena-testimonial__heading">{{ block_settings.heading | escape }}</p>
+  {% endif %}
+
+  {% if block_settings.text != blank %}
+    <div class="solena-testimonial__text rte">{{ block_settings.text }}</div>
+  {% endif %}
+
+  {% if block_settings.author != blank %}
+    <p class="solena-testimonial__author">{{ block_settings.author | escape }}</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Kundenstimme",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Schnell geliefert, top Qualität!"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "label": "Name",
+      "default": "Julia S."
+    },
+    {
+      "type": "header",
+      "content": "Sterne"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "Sterne anzeigen",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "stars",
+      "label": "Anzahl",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ block.settings.show_stars }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quote",
+      "label": "Anführungszeichen anzeigen",
+      "default": false
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "solid", "label": "t:options.solid" }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.thickness",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "t:settings.opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 12,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kundenstimme",
+      "category": "t:categories.custom",
+      "settings": {
+        "heading": "Schnell geliefert, top Qualität!",
+        "text": "<p>Leuchte war in einer Woche da und hat unserem Esszimmer endlich das gewisse Etwas verliehen!</p>",
+        "author": "Julia S."
+      }
+    }
+  ]
+}
+{% endschema %}

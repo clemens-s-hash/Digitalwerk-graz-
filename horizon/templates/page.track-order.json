@@ -1,0 +1,133 @@
+/*
+ * ------------------------------------------------------------
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
+ *
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "gap": 24,
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      },
+      "blocks": {
+        "page-content": {
+          "type": "page-content",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "page-content"
+      ]
+    },
+    "track": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 24,
+        "section_width": "page-width",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "track-order": {
+          "type": "solena-track-order",
+          "settings": {
+            "heading": "TRACK YOUR ORDER",
+            "heading_preset": "h1",
+            "input_label": "Tracking Number",
+            "button_label": "Track Now",
+            "button_full_width": true,
+            "widget_language": "de",
+            "widget_height": 560,
+            "max_width": 520
+          }
+        }
+      },
+      "block_order": [
+        "track-order"
+      ]
+    },
+    "get_in_touch": {
+      "type": "media-with-content",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      },
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {
+            "media_type": "image",
+            "image": "",
+            "image_position": "cover"
+          }
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "gap": 16
+          },
+          "blocks": {
+            "git-heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Get in touch!</h2>",
+                "type_preset": "h2",
+                "font": "var(--font-heading--family)",
+                "width": "fit-content",
+                "alignment": "left",
+                "max_width": "none"
+              }
+            },
+            "git-text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+                "type_preset": "rte",
+                "width": "100%",
+                "alignment": "left",
+                "max_width": "normal"
+              }
+            },
+            "git-button": {
+              "type": "button",
+              "settings": {
+                "label": "Contact us",
+                "link": "shopify://pages/contact",
+                "style_class": "button"
+              }
+            }
+          },
+          "block_order": [
+            "git-heading",
+            "git-text",
+            "git-button"
+          ]
+        }
+      },
+      "disabled": true
+    }
+  },
+  "order": [
+    "main",
+    "track",
+    "get_in_touch"
+  ]
+}

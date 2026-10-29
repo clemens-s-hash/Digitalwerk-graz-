@@ -1,0 +1,101 @@
+{%- doc -%}
+  Untertitel der Produktkarte: Produkttyp, ersatzweise der Anbieter.
+
+  Shrine zeigte unter dem Kartentitel `product.type` und fiel auf
+  `product.vendor` zurueck, wenn kein Typ gesetzt war. Horizon hat dafuer
+  keinen Block; der Text-Block kann nur feste Inhalte ausgeben.
+{%- enddoc -%}
+
+{% liquid
+  assign product = closest.product
+  assign subtitle = ''
+
+  if block.settings.source == 'vendor'
+    assign subtitle = product.vendor
+  elsif block.settings.source == 'type'
+    assign subtitle = product.type
+  else
+    assign subtitle = product.type
+    if subtitle == blank
+      assign subtitle = product.vendor
+    endif
+  endif
+%}
+
+{% if subtitle != blank %}
+  <span
+    class="solena-card-type spacing-style"
+    style="
+      --solena-card-type-align: {{ block.settings.alignment | replace: 'left', 'start' | replace: 'right', 'end' }};
+      {% if block.settings.text_color != blank %}--solena-card-type-color: {{ block.settings.text_color }};{% endif %}
+      {% render 'spacing-style', settings: block.settings %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    {{- subtitle | escape -}}
+  </span>
+{% elsif request.design_mode %}
+  <span class="solena-card-type" {{ block.shopify_attributes }}>Produkttyp</span>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Produkttyp",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Quelle",
+      "options": [
+        { "value": "type_then_vendor", "label": "Produkttyp, ersatzweise Anbieter" },
+        { "value": "type", "label": "Nur Produkttyp" },
+        { "value": "vendor", "label": "Nur Anbieter" }
+      ],
+      "default": "type_then_vendor"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "Standard"
+    },
+    {
+      "type": "header",
+      "content": "Innenabstand"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Oben",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Unten",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produkttyp",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

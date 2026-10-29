@@ -1,0 +1,63 @@
+{%- doc -%}
+  Eine Zeile der Vergleichstabelle: Vorteil, Haken oder Kreuz je Spalte.
+  Nur innerhalb von `solena-comparison-table` verwendbar.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+%}
+
+<div class="solena-compare__row" {{ block.shopify_attributes }}>
+  <span class="solena-compare__benefit">{{ block_settings.benefit | escape }}</span>
+
+  <span class="solena-compare__cell solena-compare__cell--us">
+    {% if block_settings.us %}
+      <span class="solena-compare__mark solena-compare__mark--check" role="img" aria-label="ja">
+        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+      </span>
+    {% else %}
+      <span class="solena-compare__mark solena-compare__mark--cross" role="img" aria-label="nein">
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    {% endif %}
+  </span>
+
+  <span class="solena-compare__cell solena-compare__cell--others">
+    {% if block_settings.others %}
+      <span class="solena-compare__mark solena-compare__mark--check" role="img" aria-label="ja">
+        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+      </span>
+    {% else %}
+      <span class="solena-compare__mark solena-compare__mark--cross" role="img" aria-label="nein">
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    {% endif %}
+  </span>
+</div>
+
+{% schema %}
+{
+  "name": "Zeile",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "benefit",
+      "label": "Vorteil",
+      "default": "Vorteil"
+    },
+    {
+      "type": "checkbox",
+      "id": "us",
+      "label": "Bei uns vorhanden",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "others",
+      "label": "Bei den anderen vorhanden",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

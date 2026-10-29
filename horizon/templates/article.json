@@ -1,12 +1,13 @@
 /*
  * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
  *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "main-blog-post",
@@ -88,9 +89,64 @@
         "padding-block-start": 40,
         "padding-block-end": 80
       }
+    },
+    "newsletter": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "background_color": "#F2EDE5",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "nl-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Subscribe to our emails</h2>",
+            "type_preset": "h2",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "nl-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Join our email list for exclusive offers and the latest news.</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "normal"
+          }
+        },
+        "nl-form": {
+          "type": "email-signup",
+          "settings": {
+            "width": "custom",
+            "custom_width": 50,
+            "border_style": "all",
+            "border_width": 1,
+            "border_radius": 0,
+            "label": "Sign up",
+            "style_class": "button",
+            "display_type": "text",
+            "integrated_button": false
+          }
+        }
+      },
+      "block_order": [
+        "nl-heading",
+        "nl-text",
+        "nl-form"
+      ]
     }
   },
   "order": [
-    "section"
+    "section",
+    "newsletter"
   ]
 }

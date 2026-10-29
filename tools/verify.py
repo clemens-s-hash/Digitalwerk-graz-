@@ -173,8 +173,38 @@ def allowed_children(kind, name):
     return out
 
 
+def check_limits(container_kind, container_name, node, where):
+    """Prueft max_blocks der Section und `limit` je Block-Type.
+
+    Shopify lehnt beim Upload ab, was darueber liegt; `theme check` nicht.
+    """
+    schema = schemas.get((container_kind, container_name))
+    if schema is None:
+        return
+    children = node.get('blocks') or {}
+
+    max_blocks = schema.get('max_blocks')
+    if max_blocks and len(children) > max_blocks:
+        errors.append('%s: %s "%s" hat %d Blocks, erlaubt sind %d (max_blocks)'
+                      % (where, container_kind, container_name, len(children), max_blocks))
+
+    limits = {e['type']: e['limit'] for e in schema.get('blocks', [])
+              if e.get('limit') and e.get('type')}
+    if not limits:
+        return
+    counts = defaultdict(int)
+    for blk in children.values():
+        counts[blk.get('type')] += 1
+    for btype, limit in limits.items():
+        if counts[btype] > limit:
+            errors.append('%s: %s "%s" hat %d Blocks vom Typ "%s", erlaubt ist %d (limit)'
+                          % (where, container_kind, container_name,
+                             counts[btype], btype, limit))
+
+
 def check_blocks(container_kind, container_name, node, where):
     allowed = allowed_children(container_kind, container_name)
+    check_limits(container_kind, container_name, node, where)
     for bid, blk in (node.get('blocks') or {}).items():
         btype = blk.get('type', '')
         if btype.startswith('shopify://apps/'):
@@ -192,16 +222,58 @@ def check_blocks(container_kind, container_name, node, where):
         check_blocks('block', btype, blk, where)
 
 
+def context_of(path):
+    """Wo wird diese JSON-Datei gerendert? ('group', <name>) oder ('template', <name>)."""
+    base = os.path.basename(path)
+    if path.startswith(os.path.join(ROOT, 'sections')) and base.endswith('-group.json'):
+        return 'group', base[: -len('-group.json')]
+    if path.startswith(os.path.join(ROOT, 'templates')):
+        return 'template', base.split('.')[0]
+    return None, None
+
+
+def check_placement(stype, where, kind, name):
+    """Prueft enabled_on / disabled_on des Section-Schemas.
+
+    Horizon sperrt einige Sections fuer die Header- und Footer-Gruppe oder
+    bindet sie an bestimmte Templates. Shopify lehnt das beim Upload ab,
+    `theme check` sieht es nicht.
+    """
+    schema = schemas.get(('section', stype))
+    if schema is None or kind is None:
+        return
+    key = 'groups' if kind == 'group' else 'templates'
+
+    enabled = schema.get('enabled_on')
+    if enabled is not None:
+        allowed_here = enabled.get(key)
+        if allowed_here is None:
+            if enabled.get('groups' if key == 'templates' else 'templates') is not None:
+                errors.append('%s: Section "%s" ist nur fuer %s zugelassen, nicht fuer %s "%s"'
+                              % (where, stype, enabled, kind, name))
+            return
+        if name not in allowed_here:
+            errors.append('%s: Section "%s" ist nur in %s %s zugelassen, nicht in "%s"'
+                          % (where, stype, key, allowed_here, name))
+
+    disabled = schema.get('disabled_on')
+    if disabled is not None and name in (disabled.get(key) or []):
+        errors.append('%s: Section "%s" ist in %s "%s" gesperrt (disabled_on %s)'
+                      % (where, stype, kind, name, disabled))
+
+
 for p, doc in json_docs.items():
     if not isinstance(doc, dict) or 'sections' not in doc:
         continue
     where = rel(p)
+    kind, ctx_name = context_of(p)
     for sid, sec in doc['sections'].items():
         stype = sec.get('type', '')
         if stype not in sections:
             errors.append('%s: Section-Type "%s" (%s) — sections/%s.liquid fehlt'
                           % (where, stype, sid, stype))
             continue
+        check_placement(stype, where, kind, ctx_name)
         check_blocks('section', stype, sec, where)
     for sid in doc.get('order', []):
         if sid not in doc['sections']:

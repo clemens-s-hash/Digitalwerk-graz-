@@ -1,0 +1,125 @@
+{%- doc -%}
+  Titel und Beschreibung der aktuellen Kollektion.
+
+  Shrines `main-collection-banner` zeigte beides an. Horizon hat nur
+  `collection-title` — und das liest `closest.collection`, was innerhalb
+  einer Produktkarte gesetzt ist, auf der Kollektionsseite selbst aber nicht
+  zuverlaessig. Fuer die Beschreibung gibt es ueberhaupt keinen Block.
+
+  Deshalb liest dieser Block das globale `collection`-Objekt und faellt auf
+  `closest.collection` zurueck, damit er auch in einem Karten-Kontext
+  funktioniert.
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign source = collection | default: closest.collection
+
+  assign has_title = false
+  if block_settings.show_title and source.title != blank
+    assign has_title = true
+  endif
+
+  assign has_description = false
+  if block_settings.show_description and source.description != blank
+    assign has_description = true
+  endif
+%}
+
+{% if has_title or has_description %}
+  <div
+    class="solena-collection-banner spacing-style"
+    style="
+      --solena-banner-align: {{ block_settings.alignment | replace: 'left', 'start' | replace: 'right', 'end' }};
+      {% render 'spacing-style', settings: block_settings %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    {% if has_title %}
+      <h1 class="solena-collection-banner__title {{ block_settings.heading_preset }}">
+        {{- source.title | escape -}}
+      </h1>
+    {% endif %}
+
+    {% if has_description %}
+      <div class="solena-collection-banner__description rte">
+        {{ source.description }}
+      </div>
+    {% endif %}
+  </div>
+{% elsif request.design_mode %}
+  <div class="solena-collection-banner" {{ block.shopify_attributes }}>
+    <h1 class="solena-collection-banner__title {{ block_settings.heading_preset }}">
+      {{- 'placeholders.collection_title' | t -}}
+    </h1>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Kollektionskopf",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Titel anzeigen",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "heading_preset",
+      "label": "t:settings.heading_preset",
+      "options": [
+        { "value": "h1", "label": "t:options.h1" },
+        { "value": "h2", "label": "t:options.h2" },
+        { "value": "h3", "label": "t:options.h3" },
+        { "value": "h4", "label": "t:options.h4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Beschreibung anzeigen",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kollektionskopf",
+      "category": "t:categories.collection"
+    }
+  ]
+}
+{% endschema %}

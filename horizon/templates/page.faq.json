@@ -1,0 +1,331 @@
+/*
+ * ------------------------------------------------------------
+ * Erzeugt von tools/templates.py aus dem Shrine-Export.
+ *
+ * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
+ * Nach Aenderungen am Generator neu erzeugen, nicht hier und
+ * dort gleichzeitig editieren.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "gap": 24,
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      },
+      "blocks": {
+        "page-content": {
+          "type": "page-content",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "page-content"
+      ]
+    },
+    "faq": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 24,
+        "section_width": "page-width",
+        "background_color": "#F2EDE5",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "faq-caption": {
+          "type": "text",
+          "settings": {
+            "text": "<p>FAQ</p>",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "width": "fit-content",
+            "alignment": "center"
+          }
+        },
+        "faq-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Häufig gestellte Fragen</h1>",
+            "type_preset": "h3",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "faq-accordion": {
+          "type": "accordion",
+          "settings": {
+            "icon": "caret",
+            "dividers": true,
+            "type_preset": "h5",
+            "divider_color": "{{ settings.color_palette.color2 }}"
+          },
+          "blocks": {
+            "row-1": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie lange dauert der Versand?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-1": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Die Bearbeitung dauert in der Regel 1 bis 2 Werktage. Die Lieferzeit beträgt meist ca. 3 bis 7 Werktage.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-1"
+              ]
+            },
+            "row-2": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Ist der Versand kostenlos?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-2": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Ja, der Versand innerhalb Deutschlands ist kostenlos.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-2"
+              ]
+            },
+            "row-3": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie kann ich meine Bestellung verfolgen?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-3": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sobald die Bestellung versendet wurde, erhalten Sie eine E-Mail mit einem Tracking-Link.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-3"
+              ]
+            },
+            "row-4": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie lautet eure Rückgaberichtlinie?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-4": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Sie können Artikel innerhalb von 30 Tagen ab Zustellung zurückgeben. Die Artikel müssen ungetragen, unbenutzt, vollständig und im Originalzustand mit Etiketten sein. Die Rücksendekosten trägt der Kunde.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-4"
+              ]
+            },
+            "row-5": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Welche Zahlungsmethoden bietet ihr an?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-5": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Visa, Mastercard, Maestro, SEPA, American Express, Apple Pay und PayPal.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-5"
+              ]
+            },
+            "row-6": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Ist die Zahlung auf eurer Website sicher?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-6": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Ja. Ihre Zahlung wird über sichere, verschlüsselte Verbindungen verarbeitet. Zusätzlich stehen Ihnen bekannte Zahlungsarten zur Verfügung.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-6"
+              ]
+            },
+            "row-7": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie geht ihr mit meinen Daten um?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-7": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Wir nutzen Ihre Daten nur zur Bestellabwicklung und zur Bereitstellung unseres Services. Ihre Daten werden nicht für fremde Werbezwecke verkauft.</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-7"
+              ]
+            },
+            "row-8": {
+              "type": "_accordion-row",
+              "settings": {
+                "heading": "Wie kann ich euch erreichen?",
+                "open_by_default": false,
+                "icon": "none"
+              },
+              "blocks": {
+                "text-8": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>support@solenahome.com</p>",
+                    "type_preset": "rte",
+                    "width": "100%",
+                    "alignment": "left",
+                    "max_width": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "text-8"
+              ]
+            }
+          },
+          "block_order": [
+            "row-1",
+            "row-2",
+            "row-3",
+            "row-4",
+            "row-5",
+            "row-6",
+            "row-7",
+            "row-8"
+          ]
+        }
+      },
+      "block_order": [
+        "faq-caption",
+        "faq-heading",
+        "faq-accordion"
+      ]
+    },
+    "details": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "full-width",
+        "padding-block-start": 88,
+        "padding-block-end": 88
+      },
+      "blocks": {
+        "faq-details-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Kontaktinformationen</h2>",
+            "type_preset": "h3",
+            "font": "var(--font-heading--family)",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "none"
+          }
+        },
+        "faq-details-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>support@solenahome.com</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "alignment": "center",
+            "max_width": "normal"
+          }
+        },
+        "faq-details-button": {
+          "type": "button",
+          "settings": {
+            "label": "Zur Kontaktseite",
+            "link": "shopify://pages/contact",
+            "style_class": "button"
+          }
+        }
+      },
+      "block_order": [
+        "faq-details-heading",
+        "faq-details-text",
+        "faq-details-button"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "details"
+  ]
+}

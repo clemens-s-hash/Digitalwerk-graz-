@@ -1,0 +1,72 @@
+{%- doc -%}
+  Haarlinie als Trenner innerhalb einer Karte oder Gruppe.
+
+  Shrine zog im Produktkarten-Layout eine 1px-Linie zwischen Identitaet
+  (Titel, Typ, Bewertung) und Preis. Horizons `_divider` ist privat und nur
+  in Sections erlaubt, deshalb dieser Block.
+{%- enddoc -%}
+
+<hr
+  class="solena-hairline spacing-style"
+  style="
+    --solena-hairline-color: {% if block.settings.color != blank %}{{ block.settings.color }}{% else %}var(--sl-line){% endif %};
+    --solena-hairline-width: {{ block.settings.thickness }}px;
+    {% render 'spacing-style', settings: block.settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+
+{% schema %}
+{
+  "name": "Haarlinie",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "thickness",
+      "label": "Dicke",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Farbe",
+      "placeholder": "Standard"
+    },
+    {
+      "type": "header",
+      "content": "Innenabstand"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Oben",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Unten",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Haarlinie",
+      "category": "t:categories.decorative"
+    }
+  ]
+}
+{% endschema %}
