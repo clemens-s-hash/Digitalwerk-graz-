@@ -1,0 +1,32 @@
+{% comment %}
+  Microsoft Clarity tracking code.
+
+  Rendered from inside <head> in every layout, so it runs on the real page
+  rather than inside Shopify's sandboxed Web Pixel iframe - that sandbox is
+  why a Clarity install under Settings > Customer events records clicks but
+  never produces session recordings.
+
+  Project ID: yn9k3648hz
+  Change the ID in this one place; every layout picks it up.
+
+  Note: Shopify renders the checkout without the theme, so this does not
+  cover checkout pages. Those need Clarity as an app or checkout extension.
+
+  Usage:
+  {% render 'microsoft-clarity' %}
+{% endcomment %}
+
+<script type="text/javascript">
+  (function (c, l, a, r, i, t, y) {
+    c[a] =
+      c[a] ||
+      function () {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i;
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', 'yn9k3648hz');
+</script>

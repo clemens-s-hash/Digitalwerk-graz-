@@ -23,6 +23,8 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    {%- render 'microsoft-clarity' -%}
+    {{ 'solena-design.css' | asset_url | stylesheet_tag }}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
@@ -172,5 +174,13 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {%- comment -%}
+      Horizon gibt die Styles seiner Sections und Blocks als {% style %} im
+      Body aus, also nach allem im <head>. Bei gleicher Spezifitaet gewinnt
+      die spaetere Regel, deshalb kommt der Design-Layer hier ein zweites
+      Mal. Der Browser laedt die Datei nur einmal.
+    {%- endcomment -%}
+    {{ 'solena-design.css' | asset_url | stylesheet_tag }}
   </body>
 </html>

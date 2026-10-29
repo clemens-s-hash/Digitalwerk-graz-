@@ -1,0 +1,295 @@
+/* ==========================================================================
+   SOLENA — Design System für Horizon
+   Editorial / minimal.
+
+   Portierung des Design-Layers aus dem Shrine-Theme. Dort lag die Optik in
+   assets/solena-design.css und rechnete gegen Dawn-Variablen auf einem
+   62.5%-Root (1rem = 10px). Horizon benutzt den Browser-Default (1rem = 16px)
+   und eigene Token-Namen, deshalb ist jede Regel neu geschrieben:
+   Shrine-rem * 10 / 16 = Horizon-rem. Die px-Werte in den Kommentaren sind
+   die am Live-Shop gemessenen Sollwerte.
+
+   Geladen aus layout/theme.liquid, zweimal:
+   im <head> nach color-palette, und erneut am Ende von <body>. Horizon gibt
+   seine Komponenten-Styles als {% style %} im Body aus; ohne die zweite
+   Einbindung verliert diese Datei jeden Gleichstand bei der Spezifität.
+   ========================================================================== */
+
+:root {
+  /* Haarlinien und gedämpfte Tinte, aus der aktiven Palette abgeleitet */
+  --sl-line: rgb(var(--color-foreground-rgb) / 0.12);
+  --sl-line-strong: rgb(var(--color-foreground-rgb) / 0.22);
+  --sl-muted: rgb(var(--color-foreground-rgb) / 0.58);
+  --sl-surface: rgb(var(--color-foreground-rgb) / 0.035);
+
+  /* Akzent, ausschließlich für Rabatt- und Sale-Marker */
+  --sl-accent: var(--color-palette-color1, #7a3b1e);
+
+  /* Editorialer Serif für einzelne Akzentwörter */
+  --sl-font-accent: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia,
+    'Times New Roman', serif;
+
+  /* Vertikaler Rhythmus */
+  --sl-space-section: 6rem; /* 96px */
+  --sl-space-section-mobile: 4rem; /* 64px */
+
+  --sl-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Shrine page_width war 1600; Horizons 'wide' liefert nur 150rem. */
+  --wide-page-width: 100rem; /* 1600px */
+
+  /* Shrine animierte mit 0.25–0.3s; Horizon liefert 0.125s. */
+  --animation-speed: 0.25s;
+  --animation-speed-slow: 0.3s;
+  --animation-easing: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media screen and (max-width: 749px) {
+  :root {
+    --sl-space-section: var(--sl-space-section-mobile);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1. Typographie
+
+   Horizon erzeugt --font-size--h1 … --h6 und --font-size--paragraph in
+   theme-styles-variables.liquid aus der Größenleiter der Theme-Settings.
+   Ab 48px wird daraus ein clamp(). Die Leiter kennt Shrines Zwischenwerte
+   (52, 38, 28, 22, 15) nicht, deshalb werden die Größen hier exakt gepinnt.
+   Zuordnung: Horizon h1 ← Shrine .h0, h2 ← .h1, h3 ← .h2, h4 ← .h3,
+   h5 ← .h4, h6 ← .h5.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --font-size--paragraph: 0.9375rem; /* 15px */
+  --font-size--h1: 2rem; /* 32px mobil */
+  --font-size--h2: 1.75rem; /* 28px */
+  --font-size--h3: 1.375rem; /* 22px */
+  --font-size--h4: 1.1875rem; /* 19px */
+  --font-size--h5: 1rem; /* 16px */
+  --font-size--h6: 0.875rem; /* 14px */
+
+  /* Shrine: alle Headlines weight 400, letter-spacing -0.01em, lh 1.14 */
+  --font-h1--line-height: 1.08;
+  --font-h2--line-height: 1.14;
+  --font-h3--line-height: 1.14;
+  --font-h4--line-height: 1.14;
+  --font-h5--line-height: 1.14;
+  --font-h6--line-height: 1.14;
+
+  --font-h1--letter-spacing: -0.01em;
+  --font-h2--letter-spacing: -0.01em;
+  --font-h3--letter-spacing: -0.01em;
+  --font-h4--letter-spacing: -0.01em;
+  --font-h5--letter-spacing: -0.01em;
+  --font-h6--letter-spacing: 0em;
+
+  --font-h1--weight: 400;
+  --font-h2--weight: 400;
+  --font-h3--weight: 400;
+  --font-h4--weight: 400;
+  --font-h5--weight: 400;
+  --font-h6--weight: 400;
+
+  --font-paragraph--line-height: 1.7;
+}
+
+@media screen and (min-width: 750px) {
+  :root {
+    --font-size--h1: 3.25rem; /* 52px */
+    --font-size--h2: 2.375rem; /* 38px */
+    --font-size--h3: 1.75rem; /* 28px */
+    --font-size--h4: 1.375rem; /* 22px */
+
+    --font-h1--letter-spacing: -0.02em;
+  }
+}
+
+body {
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p,
+li,
+.rte p {
+  line-height: 1.7;
+}
+
+.rte a,
+a.link {
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+}
+
+/* Kleines Label in Versalien — quer durchs Theme als Eyebrow benutzt.
+   Shrine: .caption-with-letter-spacing, 11px / .18em / uppercase / 500 */
+.sl-eyebrow {
+  display: block;
+  font-family: var(--font-body--family);
+  font-size: 0.6875rem; /* 11px */
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--sl-muted);
+}
+
+/* Akzentwort in kursivem Serif (z. B. „Neu" im Badge) */
+.sl-accent-word {
+  font-family: var(--sl-font-accent);
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. Buttons
+
+   Shrine: 12px, weight 500, letter-spacing .16em, uppercase,
+   min-height 54px, padding 0 36px, radius 0, Hover = opacity .82.
+   Horizon setzt Größe und Laufweite über --font-paragraph--*, deshalb
+   werden die Werte am Element überschrieben, nicht am :root.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --button-padding-inline: 2.25rem; /* 36px */
+  --button-padding-block: 0;
+}
+
+.button,
+.button-secondary,
+.button-custom,
+button.shopify-payment-button__button--unbranded {
+  font-family: var(--font-body--family);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  min-height: 3.375rem; /* 54px */
+  transition: background-color var(--animation-speed) var(--sl-ease),
+    color var(--animation-speed) var(--sl-ease),
+    box-shadow var(--animation-speed) var(--sl-ease),
+    opacity var(--animation-speed) var(--sl-ease);
+}
+
+/* Shrine blendete bei Hover auf 82 % ab, statt die Farbe zu wechseln.
+   Horizon rechnet sich in color-palette.liquid eigene Hover-Farben aus;
+   die werden hier auf die Ausgangsfarbe zurückgesetzt. */
+.button:not([aria-disabled='true'], :disabled):hover,
+button.shopify-payment-button__button--unbranded:not(:disabled):hover {
+  --button-hover-color: var(--color-primary-button-text);
+  --button-hover-background-color: var(--color-primary-button-background);
+  --button-hover-border-color: var(--color-primary-button-border);
+
+  opacity: 0.82;
+}
+
+/* Sekundär: transparent mit Haarlinie, Hover füllt voll aus. */
+.button-secondary {
+  --button-background-color: transparent;
+  --button-border-color: var(--sl-line-strong);
+}
+
+.button-secondary:not([aria-disabled='true'], :disabled):hover {
+  --button-hover-color: var(--color-background);
+  --button-hover-background-color: var(--color-foreground);
+  --button-hover-border-color: var(--color-foreground);
+
+  opacity: 1;
+  color: var(--color-background);
+  background-color: var(--color-foreground);
+  box-shadow: inset 0 0 0 1px var(--color-foreground);
+}
+
+/* Textlink mit Pfeil */
+.link,
+.button-unstyled {
+  transition: opacity var(--animation-speed) var(--sl-ease);
+}
+
+/* Shopifys dynamische Checkout-Buttons in der unbranded-Variante folgen
+   dem Sekundärstil, damit sie den Primär-Button nicht doppeln. */
+button.shopify-payment-button__button--unbranded {
+  --button-background-color: transparent;
+  --button-color: var(--color-foreground);
+  --button-border-color: var(--sl-line-strong);
+  --button-border-width: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Formulare und Eingabefelder
+
+   Shrine: radius 0, 15px, 1px Rahmen, Label beim Fokus als Versal-Label.
+   -------------------------------------------------------------------------- */
+
+textarea,
+select,
+input:not([type='checkbox'], [type='radio'], [type='range']) {
+  font-size: 0.9375rem; /* 15px */
+  letter-spacing: 0;
+  border-radius: 0;
+}
+
+textarea:hover,
+select:hover,
+input:not([type='checkbox'], [type='radio'], [type='range']):hover {
+  border-color: rgb(var(--color-foreground-rgb) / 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   4. Form: Radien und Schatten konsequent wegnehmen
+
+   Shrines Einstellungen standen auf radius 0 (Buttons, Inputs, Popups,
+   Textboxen) und 2px (Medien, Karten), alle Schatten auf 0. Horizon setzt
+   an einigen Stellen eigene Radien im Komponenten-CSS, die über die
+   Theme-Settings nicht erreichbar sind.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --style-border-radius-xs: 0.125rem; /* 2px, Shrine media_radius */
+  --style-border-radius-sm: 0.125rem;
+  --style-border-radius-md: 0.125rem;
+  --style-border-radius-lg: 0.125rem;
+}
+
+dialog,
+.dialog-modal,
+.drawer,
+.cart-drawer,
+.quick-add-modal,
+.popover {
+  border-radius: 0;
+}
+
+/* Shrine hatte alle *_shadow_opacity auf 0. */
+:root {
+  --shadow-popover: none;
+  --shadow-drawer: none;
+  --shadow-button: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Seitenrhythmus
+
+   Shrine spacing_sections war 0 — die Sections stießen direkt aneinander,
+   der Abstand kam aus dem Padding der jeweiligen Section. Horizon verhält
+   sich genauso, hier wird nur die Messgröße bereitgestellt, mit der die
+   Sections in den Templates gesetzt werden.
+   -------------------------------------------------------------------------- */
+
+.sl-section-rhythm {
+  padding-block: var(--sl-space-section);
+}
+
+/* Volle Farbflächen sollen bündig an ihre Nachbarn stoßen. */
+.shopify-section {
+  --section-outer-spacing-block: 0;
+}
+
+/* Weitere Abschnitte folgen mit den jeweiligen Etappen:
+   6. Header   7. Announcement Bar   8. Produktkarten   9. Badges
+   10. Grids   11. Slideshow / Hero  12. Media with content
+   13. Testimonials, Icon-Bar, Accordion                14. Produktseite
+   15. Warenkorb und Drawer          16. Footer         17. Feinschliff */
