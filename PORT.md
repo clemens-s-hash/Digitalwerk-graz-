@@ -4,17 +4,18 @@ Portierung des Live-Themes **solenahome-redesign-clarity** (Shrine⁺ 1.3.5) auf
 **Horizon 4.3.0**.
 
 - Vorlage (nur gelesen): `theme_export__…solenahome-redesign-clarity__29OCT2026-0428pm`
-- Ergebnis: `horizon/` in diesem Repo, als ZIP unter `dist/solena-horizon.zip`
+- Ergebnis: `horizon/` in diesem Repo, als ZIP unter `dist/solena-horizon5.zip`
 - Regel: **kein Shrine-Code kopiert.** Shrine ist optische und funktionale
   Vorlage; umgesetzt mit Horizons eigenen Sections, Theme-Blocks und Snippets.
 
-Stand: Etappen 1–8 abgeschlossen. Fünf Befunde aus deinem Diff behoben.
+Stand: Etappen 1–11 abgeschlossen. `templates/index.json` von null neu
+gebaut (siehe §1d). Lieferung: `dist/solena-horizon5.zip`.
 
 ---
 
 ## Inhalt
 
-1. [Status](#1-status) · [Die fünf Befunde aus deinem Diff](#1a-die-fünf-befunde-aus-deinem-diff) · [Linkprüfung](#1b-linkprüfung)
+1. [Status](#1-status) · [Die fünf Befunde aus deinem Diff](#1a-die-fünf-befunde-aus-deinem-diff) · [Linkprüfung](#1b-linkprüfung) · [Neuaufbau der Startseite](#1d-neuaufbau-von-templatesindexjson)
 2. [Drei Korrekturen zur Ausgangslage](#2-drei-korrekturen-zur-ausgangslage)
 3. [Design-Tokens](#3-design-tokens)
 4. [Was pro Template drin ist](#4-was-pro-template-drin-ist)
@@ -43,6 +44,7 @@ Stand: Etappen 1–8 abgeschlossen. Fünf Befunde aus deinem Diff behoben.
 | 8 | Feinschliff per CSS, Theme Check, Mobil-Prüfung | ✅ |
 | 9 | ZIP-Lieferung | ✅ |
 | 10 | Fünf Befunde aus dem Diff behoben, 8 Premium-Templates | ✅ |
+| 11 | `templates/index.json` von null neu gebaut, schlank | ✅ |
 
 Prüfungen: `shopify theme check` **0 Errors**, `tools/verify.py` **0 Fehler**.
 
@@ -73,12 +75,12 @@ ich habe das gegen das Original-Horizon geprüft, es ist nirgends. Mein
 Fehler: ich hatte das Muster aus Shrine übernommen, wo `_blocks` eine
 Plattform-Section ohne Datei im Theme ist.
 
-Alle neun Vorkommen sind ersetzt. Als Container dient jetzt
+Sieben der neun Vorkommen sind ersetzt, zwei ersatzlos entfernt. Als Container dient jetzt
 `sections/section.liquid`, das über `@app` dieselben App-Blöcke aufnimmt:
 
 | Datei | vorher | jetzt |
 |---|---|---|
-| `templates/index.json` | 2× `_blocks` | 2× `section` „GemPages Platzhalter 1/2" |
+| `templates/index.json` | 2× `_blocks` | **ersatzlos entfernt** (§1d) |
 | `templates/product.json` | 4× `_blocks` | 3× `section` „GemPages Platzhalter 1–3" + 1× `section` „Judge.me Bewertungen" |
 | `templates/page.json` | 2× `_blocks` | 2× `section` „GemPages Platzhalter 1/2" |
 | `sections/footer-group.json` | 1× `_blocks` | 1× `section` „GemPages Platzhalter (Fußbereich)" |
@@ -274,6 +276,96 @@ Shop nie hatte. Jetzt deaktiviert, wie im Original.
 
 ---
 
+## 1d. Neuaufbau von `templates/index.json`
+
+Die Startseite lieferte im Shop `solena-horizon4` unter `/` weiterhin die
+404-Seite aus. Deshalb ist `templates/index.json` **nicht repariert, sondern
+von null neu geschrieben** worden — reines JSON ab `{`, ohne Kommentarblock,
+ohne Platzhalter-Sections, und nur mit Settings, die vom Schema-Default
+abweichen. Von 24 255 Byte auf 10 683 Byte, von 9 Sections auf 7.
+
+### Was sich gegenüber der alten Datei geändert hat
+
+| Weg | Grund |
+|---|---|
+| Der Generator-Kommentarblock am Dateianfang | Du wolltest reines JSON ab `{`. Shopify erlaubt den Block zwar (alle 27 anderen Templates haben ihn weiterhin), aber er ist für die Startseite jetzt raus. |
+| `gempages_slot_1`, `gempages_slot_2` | Zwei leere `section`-Sections als Platzhalter für Shrines zwei `_blocks`-Einträge. Ersatzlos weg, siehe unten. |
+| `"font": "var(--font-heading--family)"` an allen Überschriften | **Wirkungslos.** `snippets/typography-style.liquid` wertet `font`, `case`, `line_height`, `letter_spacing` und `wrap` nur aus, wenn `type_preset == "custom"`. Bei `h1`…`h6` und `rte` macht das Setting nichts. |
+| Alle Settings, die dem Schema-Default entsprechen | u. a. `display_mode`, `section_width`, `content_position`, `autoplay`, `layout_type`, `mobile_columns`, `media_type`, `image_ratio: portrait` bei Produktkarten, `variant_style: buttons`, `desktop_media_position: left`. |
+| `icons_style` / `slideshow_controls_style` in der Slideshow | `sections/slideshow.liquid` blendet Pfeile und Punkte bei `section.blocks.size <= 1` ohnehin aus. Bei einem Slide ohne Wirkung. |
+| Der Block `media-gallery` in `featured-product-information` | Statischer Block mit fester ID im Liquid — er rendert auch ohne Eintrag im Template, mit seinen Schema-Defaults. |
+| `quantity` als eigener Block unter `_product-details` | **Hätte die Mengenauswahl doppelt gezeigt.** `blocks/buy-buttons.liquid` rendert `{% content_for 'block', type: 'quantity', id: 'quantity' %}` immer selbst, oberhalb der Kaufbuttons. Shrines Reihenfolge (Menge vor Kaufbuttons) kommt damit unverändert heraus — nur eben aus einem Block statt aus zweien. |
+| `add-to-cart` und `accelerated-checkout` als eigene Einträge | Ebenfalls statische Blöcke, die `buy-buttons` immer selbst rendert. „Inkl. dynamischem Checkout" ist damit erfüllt, ohne eine Zeile JSON. |
+| Haarlinie und Farb-Swatches in der Produktkarte | `solena-hairline` und `solena-card-swatches` sind aus den Karten von Bestseller und Trends raus, weil du die Karten auf „Bildformat portrait, zweites Bild beim Hover, Vendor und Bewertung" festgelegt hast. Die Blöcke liegen unverändert in `blocks/` — sag Bescheid, dann kommen sie mit je zwei Zeilen zurück. |
+
+### Was dazugekommen ist
+
+| Neu | Grund |
+|---|---|
+| `show_quote: true` an allen drei Kundenstimmen | Default ist `false`. Du wolltest „mit Sternen und Anführungszeichen" — die alte Datei setzte es nicht, die Anführungszeichen fehlten also. |
+| `equal_columns: true` in `featured-product-information` | Shrines `media_size: small`. Ohne das Setting ist das Raster `1fr min(50vw, var(--sidebar-width))`, die Medien bekommen also die **größere** Spalte (`snippets/product-information-content.liquid`). Mit `equal_columns` wird es 50/50 — das ist in Horizon die kleine Medienspalte. |
+| `"disabled": true` ist **weg** bei `featured_product` | Wie von dir verlangt: die Section ist aktiv. `product` bleibt leer, wie im Shrine-Original; Horizon zeigt dann die Produkt-Platzhalter. |
+
+### Überschriften-Stufen
+
+Horizon kennt kein `h0`. Shrines fünf Stufen sind um eine verschoben
+abgebildet, die Hierarchie bleibt damit dieselbe:
+
+| Section | Shrine | Horizon |
+|---|---|---|
+| Slideshow „Entdecke Solena" | `h0` | `<h1>` (größte Stufe, rte) |
+| „Solena Bestseller" | `h0` | `<h2>` + `type_preset: "h1"` (größte Stufe) |
+| „Collections" | `h1` | `<h2>` |
+| „Trends 2026" | `h1` | `<h2>` |
+| „Ein Statement für dein Zuhause" | `h2` | `<h3>` |
+| „Zufriedenheit ist unsere Voraussetzung" | `h2` | `<h3>` |
+
+Bestseller bekommt die größte Stufe optisch über `type_preset`, semantisch
+aber ein `<h2>` — ein zweites `<h1>` neben dem Slideshow-Titel wäre auf einer
+Seite falsch. `assets/base.css` Zeile 635 (`.text-block.h1 :is(h1, h2, …)`)
+ist genau dafür da.
+
+### Die Lücke zwischen Punkt 3 und 4
+
+Im Shrine-Original stehen zwischen Bestseller und `image-with-text` zwei
+Sections vom Typ `_blocks`:
+
+```
+"1788392699f5d5c41c": { "type": "_blocks", "settings": {} },
+"17883916214ce54e3d": { "type": "_blocks", "settings": {} }
+```
+
+GemPages-Inhalt. In Shrine gibt es dafür nicht einmal `sections/_blocks.liquid`,
+Shopify überspringt die beiden Einträge also stillschweigend. Sie sind
+**ersatzlos weggelassen**, auch ohne leeren Platzhalter. Die neue Startseite
+hat deshalb 7 Sections statt 9. Wenn dort einmal etwas stehen soll, ist das
+ein neuer Abschnitt im Theme-Editor — siehe §8.
+
+### Was geprüft ist
+
+- `templates/index.json` parst mit `json.load` ohne Vorverarbeitung.
+- Jeder Section-Type existiert in `horizon/sections/`, jeder Block-Type in
+  `horizon/blocks/`, und jeder Block ist im `{% schema %}` seines Elternteils
+  erlaubt (`@theme` aufgelöst).
+- Jeder Setting-Schlüssel kommt im Schema seines Section- oder Block-Typs vor.
+- Jeder `select`-Wert ist eine echte Option, jeder `range`-Wert liegt in
+  `min`…`max` und auf dem `step`, jede `checkbox` ist ein echtes Bool.
+- `order` und jede `block_order` nennen nur vorhandene IDs, und jeder nicht
+  statische Block steht in seiner `block_order`.
+- `tools/verify.py horizon`: 0 Fehler, 0 Warnungen.
+
+### Was ich damit **nicht** erklären kann
+
+Die neue Datei ist schlank und schema-sauber — aber die alte war nach denselben
+Prüfungen ebenfalls fehlerfrei. Eine Ursache für den 404 ist im Dateiinhalt
+nicht zu finden. Bleibt die Vermutung, die auch deine Formulierung „falls
+Shopify die Datei beim Upload erneut verschluckt" nahelegt: die Datei landet
+beim ZIP-Upload gar nicht erst im Theme. Nach dem Upload im Code-Editor unter
+`templates/` nachsehen; fehlt `index.json` dort, ist der vollständige Inhalt
+unten im Chat zum Einfügen.
+
+---
+
 ## 2. Drei Korrekturen zur Ausgangslage
 
 ### 2.1 Horizon 4.3.0 hat **keine Color Schemes**
@@ -449,25 +541,28 @@ Footer. Horizon bietet die Sprachauswahl nur im Header an — dort ist sie
 jetzt aktiv (`show_language: true`). Bei nur einer veröffentlichten Sprache
 rendert sie ohnehin nichts. Der Ländersteller bleibt aus, wie in Shrine.
 
-### templates/index.json ✅ — 9 Sections
+### templates/index.json ✅ — 7 Sections
+
+Von null neu gebaut, siehe §1d. Reines JSON ab `{`, 10 683 Byte.
 
 | # | Shrine | Horizon | Inhalt |
 |---|---|---|---|
-| 1 | `slideshow`, 1 Slide | `slideshow` + `_slide` | „Entdecke Solena" / „Weil Design keine Ausnahme sein sollte" / Button „Finde jetzt deinen Stil" → `/collections/all`; full-width, `slide_height: large`, Counter, Overlay 10 %, Text links mittig |
-| 2 | `collection-list`, 5 Blöcke | `collection-list` + `_collection-card` | „Collections"; hangeleuchten, deckenleuchten, tischleuchten, wandleuchten, outdoor-leuchten; 5 Spalten / 2 mobil, square, Swipe mobil, Padding 72/88 |
-| 3 | `featured-collection` | `product-list` | „Solena Bestseller" (h1), Kollektion `bestseller`, 16 Produkte, 5 Spalten / 2 mobil, Bewertung an, Padding 36/36 |
-| 4 | `_blocks` (leer) | `section` | GemPages Platzhalter 1 |
-| 5 | `_blocks` (leer) | `section` | GemPages Platzhalter 2 |
-| 6 | `image-with-text`, 3 Blöcke | `media-with-content` | „Ein Statement für dein Zuhause" / „Wo nordische Ruhe auf Design trifft" / „Mehr lesen" → `/pages/uber-uns`; Hintergrund `#F2EDE5`, Bild rechts schmal, Padding 96/96 |
-| 7 | `featured-product`, 7 Blöcke, **deaktiviert** | `featured-product-information` + `_product-details` mit 7 Blöcken, **deaktiviert** | „Immer im Blick", Titel, Preis (aus), Variantenauswahl (aus), Menge (aus), Kaufen (aus), Teilen (aus). Kein Produkt gesetzt, wie im Original — siehe §1a |
-| 8 | `featured-collection` | `product-list` | „Trends 2026", Kollektion `trends`, 4 Produkte, 4 Spalten, „Alle ansehen" |
-| 9 | `testimonials`, 3 Blöcke | `section` → `group` → 3× `solena-testimonial` | „Zufriedenheit ist unsere Voraussetzung", 3 Spalten, zentriert, Sterne; Julia S. / Thomas W. / Andrea Z. mit den Originaltexten |
+| 1 | `slideshow`, 1 Slide | `slideshow` + `_slide` | „Entdecke Solena" (`<h1>`) / „Weil Design keine Ausnahme sein sollte" / Button „Finde jetzt deinen Stil" → `shopify://collections/all`; `slide_height: large`, full-width und Text auf dem Bild als Defaults, links und vertikal mittig als Defaults, kein Autoplay, Overlay `#0000001a` (10 %), Innenabstand 48 ringsum |
+| 2 | `collection-list`, 5 Blöcke | `collection-list` + statische `_collection-card` | „Collections" (`<h2>`); hangeleuchten, deckenleuchten, tischleuchten, wandleuchten, outdoor-leuchten; 5 Spalten, 2 mobil (Default), `image_ratio: square`, Titel unter dem Bild, kein „Alle ansehen", Padding 72/88 |
+| 3 | `featured-collection` | `product-list` + statische `_product-card` | „Solena Bestseller" (größte Stufe), Kollektion `bestseller`, 16 Produkte, 5 Spalten, 2 mobil (Default); Karte: Bild portrait (Default), Titel, Vendor, Bewertung, Preis; kein „Alle ansehen", Padding 36/36 |
+| 4 | `image-with-text`, 3 Blöcke | `media-with-content` + `_media-without-appearance` + `_content-without-appearance` | „Ein Statement für dein Zuhause" (`<h3>`) / „Wo nordische Ruhe auf Design trifft" / „Mehr lesen" → `shopify://pages/uber-uns`; Bild rechts, `media_width: narrow`, `media_height: 80svh` (Default, entspricht Shrines „large"), Inhalt mittig und zentriert, Hintergrund `#F2EDE5` (= `background-2`), Padding 96/96 |
+| 5 | `featured-product`, 7 Blöcke, deaktiviert | `featured-product-information` + statische `_product-details`, **aktiv** | „Immer im Blick" in Großbuchstaben, Produkttitel, Preis, Variantenauswahl (Buttons = Default), Kaufbuttons inkl. Mengenauswahl und dynamischem Checkout, Teilen. `equal_columns: true` für kleine Medien, Medien links (Default), Padding 88/88. Kein Produkt gesetzt, wie im Original |
+| 6 | `featured-collection` | `product-list` + statische `_product-card` | „Trends 2026" (`<h2>`, ersetzt Shrines „Featured collection"), Kollektion `trends`, 4 Produkte, 4 Spalten, 2 mobil (Default); Karte: Bild portrait, Titel, Vendor, Preis; Button „Alle ansehen" rechts in der Kopfzeile, Padding 36/36 |
+| 7 | `testimonials`, 3 Blöcke | `section` → `group` → 3× `solena-testimonial` | „Zufriedenheit ist unsere Voraussetzung" (`<h3>`, zentriert), 3 Spalten in einer Zeile, Sterne und Anführungszeichen an; Julia S. / Thomas W. / Andrea Z. mit den Originaltexten, Padding 96/96 |
 
-**Nicht übertragbar:** Shrines `featured-product` hatte 7 Blöcke
-(text, title, price, variant_picker, quantity_selector, buy_buttons, share),
-alle einzeln deaktiviert, und kein Produkt. Horizons `featured-product` ist
-eine Section ohne Blöcke; sie ist deaktiviert übernommen. Sobald du ein
-Produkt setzt, gibt Horizon dort seine eigene Blockstruktur vor.
+**Zwei Dinge, die nicht im JSON stehen und trotzdem gelten:**
+
+- *Zweites Bild beim Hover* ist in Horizon keine Section-Einstellung, sondern
+  `show_second_image_on_hover` in `config/settings_data.json` — dort bereits
+  `true`, gilt also für beide Produktlisten. Shrine hatte es nur beim
+  Bestseller an; bei „Trends" ist es jetzt ebenfalls an.
+- *Vendor* hat Horizon als Block nicht. Dafür steht `solena-product-type` mit
+  `source: "vendor"` in der Karte (§5).
 
 ### templates/product.json ✅ — 9 Sections
 
@@ -782,9 +877,14 @@ Platz also nur befüllen.
 |---|---|---|
 | `sections/header-group.json` | GemPages Platzhalter (Kopfbereich) | `_blocks`, leer |
 | `sections/footer-group.json` | GemPages Platzhalter (Fußbereich) | `apps`, leer |
-| `templates/index.json` | GemPages Platzhalter 1 und 2 | 2× `_blocks`, leer |
 | `templates/product.json` | GemPages Platzhalter 1, 2 und 3 | 3× `apps`, leer |
 | `templates/page.json` | GemPages Platzhalter 1 und 2 | 2× `apps` |
+
+Auf der **Startseite** gibt es diese Platzhalter nicht mehr: Shrines zwei
+leeren `_blocks`-Sections sind beim Neuaufbau ersatzlos weggefallen (§1d).
+Wenn dort GemPages-Inhalt hin soll, legst du im Theme-Editor zwischen
+„Solena Bestseller" und „Ein Statement für dein Zuhause" einen eigenen
+Abschnitt an.
 
 ### Seiten, die du in GemPages für Horizon neu bauen musst
 
@@ -878,8 +978,15 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
 
 ## 11. Deine Schritte in Shopify
 
-1. **ZIP hochladen** unter Online Store → Themes → Add theme → Upload zip
-   file. Noch **nicht veröffentlichen**, erst in der Vorschau prüfen.
+1. **ZIP hochladen** (`dist/solena-horizon5.zip`) unter Online Store →
+   Themes → Add theme → Upload zip file. Noch **nicht veröffentlichen**,
+   erst in der Vorschau prüfen.
+1a. **Sofort danach `templates/index.json` kontrollieren.** Im neuen Theme
+   auf … → Edit code gehen und im Ordner `templates` nachsehen, ob
+   `index.json` da ist und 10 683 Byte hat. Wenn sie fehlt oder leer ist,
+   hat der Upload sie verschluckt — dann im Code-Editor neu anlegen und den
+   Inhalt einfügen. Das war der Grund für die 404-Startseite in
+   `solena-horizon4`, siehe §1d.
 2. **Menüs prüfen:** `main-menu` und `rechtliches` müssen unter Navigation
    unverändert existieren. Das Theme verweist auf diese beiden Handles.
 3. **Kollektions-Handles prüfen:** `bestseller`, `trends`, `alleprodukte`,
@@ -895,9 +1002,9 @@ fünf `UnusedDocParam` in `snippets/divider.liquid`, eine
    Stelle steht ein gestrichelter Platzhalter mit App- und Blocknamen —
    App-Block daneben einsetzen, Platzhalter löschen. Positionen und
    Einstellungen in §7.
-6a. **Produkt für die Section „Featured product" auf der Startseite wählen**,
-   falls du sie aktivieren willst. Im Original war keines gesetzt und die
-   Section deaktiviert.
+6a. **Produkt für die Section „Featured product" auf der Startseite wählen.**
+   Die Section ist jetzt aktiv, hat aber — wie im Shrine-Original — kein
+   Produkt hinterlegt und zeigt bis dahin Platzhalter.
 7. **GemPages-Inhalte** in die benannten Platzhalter setzen. Siehe §8.
 8. **Produkt-Metafelder prüfen:** `custom.selling_point_1` bis `_4` — der
    Iconic-Benefits-Block liest sie aus.

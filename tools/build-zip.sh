@@ -2,7 +2,7 @@
 # Packt horizon/ als ZIP, das direkt in Shopify unter
 # Online Store > Themes > Add theme > Upload zip file hochladbar ist.
 #
-# Shopify erwartet die sieben Theme-Ordner auf der obersten Ebene des
+# Shopify erwartet die acht Theme-Ordner auf der obersten Ebene des
 # Archivs. Systemdateien (.DS_Store, __MACOSX, Thumbs.db) lehnt der Upload
 # ab, deshalb werden sie ausgeschlossen.
 #
@@ -16,12 +16,12 @@ set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 theme="$repo/horizon"
 out_dir="$repo/dist"
-zip_path="$out_dir/solena-horizon.zip"
+zip_path="$out_dir/solena-horizon5.zip"
 
 [ -d "$theme/config" ] || { echo "Kein Theme in $theme" >&2; exit 1; }
 
 mkdir -p "$out_dir"
-rm -f "$zip_path"
+rm -f "$out_dir"/solena-horizon*.zip
 
 cd "$theme"
 zip -q -r -X "$zip_path" \

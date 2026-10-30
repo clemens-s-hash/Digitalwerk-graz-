@@ -1,89 +1,55 @@
-/*
- * ------------------------------------------------------------
- * Erzeugt von tools/templates.py aus dem Shrine-Export.
- *
- * Diese Datei darf der Shopify-Theme-Editor ueberschreiben.
- * Nach Aenderungen am Generator neu erzeugen, nicht hier und
- * dort gleichzeitig editieren.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "slideshow": {
       "type": "slideshow",
       "settings": {
-        "display_mode": "full_frame",
-        "section_width": "full-width",
-        "full_frame_on_mobile": true,
-        "slide_height": "large",
-        "content_position": "on-media",
-        "corner_radius": 0,
-        "slideshow_gap": 0,
-        "icons_style": "none",
-        "slideshow_controls_style": "counter",
-        "autoplay": false,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "slide_height": "large"
       },
       "blocks": {
-        "slide-1": {
+        "slide": {
           "type": "_slide",
           "settings": {
-            "media_type_1": "image",
             "image_1": "shopify://shop_images/hf_20260902_173914_1665b126-212b-4577-b96c-3446f36c38ab.png",
-            "content_direction": "column",
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 16,
             "toggle_overlay": true,
-            "overlay_color": "#1C1A171A",
-            "overlay_style": "solid",
-            "padding-inline-start": 80,
-            "padding-block-start": 60,
-            "padding-block-end": 60
+            "overlay_color": "#0000001a",
+            "padding-block-start": 48,
+            "padding-block-end": 48,
+            "padding-inline-start": 48,
+            "padding-inline-end": 48
           },
           "blocks": {
-            "slide-heading": {
-              "type": "_heading",
-              "settings": {
-                "text": "<h1>Entdecke Solena</h1>",
-                "type_preset": "h1",
-                "font": "var(--font-heading--family)",
-                "alignment": "left",
-                "wrap": "balance"
-              }
-            },
-            "slide-sub": {
+            "heading": {
               "type": "text",
               "settings": {
-                "text": "<p>Weil Design keine Ausnahme sein sollte</p>",
-                "type_preset": "rte",
-                "width": "fit-content",
-                "alignment": "left",
-                "max_width": "normal"
+                "text": "<h1>Entdecke Solena</h1>"
               }
             },
-            "slide-button": {
+            "subheading": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Weil Design keine Ausnahme sein sollte</p>"
+              }
+            },
+            "button": {
               "type": "button",
               "settings": {
                 "label": "Finde jetzt deinen Stil",
-                "link": "shopify://collections/all",
-                "style_class": "button"
+                "link": "shopify://collections/all"
               }
             }
           },
           "block_order": [
-            "slide-heading",
-            "slide-sub",
-            "slide-button"
+            "heading",
+            "subheading",
+            "button"
           ]
         }
       },
       "block_order": [
-        "slide-1"
+        "slide"
       ]
     },
-    "collection_list": {
+    "collections": {
       "type": "collection-list",
       "settings": {
         "collection_list": [
@@ -93,84 +59,50 @@
           "wandleuchten",
           "outdoor-leuchten"
         ],
-        "layout_type": "grid",
-        "carousel_on_mobile": true,
         "columns": 5,
-        "mobile_columns": "2",
-        "max_collections": 5,
-        "columns_gap": 24,
-        "rows_gap": 40,
-        "section_width": "page-width",
-        "gap": 32,
         "padding-block-start": 72,
         "padding-block-end": 88
       },
       "blocks": {
-        "cl-heading": {
+        "heading": {
           "type": "text",
           "settings": {
-            "text": "<h2>Collections</h2>",
-            "type_preset": "h2",
-            "font": "var(--font-heading--family)",
-            "width": "fit-content",
-            "alignment": "left",
-            "max_width": "none"
+            "text": "<h2>Collections</h2>"
           }
         },
         "static-collection-card": {
           "type": "_collection-card",
           "static": true,
           "settings": {
-            "placement": "below_image",
-            "horizontal_alignment": "flex-start",
-            "collection_card_gap": 14,
-            "border": "none"
+            "placement": "below_image"
           },
           "blocks": {
             "collection-card-image": {
               "type": "_collection-card-image",
               "static": true,
               "settings": {
-                "image_ratio": "square",
-                "border_radius": 2
+                "image_ratio": "square"
               }
             },
-            "cc-title": {
-              "type": "collection-title",
-              "settings": {
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "letter_spacing": "loose",
-                "case": "uppercase"
-              }
+            "collection-title": {
+              "type": "collection-title"
             }
           },
           "block_order": [
-            "collection-card-image",
-            "cc-title"
+            "collection-title"
           ]
         }
       },
       "block_order": [
-        "cl-heading"
+        "heading"
       ]
     },
     "bestseller": {
       "type": "product-list",
       "settings": {
         "collection": "bestseller",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
         "max_products": 16,
         "columns": 5,
-        "mobile_columns": "2",
-        "columns_gap": 24,
-        "rows_gap": 56,
-        "section_width": "page-width",
-        "gap": 32,
         "padding-block-start": 36,
         "padding-block-end": 36
       },
@@ -178,349 +110,150 @@
         "static-header": {
           "type": "_product-list-content",
           "static": true,
-          "settings": {
-            "content_direction": "row",
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "gap": 12,
-            "width": "fill"
-          },
           "blocks": {
-            "pl-title": {
+            "heading": {
               "type": "_product-list-text",
               "settings": {
                 "text": "<h2>Solena Bestseller</h2>",
-                "type_preset": "h1",
-                "font": "var(--font-heading--family)",
-                "width": "fit-content",
-                "alignment": "left",
-                "max_width": "none"
+                "type_preset": "h1"
               }
             }
           },
           "block_order": [
-            "pl-title"
+            "heading"
           ]
         },
         "static-product-card": {
           "type": "_product-card",
           "static": true,
-          "settings": {
-            "product_card_gap": 0,
-            "border": "none",
-            "border_radius": 0
-          },
           "blocks": {
-            "card-gallery": {
-              "type": "_product-card-gallery",
+            "gallery": {
+              "type": "_product-card-gallery"
+            },
+            "title": {
+              "type": "product-title"
+            },
+            "vendor": {
+              "type": "solena-product-type",
               "settings": {
-                "image_ratio": "portrait",
-                "border_radius": 2
+                "source": "vendor"
               }
             },
-            "card-topline": {
-              "type": "_product-card-group",
-              "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "space-between",
-                "vertical_alignment": "flex-start",
-                "align_baseline": false,
-                "gap": 12,
-                "width": "fill",
-                "height": "fit"
-              },
-              "blocks": {
-                "card-titles": {
-                  "type": "_product-card-group",
-                  "settings": {
-                    "content_direction": "column",
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "gap": 0,
-                    "width": "fill",
-                    "height": "fit"
-                  },
-                  "blocks": {
-                    "card-title": {
-                      "type": "product-title",
-                      "settings": {
-                        "width": "100%",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-heading--family)",
-                        "font_size": "1.125rem",
-                        "line_height": "tight",
-                        "max_width": "none"
-                      }
-                    },
-                    "card-type": {
-                      "type": "solena-product-type",
-                      "settings": {
-                        "source": "type_then_vendor",
-                        "alignment": "left"
-                      }
-                    }
-                  },
-                  "block_order": [
-                    "card-title",
-                    "card-type"
-                  ]
-                },
-                "card-rating": {
-                  "type": "review",
-                  "settings": {
-                    "stars_style": "shaded",
-                    "show_number": true,
-                    "width": "fit-content",
-                    "alignment": "right",
-                    "type_preset": "paragraph"
-                  }
-                }
-              },
-              "block_order": [
-                "card-titles",
-                "card-rating"
-              ]
+            "rating": {
+              "type": "review"
             },
-            "card-rule": {
-              "type": "solena-hairline",
-              "settings": {
-                "thickness": 1,
-                "padding-block-start": 14,
-                "padding-block-end": 0
-              }
-            },
-            "card-price": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem"
-              }
-            },
-            "card-swatches": {
-              "type": "solena-card-swatches",
-              "settings": {
-                "swatch_limit": 6,
-                "swatch_size": 18,
-                "alignment": "flex-start",
-                "padding-block-start": 14
-              }
+            "price": {
+              "type": "price"
             }
           },
           "block_order": [
-            "card-gallery",
-            "card-topline",
-            "card-rule",
-            "card-price",
-            "card-swatches"
+            "gallery",
+            "title",
+            "vendor",
+            "rating",
+            "price"
           ]
         }
       }
     },
-    "gempages_slot_1": {
-      "type": "section",
-      "name": "GemPages Platzhalter 1",
-      "settings": {
-        "content_direction": "column",
-        "section_width": "page-width",
-        "gap": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
-    "gempages_slot_2": {
-      "type": "section",
-      "name": "GemPages Platzhalter 2",
-      "settings": {
-        "content_direction": "column",
-        "section_width": "page-width",
-        "gap": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
-    "image_with_text": {
+    "media": {
       "type": "media-with-content",
       "settings": {
         "media_position": "right",
         "media_width": "narrow",
-        "media_height": "80svh",
-        "section_width": "page-width",
-        "extend_media": false,
+        "background_color": "#F2EDE5",
         "padding-block-start": 96,
-        "padding-block-end": 96,
-        "background_color": "#F2EDE5"
+        "padding-block-end": 96
       },
       "blocks": {
         "media": {
           "type": "_media-without-appearance",
           "static": true,
           "settings": {
-            "media_type": "image",
-            "image": "shopify://shop_images/hf_20260902_183544_5640de0a-023a-46bd-9a55-b126b3989ad1.png",
-            "image_position": "cover"
+            "image": "shopify://shop_images/hf_20260902_183544_5640de0a-023a-46bd-9a55-b126b3989ad1.png"
           }
         },
         "content": {
           "type": "_content-without-appearance",
           "static": true,
-          "settings": {
-            "horizontal_alignment_flex_direction_column": "center",
-            "gap": 16
-          },
           "blocks": {
-            "iwt-heading": {
+            "heading": {
               "type": "text",
               "settings": {
-                "text": "<h2>Ein Statement für dein Zuhause</h2>",
-                "type_preset": "h3",
-                "font": "var(--font-heading--family)",
-                "width": "fit-content",
+                "text": "<h3>Ein Statement für dein Zuhause</h3>",
+                "width": "100%",
                 "alignment": "center",
                 "max_width": "none"
               }
             },
-            "iwt-text": {
+            "text": {
               "type": "text",
               "settings": {
                 "text": "<p>Wo nordische Ruhe auf Design trifft</p>",
-                "type_preset": "rte",
-                "width": "fit-content",
+                "width": "100%",
                 "alignment": "center",
-                "max_width": "normal"
+                "max_width": "none"
               }
             },
-            "iwt-button": {
+            "button": {
               "type": "button",
               "settings": {
                 "label": "Mehr lesen",
-                "link": "shopify://pages/uber-uns",
-                "style_class": "button-secondary"
+                "link": "shopify://pages/uber-uns"
               }
             }
           },
           "block_order": [
-            "iwt-heading",
-            "iwt-text",
-            "iwt-button"
+            "heading",
+            "text",
+            "button"
           ]
         }
       }
     },
     "featured_product": {
       "type": "featured-product-information",
-      "disabled": true,
       "settings": {
-        "product": "",
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "gap": 32,
+        "equal_columns": true,
         "padding-block-start": 88,
         "padding-block-end": 88
       },
       "blocks": {
-        "media-gallery": {
-          "type": "_featured-product-information-carousel",
-          "static": true,
-          "settings": {}
-        },
         "product-details": {
           "type": "_product-details",
           "static": true,
-          "settings": {
-            "width": "fill",
-            "details_position": "flex-start",
-            "gap": 20
-          },
           "blocks": {
-            "fp-eyebrow": {
+            "eyebrow": {
               "type": "text",
               "settings": {
                 "text": "<p>Immer im Blick</p>",
                 "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "0.75rem",
-                "letter_spacing": "loose",
-                "case": "uppercase",
-                "width": "100%",
-                "alignment": "left"
+                "case": "uppercase"
               }
             },
-            "fp-title": {
-              "type": "product-title",
-              "settings": {
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-heading--family)",
-                "max_width": "none"
-              }
+            "title": {
+              "type": "product-title"
             },
-            "fp-price": {
-              "type": "price",
-              "disabled": true,
-              "settings": {
-                "show_sale_price_first": true,
-                "width": "100%"
-              }
+            "price": {
+              "type": "price"
             },
-            "fp-variant-picker": {
-              "type": "variant-picker",
-              "disabled": true,
-              "settings": {}
+            "variant-picker": {
+              "type": "variant-picker"
             },
-            "fp-quantity": {
-              "type": "quantity",
-              "disabled": true,
-              "settings": {}
+            "buy-buttons": {
+              "type": "buy-buttons"
             },
-            "fp-buy-buttons": {
-              "type": "buy-buttons",
-              "disabled": true,
-              "settings": {
-                "stacking": false
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button"
-                  }
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {}
-                }
-              }
-            },
-            "fp-share": {
-              "type": "solena-share",
-              "disabled": true,
-              "settings": {
-                "label": "Share"
-              }
+            "share": {
+              "type": "solena-share"
             }
           },
           "block_order": [
-            "fp-eyebrow",
-            "fp-title",
-            "fp-price",
-            "fp-variant-picker",
-            "fp-quantity",
-            "fp-buy-buttons",
-            "fp-share"
+            "eyebrow",
+            "title",
+            "price",
+            "variant-picker",
+            "buy-buttons",
+            "share"
           ]
         }
       }
@@ -529,15 +262,8 @@
       "type": "product-list",
       "settings": {
         "collection": "trends",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
         "max_products": 4,
         "columns": 4,
-        "mobile_columns": "2",
-        "columns_gap": 24,
-        "rows_gap": 56,
-        "section_width": "page-width",
-        "gap": 32,
         "padding-block-start": 36,
         "padding-block-end": 36
       },
@@ -549,150 +275,52 @@
             "content_direction": "row",
             "horizontal_alignment": "space-between",
             "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "gap": 12,
-            "width": "fill"
+            "align_baseline": true
           },
           "blocks": {
-            "pl-title": {
+            "heading": {
               "type": "_product-list-text",
               "settings": {
-                "text": "<h2>Trends 2026</h2>",
-                "type_preset": "h2",
-                "font": "var(--font-heading--family)",
-                "width": "fit-content",
-                "alignment": "left",
-                "max_width": "none"
+                "text": "<h2>Trends 2026</h2>"
               }
             },
-            "pl-view-all": {
+            "view-all": {
               "type": "_product-list-button",
               "settings": {
-                "label": "Alle ansehen",
-                "style_class": "button-secondary"
+                "label": "Alle ansehen"
               }
             }
           },
           "block_order": [
-            "pl-title",
-            "pl-view-all"
+            "heading",
+            "view-all"
           ]
         },
         "static-product-card": {
           "type": "_product-card",
           "static": true,
-          "settings": {
-            "product_card_gap": 0,
-            "border": "none",
-            "border_radius": 0
-          },
           "blocks": {
-            "card-gallery": {
-              "type": "_product-card-gallery",
+            "gallery": {
+              "type": "_product-card-gallery"
+            },
+            "title": {
+              "type": "product-title"
+            },
+            "vendor": {
+              "type": "solena-product-type",
               "settings": {
-                "image_ratio": "portrait",
-                "border_radius": 2
+                "source": "vendor"
               }
             },
-            "card-topline": {
-              "type": "_product-card-group",
-              "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "space-between",
-                "vertical_alignment": "flex-start",
-                "align_baseline": false,
-                "gap": 12,
-                "width": "fill",
-                "height": "fit"
-              },
-              "blocks": {
-                "card-titles": {
-                  "type": "_product-card-group",
-                  "settings": {
-                    "content_direction": "column",
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "gap": 0,
-                    "width": "fill",
-                    "height": "fit"
-                  },
-                  "blocks": {
-                    "card-title": {
-                      "type": "product-title",
-                      "settings": {
-                        "width": "100%",
-                        "alignment": "left",
-                        "type_preset": "custom",
-                        "font": "var(--font-heading--family)",
-                        "font_size": "1.125rem",
-                        "line_height": "tight",
-                        "max_width": "none"
-                      }
-                    },
-                    "card-type": {
-                      "type": "solena-product-type",
-                      "settings": {
-                        "source": "type_then_vendor",
-                        "alignment": "left"
-                      }
-                    }
-                  },
-                  "block_order": [
-                    "card-title",
-                    "card-type"
-                  ]
-                },
-                "card-rating": {
-                  "type": "review",
-                  "settings": {
-                    "stars_style": "shaded",
-                    "show_number": true,
-                    "width": "fit-content",
-                    "alignment": "right",
-                    "type_preset": "paragraph"
-                  }
-                }
-              },
-              "block_order": [
-                "card-titles",
-                "card-rating"
-              ]
-            },
-            "card-rule": {
-              "type": "solena-hairline",
-              "settings": {
-                "thickness": 1,
-                "padding-block-start": 14,
-                "padding-block-end": 0
-              }
-            },
-            "card-price": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem"
-              }
-            },
-            "card-swatches": {
-              "type": "solena-card-swatches",
-              "settings": {
-                "swatch_limit": 6,
-                "swatch_size": 18,
-                "alignment": "flex-start",
-                "padding-block-start": 14
-              }
+            "price": {
+              "type": "price"
             }
           },
           "block_order": [
-            "card-gallery",
-            "card-topline",
-            "card-rule",
-            "card-price",
-            "card-swatches"
+            "gallery",
+            "title",
+            "vendor",
+            "price"
           ]
         }
       }
@@ -700,91 +328,74 @@
     "testimonials": {
       "type": "section",
       "settings": {
-        "content_direction": "column",
-        "horizontal_alignment_flex_direction_column": "center",
         "gap": 32,
-        "section_width": "page-width",
         "padding-block-start": 96,
         "padding-block-end": 96
       },
       "blocks": {
-        "t-heading": {
+        "heading": {
           "type": "text",
           "settings": {
-            "text": "<h2>Zufriedenheit ist unsere Voraussetzung</h2>",
-            "type_preset": "h3",
-            "font": "var(--font-heading--family)",
+            "text": "<h3>Zufriedenheit ist unsere Voraussetzung</h3>",
             "width": "100%",
             "alignment": "center",
             "max_width": "none"
           }
         },
-        "t-row": {
+        "row": {
           "type": "group",
           "settings": {
             "content_direction": "row",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "space-between",
             "vertical_alignment": "flex-start",
-            "gap": 24,
-            "width": "fill",
-            "height": "fit"
+            "gap": 24
           },
           "blocks": {
-            "t-1": {
+            "testimonial-1": {
               "type": "solena-testimonial",
               "settings": {
                 "heading": "Schnell geliefert, top Qualität!",
                 "text": "<p>Leuchte war in einer Woche da und hat unserem Esszimmer endlich das gewisse Etwas verliehen!</p>",
                 "author": "Julia S.",
-                "show_stars": true,
-                "stars": 5,
-                "alignment": "center"
+                "show_quote": true
               }
             },
-            "t-2": {
+            "testimonial-2": {
               "type": "solena-testimonial",
               "settings": {
                 "heading": "Designer-pieces",
                 "text": "<p>Hab mir 2x die Spira Nachttischleuchte gekauft, kommt echt gut wenn man Ahnung hat wie man sie kombiniert. Wurde bis jetzt von jedem gefragt wo ich die gekauft habe. Top!</p>",
                 "author": "Thomas W.",
-                "show_stars": true,
-                "stars": 5,
-                "alignment": "center"
+                "show_quote": true
               }
             },
-            "t-3": {
+            "testimonial-3": {
               "type": "solena-testimonial",
               "settings": {
                 "heading": "Vorbildlicher Kundenservice",
                 "text": "<p>Hatte eine Frage zu meiner Bestellung und bekam innerhalb weniger Stunden eine hilfreiche Antwort. So muss das sein!</p>",
                 "author": "Andrea Z.",
-                "show_stars": true,
-                "stars": 5,
-                "alignment": "center"
+                "show_quote": true
               }
             }
           },
           "block_order": [
-            "t-1",
-            "t-2",
-            "t-3"
+            "testimonial-1",
+            "testimonial-2",
+            "testimonial-3"
           ]
         }
       },
       "block_order": [
-        "t-heading",
-        "t-row"
+        "heading",
+        "row"
       ]
     }
   },
   "order": [
     "slideshow",
-    "collection_list",
+    "collections",
     "bestseller",
-    "gempages_slot_1",
-    "gempages_slot_2",
-    "image_with_text",
+    "media",
     "featured_product",
     "trends",
     "testimonials"
