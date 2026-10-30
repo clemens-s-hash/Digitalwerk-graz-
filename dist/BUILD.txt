@@ -1,8 +1,8 @@
 Solena Horizon — Theme-Build
 
-Gebaut:       2026-10-29 17:49 UTC
-Commit:       f2f7126
-Branch:       claude/blissful-curie-910v02
+Gebaut:       2026-10-30 10:17 UTC
+Commit:       7a6dcf7
+Branch:       claude/affectionate-tesla-x9ej7c
 Dateien:      514
 Groesse:      1.4M
 Oberste Ebene im Archiv: assets blocks config layout locales sections snippets templates 
